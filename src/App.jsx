@@ -1,20 +1,24 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Hello from "./components/Hello";
-import HelloCopy from "./components/Hello copy";
+import { useState } from 'react'
 
+import './App.css'
+import './index.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import ListPage from './components/ListPage';
+import AppPage from './components/AppPage';
 function App() {
-  const [count, setCount] = useState(4);
+  const [count, setCount] = useState(0)
 
   return (
-    <Routes>
-      <Route path="/" element={<Hello />}></Route>
-      <Route path="/op" element={<HelloCopy />} />
-    </Routes>   
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/list" element={<ListPage />} />
+        <Route path="/app" element={<AppPage />} />
+      </Routes>
+    </Router>
   );
+  
 }
 
-export default App;
+export default App
