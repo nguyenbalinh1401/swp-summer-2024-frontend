@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Checkbox, Divider, Input, Modal } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EmailForm, CodeForm } from "./ForgotForm";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
@@ -12,6 +12,10 @@ export default function SignIn() {
   const [forgottenEmail, setForgottenEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");
+  const navigate = useNavigate();
+  const handleClick = () =>{
+    navigate('/welcome')
+  };
 
   // const sendEmail = () => {
   //   if (!emailSent) {
@@ -77,7 +81,7 @@ export default function SignIn() {
             Forgot your password?
           </button>
         </div>
-        <button className="mt-4 font-bold text-xl text-white bg-sky-600 py-2 px-16 rounded-full">
+        <button className="mt-4 font-bold text-xl text-white bg-sky-600 py-2 px-16 rounded-full" onClick={handleClick}>
           SIGN IN
         </button>
         <Divider>

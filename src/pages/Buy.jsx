@@ -5,10 +5,11 @@ import {
   NotificationOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme,Pagination,Button } from "antd";
+import { Breadcrumb, Layout, Menu, theme,Pagination,Button,Image } from "antd";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import '../components/style/Style.css';
 const { Header, Content, Sider } = Layout;
 
 const items1 = ["Home", "Buy", "Sell"].map((label, index) => ({
@@ -65,87 +66,53 @@ export default function Buy() {
   };
   return (
     <>
-      <Layout style={{ minHeight: "100vh" }}>
-        <Header
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+      <Layout className="layout">
+        <Header className="header"   >
           <div className="demo-logo" />
           <Menu
             theme="dark"
             mode="horizontal"
             defaultSelectedKeys={["1"]}
             items={items1}
-            style={{
-              flex: 1,
-              minWidth: 0,
-            }}
+            className="menu"
           />
-        <Button type="primary"  icon={<SearchOutlined />}>
+        <Button type="primary"  icon={<SearchOutlined />} className="search-button">
         Search
       </Button>
         </Header>
-        <Content
-          style={{
-            padding: "0 48px",
-            flex: 1,
-          }}
-        >
-          <Breadcrumb
-            style={{
-              margin: "16px 0",
-            }}
-          >
+        <Content className="content"  >
+          <Breadcrumb className="breadcrumb">
             <Breadcrumb.Item>
               <Link to="/">Home</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to="/list">List</Link>
+              <Link to="/buy">BUY</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to="/app">App</Link>
+              <Link to="/sell">SELL</Link>
             </Breadcrumb.Item>
           </Breadcrumb>
-          <Layout
-            style={{
-              padding: "24px 0",
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            <Sider
-              style={{
-                background: colorBgContainer,
-              }}
-              width={200}
-            >
+          <Layout className="inner-layout">
+            <Sider width={200} className="sider" >
               <Menu
                 mode="inline"
                 defaultSelectedKeys={["1"]}
                 defaultOpenKeys={["sub1"]}
-                style={{
-                  height: "100%",
-                }}
+                className="sider-menu"
                 items={items2}
               />
             </Sider>
-            <Content
-  style={{
-    padding: "0 24px",
-    minHeight: 280,
-  }}
->
+            <Content style={{ padding: "0 24px", minHeight: 280 }}>
   {currentItems.map((item) => (
     <div key={item.id} style={{ display: "flex", marginBottom: "100px" }}>
       
       <div style={{ marginRight: "100px" }}>
-      <h2>{item.name}</h2>
-        <img
-          src={item.image}
-          alt={item.name}
-          style={{ Width: "700px", height: "700px" }}
+      <h2 className="large-bold-heading">{item.name}</h2>
+        
+        <Image   
+           src={item.image}
+           alt={item.name}
+           className="item-image"
         />
 
       </div>
@@ -171,7 +138,7 @@ export default function Buy() {
                 total={totalItems}
                 pageSize={itemsPerPage}
                 onChange={handleChangePage}
-                style={{ textAlign: "center", marginTop: "20px" }}
+                className="pagination"
               />
 </Content>
           </Layout>

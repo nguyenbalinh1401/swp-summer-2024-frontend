@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card } from "antd";
+
 const { Meta } = Card;
+
+
+const items1 = ["Home", "Buy", "Sell"].map((label, index) => ({
+  key: String(index + 1),
+  label,
+}));
 
 export default function Home() {
   const [data, setData] = useState([]);
