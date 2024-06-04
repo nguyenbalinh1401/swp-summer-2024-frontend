@@ -7,6 +7,7 @@ import ProductDetail from "../../pages/ProductDetail";
 
 import Buy from "../../pages/Buy";
 import HomePage from "../../pages/HomePage";
+import Sell from "../../pages/Sell";
 
 export default function AppRouter() {
   return (
@@ -18,6 +19,7 @@ export default function AppRouter() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/buy" element={<Buy/>}/>
         <Route path="/welcome" element={<HomePage/>}/>
+        <Route path="/sell" element={<Sell/>}/>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

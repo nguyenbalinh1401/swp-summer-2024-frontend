@@ -5,17 +5,22 @@ import {
   NotificationOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme,Pagination,Button,Image } from "antd";
+import { Layout, Menu,Pagination,Button,Image } from "antd";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import '../components/style/Style.css';
+import '../components/style/BuyStyle.css';
 const { Header, Content, Sider } = Layout;
 
 const items1 = ["Home", "Buy", "Sell"].map((label, index) => ({
   key: String(index + 1),
-  label,
+  label: label === "Home" ? <Link to={`/`}>{label}</Link> : <Link to={`/${label.toLowerCase()}`}>{label}</Link>,
 }));
+  [
+    { key: "1", label: <Link to="/">Home</Link> },
+    { key: "2", label: <Link to="/buy">Buy</Link> },
+    { key: "3", label: <Link to="/sell">Sell</Link> }
+     ]
 
 const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
   (icon, index) => {
@@ -36,10 +41,7 @@ const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
 );
 const itemsPerPage = 3;
 export default function Buy() {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
+  
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); 
   
@@ -72,7 +74,7 @@ export default function Buy() {
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={["2"]}
             items={items1}
             className="menu"
           />
@@ -81,17 +83,7 @@ export default function Buy() {
       </Button>
         </Header>
         <Content className="content"  >
-          <Breadcrumb className="breadcrumb">
-            <Breadcrumb.Item>
-              <Link to="/">Home</Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to="/buy">BUY</Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <Link to="/sell">SELL</Link>
-            </Breadcrumb.Item>
-          </Breadcrumb>
+          
           <Layout className="inner-layout">
             <Sider width={200} className="sider" >
               <Menu
@@ -133,14 +125,14 @@ export default function Buy() {
       </div>
     </div>
   ))}
-  <Pagination
+              <Pagination
                 current={currentPage}
                 total={totalItems}
                 pageSize={itemsPerPage}
                 onChange={handleChangePage}
                 className="pagination"
               />
-</Content>
+           </Content>
           </Layout>
         </Content>            
       </Layout>

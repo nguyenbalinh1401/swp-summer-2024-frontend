@@ -2,15 +2,21 @@
     font-size: 17px;
     font-weight: bold;
   }
-  /* styles.css */
+ 
 
 .layout {
     min-height: 100vh;
+    
   }
   
   .header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: 100%;
     display: flex;
     align-items: center;
+    
   }
   
   .menu {
@@ -19,7 +25,7 @@
   }
   
   .search-button {
-    margin-left: auto; /* Adjust if needed */
+    margin-left: auto; 
   }
   
   .breadcrumb {
@@ -33,7 +39,7 @@
   
   .inner-layout {
     padding: 24px 0;
-    background: var(--color-bg-container); /* Adjust your CSS variables or use fixed values */
+    background: var(--color-bg-container); 
     border-radius: var(--border-radius-lg);
   }
   
