@@ -4,6 +4,10 @@ import NotFound from "../notFound/NotFound";
 import SignIn from "../../pages/Signin";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
+// check sell
+import SellPage from "../../pages/SellPage";
+import FillFormBeSell from "../../pages/FillFormBeSell";
+
 
 export default function AppRouter() {
   return (
@@ -14,6 +18,11 @@ export default function AppRouter() {
         <Route path="/product" element={<div>Product</div>} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="*" element={<NotFound />} />
+    
+    {/* check sell */}
+
+        <Route path="/sell" element={<SellPage />} />
+        <Route path="/fillFormBeSell" element={<FillFormBeSell />} />
       </Routes>
     </div>
   );
