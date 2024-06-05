@@ -7,6 +7,9 @@ import ProductDetail from "../../pages/ProductDetail";
 // check sell
 import SellPage from "../../pages/SellPage";
 import FillFormBeSell from "../../pages/FillFormBeSell";
+import LastActionSell from "../../pages/LastActionSell";
+
+
 
 
 export default function AppRouter() {
@@ -17,7 +20,7 @@ export default function AppRouter() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/product" element={<div>Product</div>} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/lastAction" element={<LastActionSell />} />
     
     {/* check sell */}
 
