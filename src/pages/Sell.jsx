@@ -63,7 +63,7 @@ export default function Sell() {
   const [isLimitedEdition, setIsLimitedEdition] = useState(false);
   const [showSecondSlide, setShowSecondSlide] = useState(false);
   const [showThirdSlide, setShowThirdSlide] = useState(false);
-
+  const [customsCheckOption, setCustomsCheckOption] = useState("");
   const onSellMethodChange = (value) => {
     setSellMethod(value);
   };
@@ -107,6 +107,14 @@ export default function Sell() {
     setShowFirstSlide(false);
     setShowSecondSlide(false);
     setShowThirdSlide(true);
+  };
+
+  const handleOriginalBoxChange = () => {
+    setHasOriginalBox(!hasOriginalBox);
+  };
+
+  const handleCustomsCheckChange = (e) => {
+    setCustomsCheckOption(e.target.value);
   };
 
   return (
@@ -188,7 +196,6 @@ export default function Sell() {
                   onChange={onWatchYearChange}
                   style={{ width: "100%" }}
                 >
-                  
                   <Select.Option value="2022">2022</Select.Option>
                   <Select.Option value="2021">2021</Select.Option>
                 </Select>
@@ -225,64 +232,95 @@ export default function Sell() {
                 </label>
                 <div className="radio-group">
                   <div className="radio-option">
-                    <Checkbox checked={false} />
+                    <input
+                      type="radio"
+                      name="customsCheck"
+                      value="yes"
+                      checked={customsCheckOption === "yes"}
+                      onChange={handleCustomsCheckChange}
+                    />
                     <span>Yes</span>
                   </div>
                   <div className="radio-option">
-                    <Checkbox checked={false} />
+                    <input
+                      type="radio"
+                      name="customsCheck"
+                      value="no"
+                      checked={customsCheckOption === "no"}
+                      onChange={handleCustomsCheckChange}
+                    />
                     <span>No</span>
                   </div>
                   <div className="radio-option">
-                    <Checkbox checked={true} />
+                    <input
+                      type="radio"
+                      name="customsCheck"
+                      value="nonResident"
+                      checked={customsCheckOption === "nonResident"}
+                      onChange={handleCustomsCheckChange}
+                    />
                     <span>Not a resident of the USA</span>
                   </div>
                   <div className="radio-option">
-                    <Checkbox checked={false} />
+                    <input
+                      type="radio"
+                      name="customsCheck"
+                      value="dontKnow"
+                      checked={customsCheckOption === "dontKnow"}
+                      onChange={handleCustomsCheckChange}
+                    />
                     <span>Don't Know</span>
                   </div>
                 </div>
               </div>
-              <Button type="primary" className="next-button" onClick={handleNextDetails}>
+              <Button
+                type="primary"
+                className="submit-button"
+                onClick={handleNextDetails}
+              >
                 Next: Your Details
               </Button>
             </div>
           )}
           {showThirdSlide && (
             <div className="your-details">
-            <h3>Your Details</h3>
-            <div className="form-group">
-              <label>First Name</label>
-              <Input value="dang" disabled />
+              <h3>Your Details</h3>
+              <div className="form-group">
+                <label>First Name</label>
+                <Input placeholder="Enter First Name" />
+              </div>
+              <div className="form-group">
+                <label>Last Name</label>
+                <Input placeholder="Enter Last Name" />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <Input placeholder="Enter Email" />
+              </div>
+              <div className="form-group">
+                <label>Telephone</label>
+                <Input placeholder="Enter Telephone Number" />
+              </div>
+              <div className="form-group">
+                <label>Sell Method</label>
+                <Input value={sellMethod} placeholder="Enter Sell Method" />
+              </div>
+              <div className="form-group">
+                <label>Original Box</label>
+                <Checkbox
+                  checked={hasOriginalBox}
+                  onChange={handleOriginalBoxChange}
+                >
+                  Yes
+                </Checkbox>
+              </div>
+
+              <div className="form-group">
+                <Button type="primary" className="submit-button">
+                  Submit
+                </Button>
+              </div>
             </div>
-            <div className="form-group">
-              <label>Last Name</label>
-              <Input value="lai" disabled />
-            </div>
-            <div className="form-group">
-              <label>Email</label>
-              <Input value="danglailp@gmail.com" disabled />
-            </div>
-            <div className="form-group">
-              <label>Telephone</label>
-              <Input value="+13371-479-85" disabled />
-            </div>
-            <div className="form-group">
-              <label>Sell Method</label>
-              <Input value={sellMethod} disabled />
-            </div>
-            <div className="form-group">
-              <label>Original Box</label>
-              <Checkbox checked={hasOriginalBox} disabled>
-                Yes
-              </Checkbox>
-            </div>
-            {/* Add more form groups for other details collected in the previous slides */}
-            <div className="form-group">
-              <Button type="primary" className="submit-button">
-                Submit
-              </Button>
-            </div>
-          </div>
           )}
         </div>
       </Content>
