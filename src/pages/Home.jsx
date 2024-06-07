@@ -20,7 +20,7 @@ import {
   Carousel,
 } from "antd";
 import { Link } from "react-router-dom";
-import "../components/style/BuyStyle.css";
+import "../components/style/Home.css";
 
 const { Header, Content } = Layout;
 const { Search } = Input;
@@ -71,9 +71,9 @@ export default function Home() {
     setCurrentPage(page);
   };
 
-  // Calculate pagination variables
+ 
   const totalProducts = products.length;
-  const pageSize = 8; // Number of products per page
+  const pageSize = 8; 
   const totalPages = Math.ceil(totalProducts / pageSize);
 
   return (

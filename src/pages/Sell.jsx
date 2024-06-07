@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Layout,
   Menu,
   theme,
-  message,
-  Upload,
   Input,
   Button,
   Select,
@@ -15,26 +13,6 @@ import {
 import "../components/style/SellStyle.css";
 
 const { Header, Content } = Layout;
-
-const props = {
-  name: "file",
-  multiple: true,
-  action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
 
 const items = ["Home", "Buy", "Sell"].map((label, index) => ({
   key: String(index + 1),
@@ -52,7 +30,7 @@ export default function Sell() {
   } = theme.useToken();
   const [watchValue, setWatchValue] = useState("");
   const [showFirstSlide, setShowFirstSlide] = useState(true);
-  const [showWatchValuation, setShowWatchValuation] = useState(false);
+
   const [sellMethod, setSellMethod] = useState("");
   const [hasOriginalBox, setHasOriginalBox] = useState(false);
   const [hasOriginalPapers, setHasOriginalPapers] = useState(false);
@@ -116,7 +94,7 @@ export default function Sell() {
   const handleCustomsCheckChange = (e) => {
     setCustomsCheckOption(e.target.value);
   };
-  
+
   return (
     <Layout>
       <Header className="layout-header">
@@ -138,7 +116,7 @@ export default function Sell() {
           }}
         >
           {showFirstSlide && (
-            <div className="sell-content">
+            <div className="sell-content justify-content">
               <h2>About your watch</h2>
               <div className="form-group">
                 <label>How would you like to sell your watch?</label>
@@ -221,7 +199,7 @@ export default function Sell() {
             </div>
           )}
           {showSecondSlide && (
-            <div className="watch-valuation-result">
+            <div className="watch-valuation-result justify-content">
               <h3>Customs Check</h3>
               <div className="form-group">
                 <label>
@@ -232,7 +210,7 @@ export default function Sell() {
                 </label>
                 <div className="radio-group">
                   <div className="radio-option">
-                    <input 
+                    <input
                       type="radio"
                       name="customsCheck"
                       value="yes"
@@ -283,7 +261,7 @@ export default function Sell() {
             </div>
           )}
           {showThirdSlide && (
-            <div className="your-details">
+            <div className="your-details justify-content">
               <h3>Your Details</h3>
               <div className="form-group">
                 <label>First Name</label>
