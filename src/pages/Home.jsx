@@ -71,9 +71,8 @@ export default function Home() {
     setCurrentPage(page);
   };
 
- 
   const totalProducts = products.length;
-  const pageSize = 8; 
+  const pageSize = 8;
   const totalPages = Math.ceil(totalProducts / pageSize);
 
   return (
@@ -145,10 +144,9 @@ export default function Home() {
           </Title>
 
           <Row gutter={[16, 16]}>
-            {products
-              .slice((currentPage - 1) * pageSize, currentPage * pageSize)
-              .map((product) => (
-                <Col key={product.id} span={6}>
+            {products.map((product) => (
+              <Col key={product.id} span={6}>
+                <Link to={'/HomePage/${product.id}'}>
                   <Card
                     hoverable
                     cover={<img alt={product.name} src={product.image} />}
@@ -161,8 +159,9 @@ export default function Home() {
                       Price: {product.price}
                     </Text>
                   </Card>
-                </Col>
-              ))}
+                </Link>
+              </Col>
+            ))}
           </Row>
           <Pagination
             current={currentPage}
