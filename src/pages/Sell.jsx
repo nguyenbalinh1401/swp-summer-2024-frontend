@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Layout,
@@ -116,7 +116,7 @@ export default function Sell() {
   const handleCustomsCheckChange = (e) => {
     setCustomsCheckOption(e.target.value);
   };
-
+  
   return (
     <Layout>
       <Header className="layout-header">
@@ -232,7 +232,7 @@ export default function Sell() {
                 </label>
                 <div className="radio-group">
                   <div className="radio-option">
-                    <input
+                    <input 
                       type="radio"
                       name="customsCheck"
                       value="yes"

@@ -1,69 +1,81 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import React from "react";
 import {
-  LikeOutlined,
-  MessageOutlined,
-  StarOutlined,
   CommentOutlined,
   CustomerServiceOutlined,
   CloseOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import {
-  Breadcrumb,
   Layout,
   Menu,
   theme,
-  Avatar,
-  List,
-  Space,
   FloatButton,
-  
+  Input,
+  Pagination,
+  Row,
+  Col,
+  Card,
+  Typography,
+  Carousel,
 } from "antd";
 import { Link } from "react-router-dom";
 import "../components/style/BuyStyle.css";
 
 const { Header, Content } = Layout;
-const data = Array.from({
-  length: 23,
-}).map((_, i) => ({
-  href: "https://ant.design",
-  title: `ant design part ${i}`,
-  avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
-  description:
-    "Ant Design, a design language for background applications, is refined by Ant UED Team.",
-  content:
-    "We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.",
-}));
-const IconText = ({ icon, text }) => (
-  <Space>
-    {React.createElement(icon)}
-    {text}
-  </Space>
-);
-const items = ["Home", "Buy", "Sell"].map((label, index) => ({
-  key: String(index + 1),
-  label:
-    label === "Home" ? (
-      <Link to={`/`}>{label}</Link>
-    ) : (
-      <Link to={`/${label.toLowerCase()}`}>{label}</Link>
-    ),
-}));
-[
+const { Search } = Input;
+const { Title, Text } = Typography;
+
+const items = [
   { key: "1", label: <Link to="/">Home</Link> },
   { key: "2", label: <Link to="/buy">Buy</Link> },
   { key: "3", label: <Link to="/sell">Sell</Link> },
 ];
 
+const images = [
+  "https://images.samsung.com/vn/galaxy-watch6/feature/galaxy-watch6-banner-watch6-classic-mo.jpg",
+  "https://consumer.huawei.com/content/dam/huawei-cbg-site/common/mkt/pdp/wearables/watch-ultimate-la/video/huawei-watch-ultimate-16-structure-water-resistant-design-xs.jpg",
+  "https://www.watches.com/cdn/shop/files/california-watch-co-lifestyle-2021.09-10_6a0b9a63-9e74-4db4-af49-e24dcdfb04ec_1800x.jpg",
+  "https://www.telegraph.co.uk/content/dam/fashion/2022/11/11/TELEMMGLPICT000263705496_trans_NvBQzQNjv4BqwMJYxftKZExwjop9hyNEmQEwTyzLMKRxDe4NUIzb66I.jpeg",
+];
+
 export default function Home() {
   const [open, setOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/product")
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  }, []);
+
   const handleClick = () => {
     setOpen(!open);
   };
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleSearch = (value) => {
+    console.log(value);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Calculate pagination variables
+  const totalProducts = products.length;
+  const pageSize = 8; // Number of products per page
+  const totalPages = Math.ceil(totalProducts / pageSize);
+
   return (
     <Layout>
       <FloatButton.Group
@@ -78,85 +90,88 @@ export default function Home() {
       </FloatButton.Group>
 
       <Header className="layout-header">
-        <div className="demo-logo" />
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={[1]}
+          defaultSelectedKeys={["1"]}
           items={items}
           className="menu"
         />
       </Header>
-      <Content className="content">
-        <Breadcrumb className="breadcrumb">
-          <Breadcrumb.Item>
-            <Link to="/">New</Link>
-          </Breadcrumb.Item>
-        </Breadcrumb>
 
+      <Content className="content" style={{ paddingTop: 64 }}>
         <div
           className="content-inner"
           style={{
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
+            padding: "24px",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
-          <List
-            itemLayout="vertical"
+          <Search
+            placeholder="Search items"
+            enterButton={<SearchOutlined />}
             size="large"
-            pagination={{
-              onChange: (page) => {
-                console.log(page);
-              },
-              pageSize: 3,
+            onSearch={handleSearch}
+            style={{ marginBottom: "24px" }}
+          />
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "1200px",
+              margin: "0 auto",
             }}
-            dataSource={data}
-            footer={
-              <div>
-                <b>ant design</b> footer part
-              </div>
-            }
-            renderItem={(item) => (
-              <List.Item
-                key={item.title}
-                actions={[
-                  <IconText
-                    icon={StarOutlined}
-                    text="156"
-                    key="list-vertical-star-o"
-                  />,
-                  <IconText
-                    icon={LikeOutlined}
-                    text="156"
-                    key="list-vertical-like-o"
-                  />,
-                  <IconText
-                    icon={MessageOutlined}
-                    text="2"
-                    key="list-vertical-message"
-                  />,
-                ]}
-                extra={
+          >
+            <Carousel autoplay fade arrows style={{ width: "100%" }}>
+              {images.map((image, index) => (
+                <div key={index}>
                   <img
-                    width={272}
-                    alt="logo"
-                    src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                    src={image}
+                    alt={`carousel-${index}`}
+                    style={{
+                      width: "100%",
+                      height: "400px",
+                      objectFit: "cover",
+                    }}
                   />
-                }
-              >
-                <List.Item.Meta
-                  avatar={<Avatar src={item.avatar} />}
-                  title={<a href={item.href}>{item.title}</a>}
-                  description={item.description}
-                />
-                {item.content}
-              </List.Item>
-              
-            )}
-            
+                </div>
+              ))}
+            </Carousel>
+          </div>
+          <Title level={2} style={{ marginTop: 48 }}>
+            New
+          </Title>
+
+          <Row gutter={[16, 16]}>
+            {products
+              .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+              .map((product) => (
+                <Col key={product.id} span={6}>
+                  <Card
+                    hoverable
+                    cover={<img alt={product.name} src={product.image} />}
+                  >
+                    <Card.Meta
+                      title={product.name}
+                      description={product.description}
+                    />
+                    <Text style={{ marginTop: 16 }}>
+                      Price: {product.price}
+                    </Text>
+                  </Card>
+                </Col>
+              ))}
+          </Row>
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={totalProducts}
+            onChange={handlePageChange}
+            style={{ textAlign: "center", marginTop: "24px" }}
           />
         </div>
-        
       </Content>
     </Layout>
   );
