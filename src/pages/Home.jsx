@@ -8,7 +8,6 @@ import {
 } from "@ant-design/icons";
 import {
   Layout,
-  Menu,
   theme,
   FloatButton,
   Input,
@@ -22,15 +21,10 @@ import {
 import { Link } from "react-router-dom";
 import "../components/style/Home.css";
 
-const { Header, Content } = Layout;
-const { Search } = Input;
+const { Content } = Layout;
+
 const { Title, Text } = Typography;
 
-const items = [
-  { key: "1", label: <Link to="/">Home</Link> },
-  { key: "2", label: <Link to="/buy">Buy</Link> },
-  { key: "3", label: <Link to="/sell">Sell</Link> },
-];
 
 const images = [
   "https://images.samsung.com/vn/galaxy-watch6/feature/galaxy-watch6-banner-watch6-classic-mo.jpg",
@@ -88,15 +82,7 @@ export default function Home() {
         <FloatButton icon={<CommentOutlined />} />
       </FloatButton.Group>
 
-      <Header className="layout-header">
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["1"]}
-          items={items}
-          className="menu"
-        />
-      </Header>
+      
 
       <Content className="content" style={{ paddingTop: 64 }}>
         <div
@@ -109,13 +95,7 @@ export default function Home() {
             boxSizing: "border-box",
           }}
         >
-          <Search
-            placeholder="Search items"
-            enterButton={<SearchOutlined />}
-            size="large"
-            onSearch={handleSearch}
-            style={{ marginBottom: "24px" }}
-          />
+          
           <div
             style={{
               width: "100%",
@@ -143,7 +123,7 @@ export default function Home() {
             New
           </Title>
 
-          <Row gutter={[16, 16]}>
+          <Row gutter={[8,8]}>
             {products.map((product) => (
               <Col key={product.id} span={6}>
                 <Link to={'/HomePage/${product.id}'}>

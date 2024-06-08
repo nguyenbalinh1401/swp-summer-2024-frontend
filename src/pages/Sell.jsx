@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import {
   Layout,
-  Menu,
   theme,
   Input,
   Button,
@@ -12,17 +10,9 @@ import {
 
 import "../components/style/SellStyle.css";
 
-const { Header, Content } = Layout;
+const {Content } = Layout;
 
-const items = ["Home", "Buy", "Sell"].map((label, index) => ({
-  key: String(index + 1),
-  label:
-    label === "Home" ? (
-      <Link to={`/`}>{label}</Link>
-    ) : (
-      <Link to={`/${label.toLowerCase()}`}>{label}</Link>
-    ),
-}));
+
 
 export default function Sell() {
   const {
@@ -97,16 +87,7 @@ export default function Sell() {
 
   return (
     <Layout>
-      <Header className="layout-header">
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["3"]}
-          items={items}
-          className="menu"
-        />
-      </Header>
+      
       <Content className="content">
         <div
           className="content-inner"
