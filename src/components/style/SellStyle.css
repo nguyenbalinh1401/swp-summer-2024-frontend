@@ -1,0 +1,29 @@
+.form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .radio-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .radio-option span {
+    margin-left: 0.5rem;
+  }
+  
+  .submit-button {
+    margin-top: 1rem;
+  }
+  
+  .justify-content{
+    
+      justify-content: center;
+      align-items: center;
+      height: 100vh; 
+  }
