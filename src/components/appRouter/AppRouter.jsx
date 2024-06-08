@@ -5,9 +5,11 @@ import SignIn from "../../pages/Signin";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
 // check sell
-import SellPage from "../../pages/SellPage";
-import FillFormBeSell from "../../pages/FillFormBeSell";
-import LastActionSell from "../../pages/LastActionSell";
+import SellPage from "../../components/SellPage";
+
+import LastActionSell from "../../components/LastActionSell";
+import WatchForm from "../../components/WatchForm";
+import { SellProvider } from "../../context/sellContext";
 
 
 
@@ -20,13 +22,36 @@ export default function AppRouter() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/product" element={<div>Product</div>} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/lastAction" element={<LastActionSell />} />
+        
     
     {/* check sell */}
+    <Route
+          path="/sell"
+          element={
+            <SellProvider>
+              <SellPage />
+            </SellProvider>
+          }
+        />
 
-        <Route path="/sell" element={<SellPage />} />
-        <Route path="/fillFormBeSell" element={<FillFormBeSell />} />
-      </Routes>
+        <Route
+          path="/WatchForm"
+          element={
+            <SellProvider>
+              <WatchForm />
+            </SellProvider>
+          }
+        />
+
+        <Route
+          path="/lastAction"
+          element={
+            <SellProvider>
+              <LastActionSell />
+            </SellProvider>
+          }
+        />
+        </Routes>
     </div>
   );
 }

@@ -73,19 +73,23 @@ body {
     color: gray;
   }
   
-  /* Button Styles */
-  button {
-    background-color: #090909;
-    color: white;
-    padding: 4px 8px; /* Further reduced padding */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px; /* Further reduced font size */
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
+/* Button Styles */
+button {
+  background-color: #000000; /* Màu nền đen */
+  color: #ffffff; /* Màu chữ trắng */
+  padding: 4px 8px; /* Giảm padding để kích thước nút nhỏ gọn hơn */
+  border: 2px solid #ffffff; /* Thêm viền màu trắng */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px; /* Giảm kích thước font */
+  transition: background-color 0.3s ease;
+  margin: 0 auto; /* Căn giữa nút */
+  display: inline-block; /* Inline-block để margin auto hoạt động và thu gọn kích thước */
+}
+
+button:hover {
+  background-color: #333333; /* Màu nền khi hover */
+}
+
+
   
