@@ -26,4 +26,28 @@
       justify-content: center;
       align-items: center;
       height: 100vh; 
+      margin-top: 45px;
+  }
+  
+  .content-inner{
+    padding-top: 50px;
+   
+  }
+
+  .select-option{
+    margin-left: 20px;
+    width: 100%;
+  }
+
+  .check-option{
+    margin-left: 20px;
+  }
+
+  .type-option{
+    margin-left: 20px;
+    width: 100%;
+  }
+
+  .button{
+    margin-top: 20px;
   }

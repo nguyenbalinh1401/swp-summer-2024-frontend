@@ -93,21 +93,27 @@ export default function Sell() {
           className="content-inner"
           style={{
             background: colorBgContainer,
-            borderRadius: borderRadiusLG,
+            borderRadius: borderRadiusLG,   
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems:   "flex-start",        
           }}
         >
           {showFirstSlide && (
-            <div className="sell-content justify-content">
+            
+            <div className="sell-content justify-content" >
               <h2>About your watch</h2>
               <div className="form-group">
-                <label>How would you like to sell your watch?</label>
+                <label>You want to Sell and Appraise or just Appraise your watch?</label>
                 <Select
                   value={sellMethod}
                   onChange={onSellMethodChange}
-                  style={{ width: "100%" }}
+                  className="select-option"
+                  
                 >
-                  <Select.Option value="outright">Outright Sale</Select.Option>
-                  <Select.Option value="trade">Trade In</Select.Option>
+                  <Select.Option value="outright">Sell and Appraise</Select.Option>
+                  <Select.Option value="trade">Just Appraise</Select.Option>
                 </Select>
               </div>
               <div className="form-group">
@@ -115,6 +121,7 @@ export default function Sell() {
                 <Checkbox
                   checked={hasOriginalBox}
                   onChange={onOriginalBoxChange}
+                  className="check-option"
                 >
                   Yes
                 </Checkbox>
@@ -124,6 +131,7 @@ export default function Sell() {
                 <Checkbox
                   checked={hasOriginalPapers}
                   onChange={onOriginalPapersChange}
+                  className="check-option"
                 >
                   Yes
                 </Checkbox>
@@ -133,6 +141,7 @@ export default function Sell() {
                 <Checkbox
                   checked={purchasedFromWatchfinder}
                   onChange={onWatchfinderChange}
+                  className="check-option"
                 >
                   Yes
                 </Checkbox>
@@ -144,41 +153,43 @@ export default function Sell() {
                 <Checkbox
                   checked={hasFactoryStickers}
                   onChange={onFactoryStickersChange}
+                  className="check-option"
                 >
                   Yes
                 </Checkbox>
-              </div>
-              <div className="form-group">
+              </div>            
                 <label>What year is your watch?</label>
-                <Select
+                <Input
+                  placeholder="Your Watch Year"
                   value={watchYear}
-                  onChange={onWatchYearChange}
-                  style={{ width: "100%" }}
-                >
-                  <Select.Option value="2022">2022</Select.Option>
-                  <Select.Option value="2021">2021</Select.Option>
-                </Select>
-              </div>
+                  onChange={onWatchYearChange}                 
+                  className="select-option"
+                >                 
+                </Input>
+              
               <div className="form-group">
                 <label>Is your watch a limited edition?</label>
                 <Checkbox
                   checked={isLimitedEdition}
                   onChange={onLimitedEditionChange}
+                  className="check-option"
                 >
                   Yes
                 </Checkbox>
               </div>
-              <h3>Watch Valuation</h3>
+              <label>Watch Valuation</label>
               <Input
                 placeholder="Enter watch details"
                 value={watchValue}
                 onChange={handleWatchValueChange}
+                className="type-option"
               />
-              <Button type="primary" onClick={handleWatchValuation}>
+              <Button type="primary" onClick={handleWatchValuation} className="button">
                 Valuate Watch
               </Button>
             </div>
           )}
+          
           {showSecondSlide && (
             <div className="watch-valuation-result justify-content">
               <h3>Customs Check</h3>
