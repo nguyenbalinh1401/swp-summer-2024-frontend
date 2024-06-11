@@ -14,6 +14,10 @@ import { SellProvider } from "../../context/sellContext";
 
 
 
+import Buy from "../../pages/Buy";
+import HomePage from "../../pages/HomePage";
+import Sell from "../../pages/Sell";
+
 export default function AppRouter() {
   return (
     <div className="w-full min-h-[80vh] flex items-center justify-center">
@@ -22,36 +26,10 @@ export default function AppRouter() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/product" element={<div>Product</div>} />
         <Route path="/product/:id" element={<ProductDetail />} />
+
         
     
-    {/* check sell */}
-    <Route
-          path="/sell"
-          element={
-            <SellProvider>
-              <SellPage />
-            </SellProvider>
-          }
-        />
-
-        <Route
-          path="/WatchForm"
-          element={
-            <SellProvider>
-              <WatchForm />
-            </SellProvider>
-          }
-        />
-
-        <Route
-          path="/lastAction"
-          element={
-            <SellProvider>
-              <LastActionSell />
-            </SellProvider>
-          }
-        />
-        </Routes>
+    
     </div>
   );
 }
