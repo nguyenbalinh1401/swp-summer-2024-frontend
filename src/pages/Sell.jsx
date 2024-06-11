@@ -159,13 +159,13 @@ export default function Sell() {
                 </Checkbox>
               </div>            
                 <label>What year is your watch?</label>
-                <Input
+                <Select
                   placeholder="Your Watch Year"
                   value={watchYear}
                   onChange={onWatchYearChange}                 
                   className="select-option"
                 >                 
-                </Input>
+                </Select>
               
               <div className="form-group">
                 <label>Is your watch a limited edition?</label>

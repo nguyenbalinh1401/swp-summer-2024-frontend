@@ -5,7 +5,6 @@ import {
   Menu,
   theme,
   message,
-  Upload,
   Input,
   Button,
   Select,
@@ -20,35 +19,6 @@ const { Header, Content } = Layout;
 const { Option } = Select;
 
 
-const props = {
-  name: "file",
-  multiple: true,
-  action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
-
-const items = ["Home", "Buy", "Sell"].map((label, index) => ({
-  key: String(index + 1),
-  label:
-    label === "Home" ? (
-      <Link to={`/`}>{label}</Link>
-    ) : (
-      <Link to={`/${label.toLowerCase()}`}>{label}</Link>
-    ),
-}));
 
 export default function Sell() {
   const navigate = useNavigate();
@@ -163,7 +133,7 @@ export default function Sell() {
       console.log('Submitting form with data:', newSellForm);
 
       // Chuyển hướng người dùng đến /sellPage
-      navigate('/lastAction');
+      navigate('/lastActionSell');
     } catch (error) {
       console.error('Error submitting form:', error);
       // Xử lý lỗi nếu có
@@ -229,16 +199,7 @@ export default function Sell() {
 
   return (
     <Layout>
-      <Header className="layout-header">
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["3"]}
-          items={items}
-          className="menu"
-        />
-      </Header>
+      
       <Content className="content">
         <div
           className="content-inner"
