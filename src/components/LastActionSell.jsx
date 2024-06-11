@@ -1,14 +1,50 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Timeline } from "antd";
-import { useSellContext } from "../context/sellContext"; // Import hook useSellContext từ SellProvider
+import React, { useState } from "react";
+import { Timeline, Modal } from "antd";
+import { useSellContext } from "../context/sellContext";
 import "../styles/last-action-sell.css";
+import { Button } from "antd";
 
 const LastActionSell = () => {
-  const { watchForm, sellForm } = useSellContext(); // Lấy dữ liệu từ context
+  const { watchForm, sellForm } = useSellContext();
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
 
-  console.log("Watch Form Data:", watchForm); // Log dữ liệu từ watchForm
-  console.log("Sell Form Data:", sellForm); // Log dữ liệu từ sellForm
+  const [modalVisible, setModalVisible] = useState(false);
+
+  // const addresses = ["123 Street, City, Country", "456 Avenue, Town, Country"]; // Danh sách địa chỉ
+
+  const handleSelectAddress = (address) => {
+    setSelectedAddress(address); // Lưu địa chỉ đã chọn
+    setModalVisible(false); // Ẩn modal sau khi chọn địa chỉ
+  };
+  const handleSendRequest = () => {
+    // Gửi yêu cầu đến server
+    fetch("/api/notify-quay-tham-dinh", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        address: selectedAddress,
+        watchForm,
+        sellForm
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Response from server:", data);
+        setRequestSent(true); // Cập nhật trạng thái sau khi yêu cầu đã được gửi thành công
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+  };
+  const getFormattedDate = () => {
+    const currentDate = new Date();
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return currentDate.toLocaleDateString(undefined, options);
+  };
 
   return (
     <div className="container">
@@ -25,9 +61,9 @@ const LastActionSell = () => {
             </h2>
             {sellForm ? (
               <ul>
-                {/* Hiển thị thông tin từ sellForm */}
-                <li>Total expected payout: {sellForm.totalExpectedPayout}</li>
+                {/* <li>Total expected payout: {sellForm.totalExpectedPayout}</li> */}
                 <li>Initial offer (subject to inspection): {sellForm.initialOffer}</li>
+
                 <li>Minimum servicing fee: {sellForm.minimumServicingFee}</li>
               </ul>
             ) : (
@@ -35,21 +71,28 @@ const LastActionSell = () => {
             )}
             <h3>Title: Total expected payout</h3>
             <p>
-              This estimate is valid until 29/05/2024. For us to make your final offer, you'll need to send us your watch to be checked by one of our experts. Once this is done, we'll contact you with a quote. You can get your watch to us for inspection in this way:
+              This estimate is valid until {getFormattedDate()}. For us to make your final offer, you'll need to send us your watch to be checked by one of our experts. Once this is done, we'll contact you with a quote. You can get your watch to us for inspection in this way:
             </p>
-            <Link to="/select-store" >
-              <button>Drop off in Boutique</button>
-            </Link>
+            <div>
+              <button onClick={() => setModalVisible(true)}>Drop off in Boutique</button>
+              {selectedAddress && ( // Hiển thị địa chỉ đã chọn nếu có
+                <div>
+                  <p>Selected address: {selectedAddress}</p>
+                  <p>Provide additional details about your watch to speed up the process.</p>
+                </div>
+              )}
+            </div>
             <p>Provide additional details about your watch to speed up the process.</p>
+            <Button type="primary" onClick={handleSendRequest} disabled={requestSent}>
+              {requestSent ? "Request Sent" : "Send Request"}
+            </Button>
           </Timeline.Item>
-          {/* Các Timeline.Item khác */}
         </Timeline>
       </div>
       <div className="details-section">
         <h2>Your Watch</h2>
         {watchForm ? (
           <ul>
-            {/* Hiển thị thông tin từ watchForm */}
             <li>Brand: {watchForm.brand?.name}</li>
             <li>Model: {watchForm.model?.name}</li>
             <li>Description: {watchForm.model?.description}</li>
@@ -66,13 +109,30 @@ const LastActionSell = () => {
             <li>
               <img src={watchForm.model?.image} alt={watchForm.model?.name} style={{ width: '200px', height: '200px' }} />
             </li>
-            {/* Hiển thị các thông tin khác từ watchForm */}
           </ul>
         ) : (
           <p>No watch form data available</p>
         )}
-        {/* Hiển thị thông tin khác */}
       </div>
+      {/* Modal hiển thị danh sách địa chỉ */}
+      <Modal
+        title="Select Address"
+        visible={modalVisible} // Sử dụng modalVisible thay vì modalOpen
+        onCancel={() => setModalVisible(false)}
+        footer={null}
+      >
+        <div style={{ marginBottom: '10px' }}>
+          <img src="/images/address_0.jpg" alt="123 Street, City, Country" style={{ width: '100%', height: 'auto', marginBottom: '5px' }} />
+          <Button type="primary" onClick={() => handleSelectAddress("123 Street, City, Country")}>Select</Button>
+        </div>
+        <div style={{ marginBottom: '10px' }}>
+          <img src="/images/address_1.jpg" alt="456 Avenue, Town, Country" style={{ width: '100%', height: 'auto', marginBottom: '5px' }} />
+          <Button type="primary" onClick={() => handleSelectAddress("456 Avenue, Town, Country")}>Select</Button>
+        </div>
+      </Modal>
+
+
+
     </div>
   );
 };

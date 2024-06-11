@@ -16,7 +16,8 @@ export const brands = [
         dialColor: "Black",
         caseSize: "40mm",
         yearOfManufacture: "2015",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 8500
       },
       {
         name: "Daytona",
@@ -31,7 +32,8 @@ export const brands = [
         dialColor: "White",
         caseSize: "40mm",
         yearOfManufacture: "2017",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 13000
       },
       {
         name: "Datejust",
@@ -46,7 +48,8 @@ export const brands = [
         dialColor: "Blue",
         caseSize: "41mm",
         yearOfManufacture: "2019",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 9000
       }
     ]
   },
@@ -67,7 +70,8 @@ export const brands = [
         dialColor: "Black",
         caseSize: "42mm",
         yearOfManufacture: "2018",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 5000
       },
       {
         name: "Speedmaster",
@@ -82,7 +86,8 @@ export const brands = [
         dialColor: "Black",
         caseSize: "42mm",
         yearOfManufacture: "2019",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 6000
       },
       {
         name: "Constellation",
@@ -97,7 +102,8 @@ export const brands = [
         dialColor: "Silver",
         caseSize: "38mm",
         yearOfManufacture: "2020",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 7000
       }
     ]
   },
@@ -118,7 +124,8 @@ export const brands = [
         dialColor: "Black",
         caseSize: "41mm",
         yearOfManufacture: "2018",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 4000
       },
       {
         name: "Aquaracer",
@@ -133,7 +140,8 @@ export const brands = [
         dialColor: "Blue",
         caseSize: "43mm",
         yearOfManufacture: "2019",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 3500
       },
       {
         name: "Monaco",
@@ -148,7 +156,8 @@ export const brands = [
         dialColor: "Blue",
         caseSize: "39mm",
         yearOfManufacture: "2020",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 4500
       }
     ]
   },
@@ -169,7 +178,8 @@ export const brands = [
         dialColor: "Blue",
         caseSize: "40mm",
         yearOfManufacture: "2018",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 30000
       },
       {
         name: "Calatrava",
@@ -184,7 +194,8 @@ export const brands = [
         dialColor: "White",
         caseSize: "39mm",
         yearOfManufacture: "2019",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 25000
       },
       {
         name: "Aquanaut",
@@ -199,7 +210,8 @@ export const brands = [
         dialColor: "Black",
         caseSize: "40mm",
         yearOfManufacture: "2020",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 20000
       }
     ]
   },
@@ -220,7 +232,8 @@ export const brands = [
         dialColor: "Blue",
         caseSize: "41mm",
         yearOfManufacture: "2017",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 25000
       },
       {
         name: "Royal Oak Offshore",
@@ -235,7 +248,8 @@ export const brands = [
         dialColor: "Black",
         caseSize: "42mm",
         yearOfManufacture: "2018",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 28000
       },
       {
         name: "Millenary",
@@ -250,7 +264,8 @@ export const brands = [
         dialColor: "White",
         caseSize: "39.5mm",
         yearOfManufacture: "2019",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 22000
       }
     ]
   },
@@ -271,7 +286,8 @@ export const brands = [
         dialColor: "Black",
         caseSize: "43mm",
         yearOfManufacture: "2018",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 7000
       },
       {
         name: "Superocean",
@@ -286,7 +302,8 @@ export const brands = [
         dialColor: "Blue",
         caseSize: "44mm",
         yearOfManufacture: "2019",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 6000
       },
       {
         name: "Chronomat",
@@ -301,8 +318,10 @@ export const brands = [
         dialColor: "Black",
         caseSize: "42mm",
         yearOfManufacture: "2020",
-        limitedEdition: false
+        limitedEdition: false,
+        marketValue: 6500
       }
     ]
   }
 ];
+

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Layout,
@@ -16,6 +16,9 @@ import "../styles/sell-page.css";
 import { useSellContext } from "../context/sellContext";
 
 const { Header, Content } = Layout;
+
+const { Option } = Select;
+
 
 const props = {
   name: "file",
@@ -49,11 +52,19 @@ const items = ["Home", "Buy", "Sell"].map((label, index) => ({
 
 export default function Sell() {
   const navigate = useNavigate();
-  const { updateSellForm } = useSellContext(); // Move hook call inside function component
+  const { updateSellForm, watchForm } = useSellContext(); 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const [watchValue, setWatchValue] = useState("");
+  const [initialOffer, setInitialOffer] = useState("");
+
+  //-------------------calculate----------------------------
+
+  const [minimumServicingFee, setMinimumServicingFee] = useState(0); 
+  const [total, setTotal] = useState(0);
+
+
+  //-------------------end calculate -----------------------
   const [showFirstSlide, setShowFirstSlide] = useState(true);
   const [showSecondSlide, setShowSecondSlide] = useState(false);
   const [showThirdSlide, setShowThirdSlide] = useState(false);
@@ -96,11 +107,21 @@ export default function Sell() {
   };
 
   const handleWatchValueChange = (e) => {
-    setWatchValue(e.target.value);
+    setInitialOffer(e.target.value);
   };
 
   const handleWatchValuation = () => {
-    console.log("Watch value:", watchValue);
+    console.log("initialOffer:", initialOffer);
+
+    const marketValue = watchForm?.marketValue || 0; 
+    let fee = minimumServicingFee;
+    if (hasOriginalBox) fee -= 50;
+    if (hasOriginalPapers) fee -= 50;
+
+    const total = marketValue - fee + parseFloat(initialOffer || 0);
+
+    setTotal(total);
+
     setShowFirstSlide(false);
     setShowSecondSlide(true);
     setShowThirdSlide(false);
@@ -123,7 +144,7 @@ export default function Sell() {
     try {
       // Tạo đối tượng mới chứa tất cả thông tin từ form
       const newSellForm = {
-        watchValue,
+        initialOffer, // Set initialOffer to watchValue
         sellMethod,
         hasOriginalBox,
         hasOriginalPapers,
@@ -132,6 +153,8 @@ export default function Sell() {
         watchYear,
         isLimitedEdition,
         customsCheckOption,
+        minimumServicingFee,
+        total,
       };
 
       // Cập nhật sellPage trong context với đối tượng mới
@@ -159,6 +182,51 @@ export default function Sell() {
     setShowThirdSlide(false);
   };
 
+  //-------year--------
+
+  
+  const years = [];
+  const currentYear = new Date().getFullYear();
+  for (let year = currentYear; year >= 1900; year--) {
+    years.push(year);
+  }
+  //-------------------
+
+
+
+
+  
+
+  //-----------------------
+  // Kiểm tra watchForm và cập nhật phí dịch vụ tối thiểu
+    useEffect(() => {
+      if (watchForm !== null) {
+        // Nếu watchForm không null, cập nhật phí dịch vụ tối thiểu là 100
+        setMinimumServicingFee(100);
+      } else {
+        // Nếu watchForm null, cập nhật phí dịch vụ tối thiểu là 200
+        setMinimumServicingFee(200);
+      }
+    }, [watchForm]);
+
+  //-----------------------
+
+  //-----------------------
+  // Địa chỉ hình ảnh đồng hồ và tên thương hiệu
+  const watchInfo = {
+    brand: watchForm?.brand?.name || "",
+    image: watchForm?.model?.image || "",
+  };
+
+  // Render phần thông tin đồng hồ
+  const renderWatchInfo = () => (
+    <div className="watch-info">
+      <img src={watchInfo.image} alt={watchInfo.brand} />
+      <h3>{watchInfo.brand}</h3>
+    </div>
+  );
+  //-----------------------
+
   return (
     <Layout>
       <Header className="layout-header">
@@ -181,6 +249,8 @@ export default function Sell() {
         >
           {showFirstSlide && (
             <div className="sell-content">
+              {/* Hiển thị thông tin đồng hồ */}
+            {renderWatchInfo()}
               <h2>About your watch</h2>
               <div className="form-group">
                 <label>How would you like to sell your watch?</label>
@@ -232,15 +302,19 @@ export default function Sell() {
                 </Checkbox>
               </div>
               <div className="form-group">
-                <label>What year is your watch?</label>
-                <Select
-                  value={watchYear}
-                  onChange={onWatchYearChange}
-                  style={{ width: "100%" }}
-                >
-                  <Select.Option value="2022">2022</Select.Option>
-                  <Select.Option value="2021">2021</Select.Option>
-                </Select>
+              <label>What year is your watch?</label>
+        <Select
+          value={watchYear}
+          onChange={onWatchYearChange}
+          style={{ width: "100%" }}
+        >
+          {/* Lặp qua mảng years để hiển thị danh sách năm */}
+          {years.map((year) => (
+            <Option key={year} value={year}>
+              {year}
+            </Option>
+          ))}
+        </Select>
               </div>
               <div className="form-group">
                 <label>Is your watch a limited edition?</label>
@@ -253,8 +327,8 @@ export default function Sell() {
               </div>
               <h3>Watch Valuation</h3>
               <Input
-                placeholder="Enter watch details"
-                value={watchValue}
+                placeholder="Enter your initialOffer: "
+                value={initialOffer}
                 onChange={handleWatchValueChange}
               />
               <Button type="primary" onClick={handleWatchValuation}>
@@ -363,7 +437,7 @@ export default function Sell() {
               </div>
               <div>
                 <Button type="primary"
-                className="back-button"
+                  className="back-button"
                   onClick={handleBackToSecondSlide}
                 >
                   Back
