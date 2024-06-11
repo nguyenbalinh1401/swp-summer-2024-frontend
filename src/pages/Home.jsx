@@ -19,7 +19,11 @@ import {
   Carousel,
 } from "antd";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import "../styles/home.css";
+=======
+import "../components/style/Home.css";
+>>>>>>> 97e851449b2b6f16c1d8feb518e4aa0031d00fc8
 
 const { Content } = Layout;
 
@@ -154,4 +158,8 @@ export default function Home() {
       </Content>
     </Layout>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 97e851449b2b6f16c1d8feb518e4aa0031d00fc8
