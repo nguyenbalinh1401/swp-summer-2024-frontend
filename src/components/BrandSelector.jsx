@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import '../styles/watch-form.css';
 
 const BrandSelector = ({ brands, onSelectBrand, updateWatchForm, navigate }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [hoveredBrand, setHoveredBrand] = useState(null);
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
@@ -18,27 +20,59 @@ const BrandSelector = ({ brands, onSelectBrand, updateWatchForm, navigate }) => 
     navigate('/sell');
   };
 
+  const handleMouseEnter = (brand) => {
+    setHoveredBrand(brand);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredBrand(null);
+  };
+
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <h2 style={{ marginBottom: '10px' }}>Search your watch brand:</h2>
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+    <div className="brand-selector-container">
+      <h2 className="brand-selector-heading">Search your watch brand</h2>
+      <div className="brand-selector-search">
         <input
           type="text"
           placeholder="Search..."
           value={searchTerm}
           onChange={handleSearch}
-          style={{ width: '300px', padding: '8px', borderRadius: '5px', border: '1px solid #ccc' }}
+          className="brand-selector-input"
         />
       </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+      <div className="brand-selector-grid">
         {filteredBrands.map((brand, index) => (
-          <div key={index} onClick={() => onSelectBrand(brand)} style={{ cursor: 'pointer', border: '2px solid black', padding: '10px', borderRadius: '5px', margin: '5px' }}>
-            <img src={brand.logo} alt={brand.name} style={{ width: '100px', height: '100px' }} />
-            <p>{brand.name}</p>
+          <div 
+            key={index} 
+            onClick={() => onSelectBrand(brand)} 
+            onMouseEnter={() => handleMouseEnter(brand)} 
+            onMouseLeave={handleMouseLeave} 
+            className="brand-selector-card"
+          >
+            <img 
+              src={brand.logo} 
+              alt={brand.name} 
+              className="brand-selector-image" 
+            />
+            <div className="brand-selector-details">
+              <h3 className="brand-selector-name">{brand.name}</h3>
+              {hoveredBrand === brand && (
+                <div className="brand-selector-info">
+                  <svg className="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                  <span className="info-text">More info about {brand.name}</span>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
-      <button onClick={handleNullForm}>Don't know</button>
+      <div className="brand-selector-button">
+        <button className="brand-selector-dont-know" onClick={handleNullForm}>
+          Don't know
+        </button>
+      </div>
     </div>
   );
 };
