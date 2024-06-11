@@ -19,16 +19,11 @@ import {
   Carousel,
 } from "antd";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
-import "../styles/home.css";
-=======
-import "../components/style/Home.css";
->>>>>>> 97e851449b2b6f16c1d8feb518e4aa0031d00fc8
+import "../components/style/Home.css"; // Chọn một đường dẫn và xóa dòng còn lại
 
 const { Content } = Layout;
 
 const { Title, Text } = Typography;
-
 
 const images = [
   "https://images.samsung.com/vn/galaxy-watch6/feature/galaxy-watch6-banner-watch6-classic-mo.jpg",
@@ -86,8 +81,6 @@ export default function Home() {
         <FloatButton icon={<CommentOutlined />} />
       </FloatButton.Group>
 
-      
-
       <Content className="content" style={{ paddingTop: 64 }}>
         <div
           className="content-inner"
@@ -99,7 +92,6 @@ export default function Home() {
             boxSizing: "border-box",
           }}
         >
-          
           <div
             style={{
               width: "100%",
@@ -127,10 +119,10 @@ export default function Home() {
             New
           </Title>
 
-          <Row gutter={[8,8]}>
+          <Row gutter={[8, 8]}>
             {products.map((product) => (
               <Col key={product.id} span={6}>
-                <Link to={'/HomePage/${product.id}'}>
+                <Link to={`/HomePage/${product.id}`}>
                   <Card
                     hoverable
                     cover={<img alt={product.name} src={product.image} />}
@@ -158,8 +150,4 @@ export default function Home() {
       </Content>
     </Layout>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 97e851449b2b6f16c1d8feb518e4aa0031d00fc8
