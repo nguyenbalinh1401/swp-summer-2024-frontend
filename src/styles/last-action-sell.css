@@ -1,81 +1,84 @@
 /* Global Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
-    margin: 0;
-    padding: 0;
-  }
-  
-  h1, h2 {
-    text-align: left;
-    color: #333;
-    position: relative;
-  }
-  
-  h2 .status {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  
-  /* Container Styles */
-  .container {
-    max-width: 1200px;
-    margin: 40px auto;
-    display: flex;
-  }
-  
-  /* Timeline Section */
-  .timeline-section {
-    flex: 1;
-    margin-right: 20px;
-  }
-  
-  /* Details Section */
-  .details-section {
-    flex: 1;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  /* Common Styles */
-  h2, h3 {
-    margin-top: 0;
-    color: #007bff;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 5px;
-  }
-  
-  p {
-    margin: 10px 0;
-  }
-  
-  /* Status Styles */
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2 {
+  text-align: left;
+  color: #333;
+  position: relative;
+}
+
+h2 .status {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Container Styles */
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  display: flex;
+}
+
+/* Timeline Section */
+.timeline-section {
+  flex: 1;
+  margin-right: 20px;
+}
+
+/* Details Section */
+.details-section {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Common Styles */
+h2,
+h3 {
+  margin-top: 0;
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+p {
+  margin: 10px 0;
+}
+
+/* Status Styles */
 .status {
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 4px;
-  }
-  
-  .complete {
-    color: green;
-  }
-  
-  .in-progress {
-    color: orange;
-  }
-  
-  .pending {
-    color: gray;
-  }
-  
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.complete {
+  color: green;
+}
+
+.in-progress {
+  color: orange;
+}
+
+.pending {
+  color: gray;
+}
+
 /* Button Styles */
-button {
-  background-color: #000000; /* Màu nền đen */
+button,
+.ant-btn {
+  background-color: #007bff; /* Màu nền mặc định */
   color: #ffffff; /* Màu chữ trắng */
   padding: 4px 8px; /* Giảm padding để kích thước nút nhỏ gọn hơn */
   border: 2px solid #ffffff; /* Thêm viền màu trắng */
@@ -87,9 +90,41 @@ button {
   display: inline-block; /* Inline-block để margin auto hoạt động và thu gọn kích thước */
 }
 
-button:hover {
-  background-color: #333333; /* Màu nền khi hover */
+button:hover,
+.ant-btn:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
 }
 
+/* Timeline Styles */
+.ant-timeline {
+  margin: 0;
+  padding: 0;
+}
 
-  
+.ant-timeline-item-content {
+  padding-left: 20px;
+}
+
+.ant-timeline-item-tail {
+  left: 12px;
+}
+
+.ant-timeline-item-head {
+  left: 10px;
+}
+
+.ant-timeline-item-head-blue {
+  background-color: #007bff; /* Màu thanh thời gian mặc định */
+}
+
+.ant-timeline-item-head-green {
+  background-color: green; /* Màu thanh thời gian cho trạng thái complete */
+}
+
+.ant-timeline-item-head-orange {
+  background-color: orange; /* Màu thanh thời gian cho trạng thái in-progress */
+}
+
+.ant-timeline-item-head-gray {
+  background-color: gray; /* Màu thanh thời gian cho trạng thái pending */
+}

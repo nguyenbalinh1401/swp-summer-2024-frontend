@@ -23,7 +23,7 @@ const WatchForm = () => {
   const handleFormSubmit = (model) => {
     if (selectedBrand && model) {
         updateWatchForm({ brand: selectedBrand, model });
-        navigate('/sell');
+        navigate('/sellPage');
     } else {
         // Xử lý khi người dùng chưa chọn đủ thông tin
         alert("Vui lòng chọn thương hiệu và mẫu đồng hồ!");

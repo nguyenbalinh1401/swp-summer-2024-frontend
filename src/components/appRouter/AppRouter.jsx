@@ -33,7 +33,7 @@ export default function AppRouter() {
           } 
         />
         <Route 
-          path="/lastActionSell" 
+          path="/LastActionSell" 
           element={
             <SellProvider>
               <LastActionSell />
