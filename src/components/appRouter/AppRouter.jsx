@@ -4,6 +4,15 @@ import NotFound from "../notFound/NotFound";
 import SignIn from "../../pages/Signin";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
+// check sell
+import SellPage from "../../components/SellPage";
+
+import LastActionSell from "../../components/LastActionSell";
+import WatchForm from "../../components/WatchForm";
+import { SellProvider } from "../../context/sellContext";
+
+
+
 
 import Buy from "../../pages/Buy";
 import HomePage from "../../pages/HomePage";
@@ -17,11 +26,10 @@ export default function AppRouter() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/product" element={<div>Product</div>} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/buy" element={<Buy/>}/>
-        <Route path="/welcome" element={<HomePage/>}/>
-        <Route path="/sell" element={<Sell/>}/>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+
+        
+    
+    
     </div>
   );
 }
