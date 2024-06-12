@@ -10,7 +10,7 @@ import LastActionSell from "../../components/LastActionSell";
 import WatchForm from "../../components/WatchForm";
 import { SellProvider } from "../../context/sellContext";
 import ContactPage from "../../pages/ContactPage";
-
+import OtherBrandForm from "../OtherBrandForm";
 
 export default function AppRouter() {
   return (
@@ -43,6 +43,14 @@ export default function AppRouter() {
           element={
             <SellProvider>
               <WatchForm />
+            </SellProvider>
+          } 
+        />
+        <Route 
+          path="/OtherBrandForm" 
+          element={
+            <SellProvider>
+              <OtherBrandForm />
             </SellProvider>
           } 
         />

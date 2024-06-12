@@ -25,6 +25,7 @@ body {
     max-width: 1200px;
     margin: 40px auto;
     display: flex;
+    margin-top: 100px;
   }
   
   /* Timeline Section */

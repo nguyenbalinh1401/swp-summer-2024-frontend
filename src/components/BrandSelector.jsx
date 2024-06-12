@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import "./style/BrandSelectorStyle.css";
-export default function BrandSelector({ brands, onSelectBrand, updateWatchForm, navigate })  {
+import '../styles/watch-form.css';
+
+
+export default function BrandSelector ({ brands, onSelectBrand, navigate }){
   const [searchTerm, setSearchTerm] = useState('');
+  const [hoveredBrand, setHoveredBrand] = useState(null);
+
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
@@ -11,36 +15,66 @@ export default function BrandSelector({ brands, onSelectBrand, updateWatchForm, 
     brand.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleNullForm = () => {
-    // Đặt watchForm thành null
-    updateWatchForm(null);
+  const handleOtherBrandForm = () => {
+    
     // Chuyển hướng người dùng đến trang "sell"
-    navigate('/sell');
+    navigate('/OtherBrandForm');
+  };
+
+  const handleMouseEnter = (brand) => {
+    setHoveredBrand(brand);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredBrand(null);
   };
 
   return (
-    <div className='brand-form'>
-      <h2 className='h2'>Search your watch brand:</h2>
-      <div className='search-form'>
+    <div className="brand-selector-container">
+      <h2 className="brand-selector-heading">Search your watch brand</h2>
+      <div className="brand-selector-search">
         <input
           type="text"
           placeholder="Search..."
           value={searchTerm}
           onChange={handleSearch}
-          className='input-form'
+          className="brand-selector-input"
         />
       </div>
-      <div className='logo-form'>
+      <div className="brand-selector-grid">
         {filteredBrands.map((brand, index) => (
-          <div key={index} onClick={() => onSelectBrand(brand)} className='onclick-form'>
-            <img src={brand.logo} alt={brand.name} className='image-form' />
-            <p>{brand.name}</p>
+          <div 
+            key={index} 
+            onClick={() => onSelectBrand(brand)} 
+            onMouseEnter={() => handleMouseEnter(brand)} 
+            onMouseLeave={handleMouseLeave} 
+            className="brand-selector-card"
+          >
+            <img 
+              src={brand.logo} 
+              alt={brand.name} 
+              className="brand-selector-image" 
+            />
+            <div className="brand-selector-details">
+              <h3 className="brand-selector-name">{brand.name}</h3>
+              {hoveredBrand === brand && (
+                <div className="brand-selector-info">
+                  <svg className="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                  <span className="info-text">More info about {brand.name}</span>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
-      <button onClick={handleNullForm}>Don't know</button>
+      <div className="brand-selector-button">
+        <button className="brand-selector-dont-know" onClick={handleOtherBrandForm}>
+          Don't know
+        </button>
+      </div>
     </div>
   );
 };
-
 
