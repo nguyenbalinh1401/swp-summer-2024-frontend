@@ -10,7 +10,7 @@ import LastActionSell from "../../components/LastActionSell";
 import WatchForm from "../../components/WatchForm";
 import { SellProvider } from "../../context/sellContext";
 import ContactPage from "../../pages/ContactPage";
-import SellPage2 from "../../pages/SellPage2";
+
 
 export default function AppRouter() {
   return (
@@ -21,7 +21,7 @@ export default function AppRouter() {
         <Route path="/product" element={<div>Product</div>} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/contact" element={<ContactPage/>}/>
-        <Route path="/sell" element={<SellPage2/>}/>
+       
         <Route 
           path="/sellPage" 
           element={

@@ -4,8 +4,9 @@ import BrandSelector from './BrandSelector';
 import ModelSelector from './ModelSelector';
 import { useSellContext } from '../context/sellContext'; // Import SellContext và hook useSellContext
 import { brands } from '../data/mockData';
+import "./style/WatchForm.css";
 
-const WatchForm = () => {
+export default function WatchForm() {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const WatchForm = () => {
         updateWatchForm({ brand: selectedBrand, model: selectedModel });
         console.log("Updated watchForm:", { brand: selectedBrand, model: selectedModel });
         // Chuyển hướng người dùng đến trang sell
-        navigate('/sell');
+        navigate('/sellPage');
     } else {
         // Xử lý khi người dùng chưa chọn đủ thông tin
     }
@@ -42,17 +43,17 @@ const WatchForm = () => {
       {!selectedBrand ? (
         <BrandSelector brands={brands} onSelectBrand={handleSelectBrand} />
       ) : (
-        <div>
+        <div className='select-form'>
           <button onClick={handleBackToBrandSelection}>Back to brands</button>
           <ModelSelector brand={selectedBrand} onSelectModel={handleSelectModel} />
         </div>
       )}
       {selectedModel && (
-        <div>
+        <div >
           <h3>You have selected:</h3>
           <p>Brand: {selectedBrand.name}</p>
           <p>Model: {selectedModel.name}</p>
-          <img src={selectedModel.image} alt={selectedModel.name} style={{ width: '200px', height: '200px' }} />
+          <img src={selectedModel.image} alt={selectedModel.name} className='image-form' />
           <p>Description: {selectedModel.description}</p>
           <button onClick={handleFormSubmit}>Submit</button> {/* Button để submit form */}
         </div>
@@ -61,4 +62,4 @@ const WatchForm = () => {
   );
 };
 
-export default WatchForm;
+

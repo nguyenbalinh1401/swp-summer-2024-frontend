@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import {
   Layout,
-  Menu,
   theme,
-  message,
   Input,
   Button,
   Select,
   Checkbox,
 } from "antd";
-
 import "../styles/sell-page.css";
 import { useSellContext } from "../context/sellContext";
-
-const { Header, Content } = Layout;
-
-const { Option } = Select;
-
-
-
-export default function Sell() {
+const {Content } = Layout;
+export default function SellPage() {
   const navigate = useNavigate();
   const { updateSellForm, watchForm } = useSellContext(); 
   const {
@@ -60,16 +51,8 @@ export default function Sell() {
     setHasOriginalPapers(e.target.checked);
   };
 
-  const onWatchfinderChange = (e) => {
-    setPurchasedFromWatchfinder(e.target.checked);
-  };
-
   const onFactoryStickersChange = (e) => {
     setHasFactoryStickers(e.target.checked);
-  };
-
-  const onWatchYearChange = (value) => {
-    setWatchYear(value);
   };
 
   const onLimitedEditionChange = (e) => {
@@ -152,21 +135,6 @@ export default function Sell() {
     setShowThirdSlide(false);
   };
 
-  //-------year--------
-
-  
-  const years = [];
-  const currentYear = new Date().getFullYear();
-  for (let year = currentYear; year >= 1900; year--) {
-    years.push(year);
-  }
-  //-------------------
-
-
-
-
-  
-
   //-----------------------
   // Kiểm tra watchForm và cập nhật phí dịch vụ tối thiểu
     useEffect(() => {
@@ -214,14 +182,15 @@ export default function Sell() {
             {renderWatchInfo()}
               <h2>About your watch</h2>
               <div className="form-group">
-                <label>How would you like to sell your watch?</label>
+              <label>You want to Sell and Appraise or just Appraise your watch?</label>
+
                 <Select
                   value={sellMethod}
                   onChange={onSellMethodChange}
                   style={{ width: "100%" }}
                 >
-                  <Select.Option value="outright">Outright Sale</Select.Option>
-                  <Select.Option value="trade">Trade In</Select.Option>
+                  <Select.Option value="outright">Sell and Appraise</Select.Option>
+                  <Select.Option value="trade">Just Appraise</Select.Option>  
                 </Select>
               </div>
               <div className="form-group">
@@ -241,16 +210,7 @@ export default function Sell() {
                 >
                   Yes
                 </Checkbox>
-              </div>
-              <div className="form-group">
-                <label>Was your watch purchased from Watchfinder?</label>
-                <Checkbox
-                  checked={purchasedFromWatchfinder}
-                  onChange={onWatchfinderChange}
-                >
-                  Yes
-                </Checkbox>
-              </div>
+              </div>              
               <div className="form-group">
                 <label>
                   Is your watch unworn with factory stickers intact?
@@ -261,22 +221,7 @@ export default function Sell() {
                 >
                   Yes
                 </Checkbox>
-              </div>
-              <div className="form-group">
-              <label>What year is your watch?</label>
-        <Select
-          value={watchYear}
-          onChange={onWatchYearChange}
-          style={{ width: "100%" }}
-        >
-          {/* Lặp qua mảng years để hiển thị danh sách năm */}
-          {years.map((year) => (
-            <Option key={year} value={year}>
-              {year}
-            </Option>
-          ))}
-        </Select>
-              </div>
+              </div>                
               <div className="form-group">
                 <label>Is your watch a limited edition?</label>
                 <Checkbox
@@ -307,8 +252,8 @@ export default function Sell() {
                   watch within, and have not exported the watch outside of, the
                   USA:
                 </label>
-                <div className="radio-group">
-                  <div className="radio-option">
+                <div className="radio-group-form2">
+                  <div className="radio-option-form2">
                     <input
                       type="radio"
                       name="customsCheck"
@@ -318,7 +263,7 @@ export default function Sell() {
                     />
                     <span>Yes</span>
                   </div>
-                  <div className="radio-option">
+                  <div className="radio-option-form2">
                     <input
                       type="radio"
                       name="customsCheck"
@@ -328,7 +273,7 @@ export default function Sell() {
                     />
                     <span>No</span>
                   </div>
-                  <div className="radio-option">
+                  <div className="radio-option-form2">
                     <input
                       type="radio"
                       name="customsCheck"
@@ -338,7 +283,7 @@ export default function Sell() {
                     />
                     <span>Not a resident of the USA</span>
                   </div>
-                  <div className="radio-option">
+                  <div className="radio-option-form2">
                     <input
                       type="radio"
                       name="customsCheck"
