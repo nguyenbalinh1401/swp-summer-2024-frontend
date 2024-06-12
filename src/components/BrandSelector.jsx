@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import '../styles/watch-form.css';
 
+
 const BrandSelector = ({ brands, onSelectBrand, updateWatchForm, navigate }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredBrand, setHoveredBrand] = useState(null);
+
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
@@ -13,11 +15,10 @@ const BrandSelector = ({ brands, onSelectBrand, updateWatchForm, navigate }) => 
     brand.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleNullForm = () => {
-    // Đặt watchForm thành null
-    updateWatchForm(null);
+  const handleOtherBrandForm = () => {
+    
     // Chuyển hướng người dùng đến trang "sell"
-    navigate('/sell');
+    navigate('/OtherBrandForm');
   };
 
   const handleMouseEnter = (brand) => {
@@ -69,7 +70,7 @@ const BrandSelector = ({ brands, onSelectBrand, updateWatchForm, navigate }) => 
         ))}
       </div>
       <div className="brand-selector-button">
-        <button className="brand-selector-dont-know" onClick={handleNullForm}>
+        <button className="brand-selector-dont-know" onClick={handleOtherBrandForm}>
           Don't know
         </button>
       </div>

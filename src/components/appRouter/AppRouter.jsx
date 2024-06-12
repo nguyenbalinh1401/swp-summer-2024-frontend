@@ -11,6 +11,7 @@ import { SellProvider } from "../../context/sellContext";
 import Buy from "../../pages/Buy";
 import HomePage from "../../pages/HomePage";
 import Sell from "../../pages/Sell";
+import OtherBrandForm from "../OtherBrandForm";
 
 export default function AppRouter() {
   return (
@@ -45,6 +46,14 @@ export default function AppRouter() {
           element={
             <SellProvider>
               <WatchForm />
+            </SellProvider>
+          } 
+        />
+        <Route 
+          path="/OtherBrandForm" 
+          element={
+            <SellProvider>
+              <OtherBrandForm />
             </SellProvider>
           } 
         />
