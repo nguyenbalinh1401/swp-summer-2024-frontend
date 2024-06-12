@@ -1,25 +1,20 @@
 import React, { useState } from "react";
-import { Timeline, Modal } from "antd";
+import { Timeline, Modal, Button } from "antd";
 import { useSellContext } from "../context/sellContext";
 import "../styles/last-action-sell.css";
-import { Button } from "antd";
 
 const LastActionSell = () => {
   const { watchForm, sellForm } = useSellContext();
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
   const [requestSent, setRequestSent] = useState(false);
-
   const [modalVisible, setModalVisible] = useState(false);
 
-  // const addresses = ["123 Street, City, Country", "456 Avenue, Town, Country"]; // Danh sách địa chỉ
-
   const handleSelectAddress = (address) => {
-    setSelectedAddress(address); // Lưu địa chỉ đã chọn
-    setModalVisible(false); // Ẩn modal sau khi chọn địa chỉ
+    setSelectedAddress(address);
+    setModalVisible(false);
   };
+
   const handleSendRequest = () => {
-    // Gửi yêu cầu đến server
     fetch("/api/notify-quay-tham-dinh", {
       method: "POST",
       headers: {
@@ -34,12 +29,13 @@ const LastActionSell = () => {
       .then(response => response.json())
       .then(data => {
         console.log("Response from server:", data);
-        setRequestSent(true); // Cập nhật trạng thái sau khi yêu cầu đã được gửi thành công
+        setRequestSent(true);
       })
       .catch(error => {
         console.error("Error:", error);
       });
   };
+
   const getFormattedDate = () => {
     const currentDate = new Date();
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -61,9 +57,7 @@ const LastActionSell = () => {
             </h2>
             {sellForm ? (
               <ul>
-                {/* <li>Total expected payout: {sellForm.totalExpectedPayout}</li> */}
                 <li>Initial offer (subject to inspection): {sellForm.initialOffer}</li>
-
                 <li>Minimum servicing fee: {sellForm.minimumServicingFee}</li>
               </ul>
             ) : (
@@ -73,19 +67,35 @@ const LastActionSell = () => {
             <p>
               This estimate is valid until {getFormattedDate()}. For us to make your final offer, you'll need to send us your watch to be checked by one of our experts. Once this is done, we'll contact you with a quote. You can get your watch to us for inspection in this way:
             </p>
-            <div>
-              <button onClick={() => setModalVisible(true)}>Drop off in Boutique</button>
-              {selectedAddress && ( // Hiển thị địa chỉ đã chọn nếu có
+            <div >
+              <Button type="primary" onClick={() => setModalVisible(true)}>Drop off in Boutique</Button>
+              {selectedAddress && (
                 <div>
                   <p>Selected address: {selectedAddress}</p>
                   <p>Provide additional details about your watch to speed up the process.</p>
                 </div>
               )}
             </div>
-            <p>Provide additional details about your watch to speed up the process.</p>
             <Button type="primary" onClick={handleSendRequest} disabled={requestSent}>
               {requestSent ? "Request Sent" : "Send Request"}
             </Button>
+          </Timeline.Item>
+        </Timeline>
+        <Timeline>
+        <Timeline.Item color="gray">
+            <h2>Send Your Watch For Authentication And Inspection
+              <span className="status pending">Pending</span>
+            </h2>
+          </Timeline.Item>
+          <Timeline.Item color="gray">
+            <h2>Final Offer
+              <span className="status pending">Pending</span>
+            </h2>
+          </Timeline.Item>
+          <Timeline.Item color="gray">
+            <h2>Sale Complete
+              <span className="status pending">Pending</span>
+            </h2>
           </Timeline.Item>
         </Timeline>
       </div>
@@ -106,18 +116,15 @@ const LastActionSell = () => {
             <li>Bracelet Material: {watchForm.model?.braceletMaterial}</li>
             <li>Type: {watchForm.model?.type}</li>
             <li>Limited Edition: {watchForm.model?.limitedEdition ? "Yes" : "No"}</li>
-            <li>
-              <img src={watchForm.model?.image} alt={watchForm.model?.name} style={{ width: '200px', height: '200px' }} />
-            </li>
+            <li><img src={watchForm.model?.image} alt={watchForm.model?.name} style={{ width: '200px', height: '200px' }} /></li>
           </ul>
         ) : (
           <p>No watch form data available</p>
         )}
       </div>
-      {/* Modal hiển thị danh sách địa chỉ */}
       <Modal
         title="Select Address"
-        visible={modalVisible} // Sử dụng modalVisible thay vì modalOpen
+        visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
       >
@@ -130,9 +137,6 @@ const LastActionSell = () => {
           <Button type="primary" onClick={() => handleSelectAddress("456 Avenue, Town, Country")}>Select</Button>
         </div>
       </Modal>
-
-
-
     </div>
   );
 };

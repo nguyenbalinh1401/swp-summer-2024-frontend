@@ -4,7 +4,7 @@ import BrandSelector from './BrandSelector';
 import ModelSelector from './ModelSelector';
 import { useSellContext } from '../context/sellContext'; // Import SellContext và hook useSellContext
 import { brands } from '../data/mockData';
-import "./style/WatchForm.css";
+import "./style/WatchFormStyle.css";
 
 export default function WatchForm() {
   const [selectedBrand, setSelectedBrand] = useState(null);
