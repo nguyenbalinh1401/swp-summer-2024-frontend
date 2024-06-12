@@ -93,7 +93,6 @@ export function EmailForm(props) {
 
 export function CodeForm(props) {
   const [isLoading, setIsLoading] = useState(false);
-  const [currentCode, setCurrentCode] = useState("");
   const [isWrongCode, setIsWrongCode] = useState(false);
 
   const onChange = (code) => {
@@ -118,11 +117,12 @@ export function CodeForm(props) {
   return (
     <div className="w-full flex flex-col items-center justify-center gap-8">
       <p className="text-[150%] font-medium font-title text-sky-800">
-        We have just send you a code. Please check your email to get your
-        password back.
+        We have just send you a verification code to your email. Please check
+        your email to get it.
       </p>
       <div className="w-96 flex flex-col items-center justify-center gap-4">
         <Input.OTP
+          autoFocus
           size="large"
           status={isWrongCode ? "error" : ""}
           formatter={(str) => str.toUpperCase()}
@@ -154,44 +154,101 @@ export function CodeForm(props) {
 
 export function ResetPasswordForm(props) {
   const [isLoading, setIsLoading] = useState(false);
-  const [passwordError, setPasswordError] = useState(null);
-  const [newPassword, setNewPassword] = useState(null);
+  const [passwordError, setPasswordError] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  useEffect(() => {
+    console.log("New password: ", newPassword);
+    if (newPassword.length > 0) {
+      if (newPassword.length < 8 || newPassword.length > 20) {
+        setPasswordError("Password should contain within 8 to 20 characters");
+      } else if (
+        !newPassword.match(confirmPassword) &&
+        confirmPassword.length > 0
+      ) {
+        setPasswordError("Passwords do not match");
+      } else {
+        setPasswordError("");
+      }
+    } else {
+      setPasswordError("");
+    }
+  }, [newPassword]);
+
+  useEffect(() => {
+    console.log("Confirm password: ", confirmPassword);
+    if (confirmPassword.length > 0) {
+      if (!confirmPassword.match(newPassword)) {
+        setPasswordError("Passwords do not match");
+      } else {
+        setPasswordError("");
+      }
+    }
+  }, [confirmPassword]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    console.log("Email: ", props.email);
+    console.log("New password: ", newPassword);
+    //PATCH
+    const account = {
+      email: props.email,
+      password: newPassword,
+    };
+    sessionStorage.setItem("passwordReset", JSON.stringify(account));
+    setTimeout(() => {
+      setIsLoading(false);
+      window.location.replace("/signin");
+    }, 2000);
+  };
 
   return (
     <div className="w-full flex flex-col items-start justify-center gap-2 mt-8">
-      <p className="font-medium font-title text-sky-800">
-        Enter your new password
-      </p>
-      <div className="w-96 flex flex-col items-start justify-center gap-2">
-        <Input
-          size="large"
-          placeholder="New password"
-          className="font-montserrat"
-        />
-        <Input
-          size="large"
-          placeholder="Confirm new password"
-          className="font-montserrat"
-        />
-      </div>
-      <div
-        className={`text-red-600 text-xs font-thin ${
-          passwordError ? "visible" : "invisible"
-        }`}
-      >
-        {passwordError}
-      </div>
-      <button
-        type="submit"
-        disabled={passwordError || !newPassword}
-        className="w-full mt-4 font-bold text-md text-white bg-sky-600 py-2 rounded-full disabled:bg-gray-300 disabled:cursor-not-allowed"
-      >
-        {isLoading ? (
-          <img src={spinner} alt="" className="mx-auto" />
-        ) : (
-          "CONFIRM"
-        )}
-      </button>
+      <form onSubmit={handleSubmit}>
+        <p className="font-medium font-title text-sky-800">
+          Enter your new password
+        </p>
+        <div className="w-96 flex flex-col items-start justify-center gap-2">
+          <Input.Password
+            size="large"
+            placeholder="New password"
+            className="font-montserrat"
+            onBlur={(e) => {
+              setNewPassword(e.target.value);
+            }}
+          />
+          <Input.Password
+            size="large"
+            placeholder="Confirm new password"
+            className="font-montserrat"
+            onBlur={(e) => {
+              setConfirmPassword(e.target.value);
+            }}
+          />
+        </div>
+        <div
+          className={`text-red-600 text-xs font-thin ${
+            passwordError.length > 0 ? "visible" : "invisible"
+          }`}
+        >
+          {passwordError}
+        </div>
+        <button
+          type="submit"
+          disabled={
+            passwordError.length > 0 || !newPassword || !confirmPassword
+          }
+          className="w-full mt-4 font-bold text-md text-white bg-sky-600 hover:bg-sky-700 py-2 rounded-full disabled:bg-gray-300 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <img src={spinner} alt="" className="mx-auto" />
+          ) : (
+            "CONFIRM"
+          )}
+        </button>
+      </form>
     </div>
   );
 }
