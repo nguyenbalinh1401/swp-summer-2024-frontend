@@ -20,6 +20,9 @@ export default function ProductDetail() {
       try {
         const response = await axios.get(`http://localhost:3000/product/${id}`);
         setProduct(response.data);
+
+        const relatedResponse = await axios.get(`http://localhost:3000/products/related/${id}`);
+        setRelatedProducts(relatedResponse.data);
       } catch (error) {
         console.error(error);
       }
@@ -51,7 +54,7 @@ export default function ProductDetail() {
           <p className="text-sm text-gray-500 text-center">2-Year Warranty</p>
         </Card>
       </div>
-        <Card title="Card Title">
+        <Card title="Specification">
           <Card.Grid style={gridStyle}>Type: {product.type}</Card.Grid>
           <Card.Grid hoverable={false} style={gridStyle}>Dial Color: {product.dialColor}</Card.Grid>
           <Card.Grid style={gridStyle}>Box: {product.box ? 'Yes' : 'No'}</Card.Grid>

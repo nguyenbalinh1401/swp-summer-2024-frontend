@@ -1,19 +1,28 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import Navbar from "./components/navbar/Navbar";
+import Footer from "./components/footer/Footer";
+import AppRouter from "./components/appRouter/AppRouter";
+import { CookiesProvider } from "react-cookie";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Hello from "./components/Hello";
-import HelloCopy from "./components/Hello copy";
+import "./index.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import ListPage from "./components/ListPage";
+import AppPage from "./components/AppPage";
 
 function App() {
-  const [count, setCount] = useState(4);
-
   return (
-    <Routes>
-      <Route path="/" element={<Hello />}></Route>
-      <Route path="/op" element={<HelloCopy />} />
-    </Routes>   
+    <CookiesProvider
+      defaultSetOptions={{
+        path: "/",
+        maxAge: 1 * 24 * 60 * 60,
+      }}
+    >
+      <div className="w-screen min-h-screen flex flex-col justify-between font-montserrat">
+        <Navbar />
+        <AppRouter />
+        <Footer />
+      </div>
+    </CookiesProvider>
   );
 }
 
