@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Timeline, Modal, Button } from "antd";
 import { useSellContext } from "../context/sellContext";
 import "../styles/last-action-sell.css";
+import { message } from 'antd';
+import axios from 'axios';
 
 const LastActionSell = () => {
   const { watchForm, sellForm } = useSellContext();
@@ -14,27 +16,35 @@ const LastActionSell = () => {
     setModalVisible(false);
   };
 
-  const handleSendRequest = () => {
-    fetch("/api/notify-quay-tham-dinh", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        address: selectedAddress,
-        watchForm,
-        sellForm
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log("Response from server:", data);
+  const handleSendRequest = async () => {
+    try {
+        console.log("Sending request...");
+        const response = await axios.post("http://localhost:3000/sell-request/create", {
+            address: selectedAddress,
+            watchForm,
+            sellForm
+        });
+
+        console.log("Response from server:", response.data);
         setRequestSent(true);
-      })
-      .catch(error => {
+    } catch (error) {
         console.error("Error:", error);
-      });
-  };
+        if (error.response && error.response.status === 400) {
+            message.open({
+                type: "error",
+                content: "Invalid request. Please check your input and try again.",
+                duration: 5,
+            });
+        } else {
+            message.open({
+                type: "error",
+                content: "Failed to send the request. Please try again later.",
+                duration: 5,
+            });
+        }
+    }
+};
+
 
   const getFormattedDate = () => {
     const currentDate = new Date();
