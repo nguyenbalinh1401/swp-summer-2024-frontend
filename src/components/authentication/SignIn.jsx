@@ -86,7 +86,6 @@ export default function SignIn() {
           console.log(res.data);
           setTimeout(() => {
             const account = jwtDecode(res.data.metadata);
-            console.log("Sign in account: ", account);
             sessionStorage.setItem("signInUser", JSON.stringify(account));
             if (rememberSignIn) {
               setCookie("signIn", JSON.stringify(account));
