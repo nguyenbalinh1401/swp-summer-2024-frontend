@@ -1,19 +1,14 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Hello from "./components/Hello";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home"
 import HelloCopy from "./components/Hello copy";
+import Product from "./pages/Product";
 
 function App() {
-  const [count, setCount] = useState(4);
-
   return (
     <Routes>
-      <Route path="/" element={<Hello />}></Route>
-      <Route path="/op" element={<HelloCopy />} />
-    </Routes>   
+      <Route path="/" element={<Home />} />
+      <Route path="/product" element={<Product />} />
+    </Routes>
   );
 }
 
