@@ -1,0 +1,33 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f2f5;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+    margin-top: 100px;
+    margin-bottom: 100px;
+  }
+  
+  .container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .ant-descriptions-bordered {
+    margin-bottom: 20px;
+  }
+  
+  .ant-descriptions-item-label {
+    font-weight: bold;
+  }
+  
+  .ant-input {
+    width: 100%;
+  }
+  
+  .update-button {
+    text-align: right;
+    margin-top: 20px;
+  }
+  

@@ -1,56 +1,94 @@
-import React, { useState } from "react";
-import { Timeline, Modal, Button } from "antd";
+import React, { useState, useEffect } from "react";
+import { Timeline, Modal, Button, message } from "antd";
 import { useSellContext } from "../context/sellContext";
 import "../styles/last-action-sell.css";
-import { message } from 'antd';
-import axios from 'axios';
+import axios from "axios";
 
 const LastActionSell = () => {
   const { watchForm, sellForm } = useSellContext();
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState({ address: null, role: null });
   const [requestSent, setRequestSent] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [estimatedPrice, setEstimatedPrice] = useState(0);
 
-  const handleSelectAddress = (address) => {
-    setSelectedAddress(address);
+  const handleSelectAddress = (address, role) => {
+    setSelectedAddress({ address, role });
     setModalVisible(false);
   };
 
   const handleSendRequest = async () => {
     try {
-        console.log("Sending request...");
-        const response = await axios.post("http://localhost:3000/sell-request/create", {
-            address: selectedAddress,
-            watchForm,
-            sellForm
-        });
+      console.log("Sending request...");
+      const response = await axios.post("http://localhost:3000/sell-request/create", {
+        address: selectedAddress.address,
+        role: selectedAddress.role,
+        watchForm,
+        sellForm
+      });
 
-        console.log("Response from server:", response.data);
-        setRequestSent(true);
+      console.log("Response from server:", response.data);
+      setRequestSent(true);
     } catch (error) {
-        console.error("Error:", error);
-        if (error.response && error.response.status === 400) {
-            message.open({
-                type: "error",
-                content: "Invalid request. Please check your input and try again.",
-                duration: 5,
-            });
-        } else {
-            message.open({
-                type: "error",
-                content: "Failed to send the request. Please try again later.",
-                duration: 5,
-            });
-        }
+      console.error("Error:", error);
+      if (error.response && error.response.status === 400) {
+        message.open({
+          type: "error",
+          content: "Invalid request. Please check your input and try again.",
+          duration: 5,
+        });
+      } else {
+        message.open({
+          type: "error",
+          content: "Failed to send the request. Please try again later.",
+          duration: 5,
+        });
+      }
     }
-};
-
+  };
 
   const getFormattedDate = () => {
     const currentDate = new Date();
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
     return currentDate.toLocaleDateString(undefined, options);
   };
+
+  const calculateEstimatedPrice = () => {
+    const marketValue = watchForm?.marketValue || 0;
+    let estimate = marketValue;
+
+    if (sellForm.hasOriginalBox) {
+      estimate += 100; // Example addition value
+    } else {
+      estimate -= 50; // Example deduction value
+    }
+
+    if (sellForm.hasOriginalPapers) {
+      estimate += 100; // Example addition value
+    } else {
+      estimate -= 50; // Example deduction value
+    }
+
+    if (sellForm.isLimitedEdition) {
+      estimate += 200; // Example addition value
+    } else {
+      estimate -= 100; // Example deduction value
+    }
+
+    if (sellForm.hasFactoryStickers) {
+      estimate += 150; // Example addition value
+    } else {
+      estimate -= 75; // Example deduction value
+    }
+
+    return estimate;
+  };
+
+  useEffect(() => {
+    if (sellForm && watchForm) {
+      const estimate = calculateEstimatedPrice();
+      setEstimatedPrice(estimate);
+    }
+  }, [sellForm, watchForm]);
 
   return (
     <div className="container">
@@ -67,8 +105,9 @@ const LastActionSell = () => {
             </h2>
             {sellForm ? (
               <ul>
-                <li>Initial offer (subject to inspection): {sellForm.initialOffer}</li>
+                <li className="bold-large-text">Initial offer (subject to inspection): {sellForm.initialOffer}</li>
                 <li>Minimum servicing fee: {sellForm.minimumServicingFee}</li>
+                <li>Estimated Price: {estimatedPrice}</li>
               </ul>
             ) : (
               <p>No sell form data available</p>
@@ -77,11 +116,11 @@ const LastActionSell = () => {
             <p>
               This estimate is valid until {getFormattedDate()}. For us to make your final offer, you'll need to send us your watch to be checked by one of our experts. Once this is done, we'll contact you with a quote. You can get your watch to us for inspection in this way:
             </p>
-            <div >
+            <div>
               <Button type="primary" onClick={() => setModalVisible(true)}>Drop off in Boutique</Button>
-              {selectedAddress && (
+              {selectedAddress.address && (
                 <div>
-                  <p>Selected address: {selectedAddress}</p>
+                  <p>Selected address: {selectedAddress.address}</p>
                   <p>Provide additional details about your watch to speed up the process.</p>
                 </div>
               )}
@@ -92,7 +131,7 @@ const LastActionSell = () => {
           </Timeline.Item>
         </Timeline>
         <Timeline>
-        <Timeline.Item color="gray">
+          <Timeline.Item color="gray">
             <h2>Send Your Watch For Authentication And Inspection
               <span className="status pending">Pending</span>
             </h2>
@@ -140,11 +179,11 @@ const LastActionSell = () => {
       >
         <div style={{ marginBottom: '10px' }}>
           <img src="/images/address_0.jpg" alt="123 Street, City, Country" style={{ width: '100%', height: 'auto', marginBottom: '5px' }} />
-          <Button type="primary" onClick={() => handleSelectAddress("123 Street, City, Country")}>Select</Button>
+          <Button type="primary" onClick={() => handleSelectAddress("123 Street, City, Country", "staff1")}>Select</Button>
         </div>
         <div style={{ marginBottom: '10px' }}>
           <img src="/images/address_1.jpg" alt="456 Avenue, Town, Country" style={{ width: '100%', height: 'auto', marginBottom: '5px' }} />
-          <Button type="primary" onClick={() => handleSelectAddress("456 Avenue, Town, Country")}>Select</Button>
+          <Button type="primary" onClick={() => handleSelectAddress("456 Avenue, Town, Country", "staff2")}>Select</Button>
         </div>
       </Modal>
     </div>

@@ -12,6 +12,8 @@ import Buy from "../../pages/Buy";
 import HomePage from "../../pages/HomePage";
 import Sell from "../../pages/Sell";
 import OtherBrandForm from "../OtherBrandForm";
+import StaffDashboard from "../StaffDashboard";
+import SellRequestDetail from "../SellRequestDetail";
 
 export default function AppRouter() {
   return (
@@ -24,6 +26,9 @@ export default function AppRouter() {
         <Route path="/buy" element={<Buy />} />
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/sell" element={<Sell />} />
+        <Route path="/staffDashboard" element={<StaffDashboard />} />
+        <Route path="/sell-request/:id" element={<SellRequestDetail />} />
+        
         
         <Route 
           path="/sellPage" 

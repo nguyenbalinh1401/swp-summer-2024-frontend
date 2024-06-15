@@ -87,3 +87,7 @@
   border-radius: 4px; /* Góc bo tròn */
   height: 100%; /* Chiều cao tương ứng với tiến trình */
 }
+.bold-large-text {
+  font-weight: bold;
+  font-size: 1.5em; /* Bạn có thể thay đổi giá trị này để tăng/giảm kích thước */
+}
