@@ -1,11 +1,16 @@
-
-
-.menu {
-  flex-grow: 1;
+body{
+  margin: 0;
+  padding: 0;
 }
-
 .content {
-  padding: 80px 24px 24px; 
+  width: 80%;
+  
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: px;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .content-inner {
@@ -18,6 +23,32 @@
 
 .carousel img {
   width: 100%;
-  height: 400px;
+  height: 600px;
   object-fit: cover;
+}
+
+.carousel{
+  width: 100%;
+  display: flex;
+}
+
+.title{
+  margin-top: 30px;
+  font-size: 500px;
+  color: #fff;
+  border-bottom: 2px solid #007BFF;
+  padding-bottom: 5px;
+ 
+}
+
+.floatbutton{
+  right: 50px;
+}
+
+.siderStyle{
+  text-align: center;
+  line-height: 120px;
+  color: #fff;
+  background-color: #fff;
+  margin-top: 64px;
 }
