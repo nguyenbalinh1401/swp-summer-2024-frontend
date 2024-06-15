@@ -118,7 +118,7 @@ export default function Home() {
         <Row gutter={[8, 8]}>
           {products.map((product) => (
             <Col key={product.id} span={6}>
-              <Link to="/product/:id">
+              <Link to={`/product/${product.id}`}>
                 <Card
                   hoverable
                   cover={<img alt={product.name} src={product.image} />}
