@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../style/ContactStyle.css";
-import { theme } from "antd";
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -21,25 +20,23 @@ export default function Contact() {
     console.log("Form submitted:", formData);
   };
 
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+  // useEffect(() => {
+  //   fetch("http://localhost:3000/contact/report")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setProducts(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching Contact", error);
+  //     });
+  // }, []);
   return (
-    <div className="container">
-    <div>
+    <div className="container-contact">
+    
       <h1>Contact Us</h1>
-      <form onSubmit={handleSubmit}>
-        <div
-          style={{
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-          }}
-        >
-          <label htmlFor="name">Name:</label>
+      <form onSubmit={handleSubmit} className="form-contact">
+        
+          <label htmlFor="name" className="label-contact">Name:</label>
           <input
             type="text"
             id="name"
@@ -48,9 +45,9 @@ export default function Contact() {
             onChange={handleChange}
             required
           />
-        </div>
+        
         <div>
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="email" className="label-contact">Email:</label>
           <input
             type="email"
             id="email"
@@ -61,7 +58,7 @@ export default function Contact() {
           />
         </div>
         <div>
-          <label htmlFor="message">Message:</label>
+          <label htmlFor="message" className="label-contact">Message:</label>
           <textarea
             id="message"
             name="message"
@@ -70,9 +67,8 @@ export default function Contact() {
             required
           />
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" className="button-contact">Submit</button>
       </form>
-    </div>
     </div>
   );
 }
