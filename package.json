@@ -12,6 +12,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.3.3",
     "@react-oauth/google": "^0.12.1",
+    "@react-pdf/renderer": "^3.4.4",
     "antd": "^5.18.0",
     "axios": "^1.7.2",
     "framer-motion": "^11.2.10",
@@ -41,4 +42,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC"
+  
 }
+

@@ -24,7 +24,22 @@ const WatchForm = () => {
     if (selectedBrand && model) {
       const brandName = selectedBrand.name;
       
-      updateWatchForm({ brand: brandName, model });
+      updateWatchForm({ brand: brandName,
+        
+          name: model.name,  // Assuming model has a 'name' property
+          image: model.image,
+          description: model.description,
+          modelNumber: model.modelNumber,
+          serialNumber: model.serialNumber,
+          type: model.type,
+          caseMaterial: model.caseMaterial,
+          braceletMaterial: model.braceletMaterial,
+          caseColor: model.caseColor,
+          dialColor: model.dialColor,
+          caseSize: model.caseSize,
+          yearOfManufacture: model.yearOfManufacture,
+          limitedEdition: model.limitedEdition,
+          marketValue: model.marketValue });
       navigate('/sellPage');
     } else {
       

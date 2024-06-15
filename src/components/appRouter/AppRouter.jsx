@@ -14,6 +14,7 @@ import Sell from "../../pages/Sell";
 import OtherBrandForm from "../OtherBrandForm";
 import StaffDashboard from "../StaffDashboard";
 import SellRequestDetail from "../SellRequestDetail";
+import ReportPage from "../ReportPage";
 
 export default function AppRouter() {
   return (
@@ -28,6 +29,7 @@ export default function AppRouter() {
         <Route path="/sell" element={<Sell />} />
         <Route path="/staffDashboard" element={<StaffDashboard />} />
         <Route path="/sell-request/:id" element={<SellRequestDetail />} />
+        <Route path="/sell-request/report/:id" element={<ReportPage />} />
         
         
         <Route 

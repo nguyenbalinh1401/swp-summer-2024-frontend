@@ -30,9 +30,12 @@ export default function StaffDashboard() {
       title: "Name", 
       dataIndex: "firstName", 
       key: "firstName",
-      render: (text, record) => `${record.firstName} ${record.lastName}`
+      render: (text, record) => `${record.sellForm.firstName} ${record.sellForm.lastName}`
     },
-    { title: "Watch Model", dataIndex: ["watchForm", "model", "name"], key: "modelName" },
+    { title: "Watch Model", dataIndex: ["watchForm", "model", "name"], key: "modelName" ,
+      render: (text, record) => `${record.watchForm.name} `
+    },
+    
     {
       title: "Action",
       key: "action",

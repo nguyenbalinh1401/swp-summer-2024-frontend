@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Descriptions, message, Input, Button } from "antd";
 import "../styles/sellRequest-ReDetail.css";
@@ -8,6 +8,7 @@ export default function SellRequestDetail() {
   const { id } = useParams(); // Lấy ID từ URL
   const [sellRequest, setSellRequest] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchSellRequest();
@@ -18,6 +19,7 @@ export default function SellRequestDetail() {
       const response = await axios.get(`http://localhost:3000/sell-request/${id}`);
       setSellRequest(response.data);
       setLoading(false);
+      console.log('Sell request data:', response.data);
     } catch (error) {
       message.error("Failed to fetch sell request details");
       setLoading(false);
@@ -38,11 +40,10 @@ export default function SellRequestDetail() {
         ...prevRequest,
         watchForm: {
           ...prevRequest.watchForm,
-          model: {
-            ...prevRequest.watchForm.model,
+          
             [field]: value,
           },
-        },
+        
       }));
     } else {
       setSellRequest((prevRequest) => ({
@@ -56,6 +57,7 @@ export default function SellRequestDetail() {
     try {
       await axios.put(`http://localhost:3000/sell-request/${id}`, sellRequest);
       message.success("Sell request updated successfully");
+      navigate(`/sell-request/report/${id}`);
     } catch (error) {
       message.error("Failed to update sell request");
     }
@@ -70,7 +72,7 @@ export default function SellRequestDetail() {
   }
 
   return (
-    <div className="container">
+    <div className="container-staff">
       <h2>Sell Request Details</h2>
       <Descriptions bordered>
         <Descriptions.Item label="ID">{sellRequest.id}</Descriptions.Item>
@@ -112,34 +114,29 @@ export default function SellRequestDetail() {
         </Descriptions.Item>
         <Descriptions.Item label="Model Name">
           <Input
-            value={sellRequest.watchForm.model.name}
+            value={sellRequest.watchForm.name}
             onChange={(e) => handleInputChange("watchForm", "name", e.target.value)}
           />
         </Descriptions.Item>
         <Descriptions.Item label="Model Number">
           <Input
-            value={sellRequest.watchForm.model.modelNumber}
+            value={sellRequest.watchForm.modelNumber}
             onChange={(e) => handleInputChange("watchForm", "modelNumber", e.target.value)}
           />
         </Descriptions.Item>
         <Descriptions.Item label="Serial Number">
           <Input
-            value={sellRequest.watchForm.model.serialNumber}
+            value={sellRequest.watchForm.serialNumber}
             onChange={(e) => handleInputChange("watchForm", "serialNumber", e.target.value)}
           />
         </Descriptions.Item>
         <Descriptions.Item label="Year">
           <Input
-            value={sellRequest.watchForm.model.yearOfManufacture}
+            value={sellRequest.watchForm.yearOfManufacture}
             onChange={(e) => handleInputChange("watchForm", "yearOfManufacture", e.target.value)}
           />
         </Descriptions.Item>
-        <Descriptions.Item label="Sell Method">
-          <Input
-            value={sellRequest.sellForm.sellMethod}
-            onChange={(e) => handleInputChange("sellForm", "sellMethod", e.target.value)}
-          />
-        </Descriptions.Item>
+        
         <Descriptions.Item label="Initial Offer">
           <Input
             value={sellRequest.sellForm.initialOffer}
@@ -182,18 +179,8 @@ export default function SellRequestDetail() {
             onChange={(e) => handleInputChange("sellForm", "hasFactoryStickers", e.target.value.toLowerCase() === "yes")}
           />
         </Descriptions.Item>
-        <Descriptions.Item label="Purchased From Watchfinder">
-          <Input
-            value={sellRequest.sellForm.purchasedFromWatchfinder ? "Yes" : "No"}
-            onChange={(e) => handleInputChange("sellForm", "purchasedFromWatchfinder", e.target.value.toLowerCase() === "yes")}
-          />
-        </Descriptions.Item>
-        <Descriptions.Item label="Customs Check Option">
-          <Input
-            value={sellRequest.sellForm.customsCheckOption}
-            onChange={(e) => handleInputChange("sellForm", "customsCheckOption", e.target.value)}
-          />
-        </Descriptions.Item>
+        
+        
       </Descriptions>
       <div className="update-button">
         <Button type="primary" onClick={handleUpdate}>
