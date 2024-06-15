@@ -35,7 +35,6 @@ export default function SellPage() {
   const [purchasedFromWatchfinder, setPurchasedFromWatchfinder] =
     useState(false);
   const [hasFactoryStickers, setHasFactoryStickers] = useState(false);
-  const [watchYear, setWatchYear] = useState("");
   const [isLimitedEdition, setIsLimitedEdition] = useState(false);
   const [customsCheckOption, setCustomsCheckOption] = useState("");
 
