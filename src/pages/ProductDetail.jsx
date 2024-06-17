@@ -140,7 +140,7 @@ export default function ProductDetail() {
         <div className="w-full md:w-3/5 mb-8 pl-4">
           <Card title="Specification" className="w-full">
             <Card.Grid style={gridStyle}>Type: {product.type}</Card.Grid>
-            <Card.Grid hoverable={false} style={gridStyle}>Dial Color: {product.dialColor}</Card.Grid>
+            <Card.Grid style={gridStyle}>Dial Color: {product.dialColor}</Card.Grid>
             <Card.Grid style={gridStyle}>Box: {product.box ? 'Yes' : 'No'}</Card.Grid>
             <Card.Grid style={gridStyle}>Papers: {product.papers ? 'Yes' : 'No'}</Card.Grid>
             <Card.Grid style={gridStyle}>Case Size: {product.caseSize} mm</Card.Grid>
@@ -155,7 +155,7 @@ export default function ProductDetail() {
       </div>
 
       <div className="mt-8 w-full md:w-3/4">
-        <h2 className="text-xl font-bold mb-4">Related Products</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">Related Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {relatedProducts.slice(0, visibleProducts).map((relatedProduct) => (
             <Card
@@ -182,3 +182,5 @@ export default function ProductDetail() {
     </div>
   );
 }
+
+
