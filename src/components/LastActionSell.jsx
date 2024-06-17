@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Timeline, Modal, Button } from "antd";
 import { useSellContext } from "../context/sellContext";
-import "../styles/last-action-sell.css";
+import styles from "../styles/last-action-sell.module.css";
 
 const LastActionSell = () => {
   const { watchForm, sellForm } = useSellContext();
@@ -43,17 +43,17 @@ const LastActionSell = () => {
   };
 
   return (
-    <div className="container">
-      <div className="timeline-section">
+    <div className={styles.container}>
+      <div className={styles.timelineSection}>
         <Timeline>
           <Timeline.Item color="green">
             <h2>Sell Your Watch Enquiry
-              <span className="status complete">Completed</span>
+              <span className={styles.statusComplete}>Completed</span>
             </h2>
           </Timeline.Item>
           <Timeline.Item color="blue">
             <h2>Our Initial Offer
-              <span className="status in-progress">In Progress</span>
+              <span className={styles.statusInProgress}>In Progress</span>
             </h2>
             {sellForm ? (
               <ul>
@@ -84,22 +84,22 @@ const LastActionSell = () => {
         <Timeline>
         <Timeline.Item color="gray">
             <h2>Send Your Watch For Authentication And Inspection
-              <span className="status pending">Pending</span>
+              <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
           <Timeline.Item color="gray">
             <h2>Final Offer
-              <span className="status pending">Pending</span>
+              <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
           <Timeline.Item color="gray">
             <h2>Sale Complete
-              <span className="status pending">Pending</span>
+              <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
         </Timeline>
       </div>
-      <div className="details-section">
+      <div className={styles.detailsSection}>
         <h2>Your Watch</h2>
         {watchForm ? (
           <ul>

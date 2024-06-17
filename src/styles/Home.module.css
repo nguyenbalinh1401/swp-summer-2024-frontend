@@ -1,10 +1,8 @@
-body{
-  margin: 0;
-  padding: 0;
-}
+
 .content {
   width: 80%;
-  
+  margin: 0;
+  padding: 0;
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -13,7 +11,7 @@ body{
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-.content-inner {
+.contentInner {
   background: #fff;
   border-radius: 8px;
   padding: 24px;
@@ -41,7 +39,7 @@ body{
  
 }
 
-.floatbutton{
+.floatButton{
   right: 50px;
 }
 
