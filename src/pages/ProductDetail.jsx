@@ -75,7 +75,6 @@
 //     </div>
 //   );
 // }
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -101,7 +100,7 @@ export default function ProductDetail() {
         setProduct(response.data.product);
         setRelatedProducts(response.data.relatedProducts);
       } catch (error) {
-        console.error("have an error i'm sorry :((");
+        console.error("Error fetching product data:", error);
       }
     };
     fetchProductData();
@@ -113,40 +112,43 @@ export default function ProductDetail() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-full md:w-1/2 mb-8 my-auto">
-        <Card
-          hoverable
-          cover={<img src={product.image} alt={product.name} className="w-full h-60 object-cover" />}
-          className="w-full"
-        >
-          <Meta title={product.name} description={product.description} />
-          <p className="text-lg font-bold text-center">Price: {product.price}</p>
-          <Link
-            to={`/cart`}
-            className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md block text-center mt-4"
+      <div className="flex flex-wrap w-full md:w-3/4 mb-8">
+        <div className="w-full md:w-2/5 mb-8 pr-4">
+          <Card
+            hoverable
+            cover={<img src={product.image} alt={product.name} className="w-full h-60 object-cover" />}
+            className="w-full"
           >
-            Add to Cart
-          </Link>
-          <p className="text-sm text-gray-500 text-center mt-2">Free Shipping</p>
-          <p className="text-sm text-gray-500 text-center">2-Year Warranty</p>
-        </Card>
+            <Meta title={product.name} description={product.description} />
+            <p className="text-lg font-bold text-center">Price: {product.price}</p>
+            <Link
+              to={`/cart`}
+              className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md block text-center mt-4"
+            >
+              Add to Cart
+            </Link>
+            <p className="text-sm text-gray-500 text-center mt-2">Free Shipping</p>
+            <p className="text-sm text-gray-500 text-center">2-Year Warranty</p>
+          </Card>
+        </div>
+        <div className="w-full md:w-3/5 mb-8 pl-4">
+          <Card title="Specification" className="w-full">
+            <Card.Grid style={gridStyle}>Type: {product.type}</Card.Grid>
+            <Card.Grid hoverable={false} style={gridStyle}>Dial Color: {product.dialColor}</Card.Grid>
+            <Card.Grid style={gridStyle}>Box: {product.box ? 'Yes' : 'No'}</Card.Grid>
+            <Card.Grid style={gridStyle}>Papers: {product.papers ? 'Yes' : 'No'}</Card.Grid>
+            <Card.Grid style={gridStyle}>Case Size: {product.caseSize} mm</Card.Grid>
+            <Card.Grid style={gridStyle}>Past Usage Time: {product.pastUsageTime}</Card.Grid>
+            <Card.Grid style={gridStyle}>Water Resistance: {product.waterResistance} m</Card.Grid>
+            <Card.Grid style={gridStyle}>Case Material: {product.caseMaterial}</Card.Grid>
+            <Card.Grid style={gridStyle}>Year of Production: {product.yearOfProduction}</Card.Grid>
+            <Card.Grid style={gridStyle}>Remaining Insurance: {product.remainingInsurance} years</Card.Grid>
+            <Card.Grid style={gridStyle}>Status: {product.status}</Card.Grid>
+          </Card>
+        </div>
       </div>
 
-      <Card title="Specification" className="w-full md:w-1/2 mb-8">
-        <Card.Grid style={gridStyle}>Type: {product.type}</Card.Grid>
-        <Card.Grid hoverable={false} style={gridStyle}>Dial Color: {product.dialColor}</Card.Grid>
-        <Card.Grid style={gridStyle}>Box: {product.box ? 'Yes' : 'No'}</Card.Grid>
-        <Card.Grid style={gridStyle}>Papers: {product.papers ? 'Yes' : 'No'}</Card.Grid>
-        <Card.Grid style={gridStyle}>Case Size: {product.caseSize} mm</Card.Grid>
-        <Card.Grid style={gridStyle}>Past Usage Time: {product.pastUsageTime}</Card.Grid>
-        <Card.Grid style={gridStyle}>Water Resistance: {product.waterResistance} m</Card.Grid>
-        <Card.Grid style={gridStyle}>Case Material: {product.caseMaterial}</Card.Grid>
-        <Card.Grid style={gridStyle}>Year of Production: {product.yearOfProduction}</Card.Grid>
-        <Card.Grid style={gridStyle}>Remaining Insurance: {product.remainingInsurance} years</Card.Grid>
-        <Card.Grid style={gridStyle}>Status: {product.status}</Card.Grid>
-      </Card>
-
-      <div className="mt-8 w-full">
+      <div className="mt-8 w-full md:w-3/4">
         <h2 className="text-xl font-bold mb-4">Related Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {relatedProducts.map((relatedProduct) => (
