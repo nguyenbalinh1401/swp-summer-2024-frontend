@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import CartList from "../components/cart/CartList";
 import { useCookies } from "react-cookie";
 import CartSummary from "../components/cart/CartSummary";
 import CartCheckout from "../components/cart/CartCheckout";
+import ShoppingCart from "../components/cart/ShoppingCart";
 
 export default function Cart() {
   // const [cartList, setCartList] = useState(
@@ -65,7 +65,7 @@ export default function Cart() {
   return (
     <div className="w-full flex items-start justify-center gap-8 px-16">
       <div className="w-2/3">
-        <CartList list={tempCart} getCheckedList={getCheckedList} />
+        <ShoppingCart list={tempCart} getCheckedList={getCheckedList} />
       </div>
       <div className="w-1/3 flex flex-col items-center justify-start gap-8">
         <CartCheckout getCheckoutInfo={getCheckoutInfo} />

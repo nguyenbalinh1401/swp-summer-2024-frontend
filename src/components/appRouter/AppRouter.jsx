@@ -8,9 +8,8 @@ import ProductDetail from "../../pages/ProductDetail";
 
 import Cart from "../../pages/Cart";
 import Buy from "../../pages/Buy";
-import HomePage from "../../pages/HomePage";
-import Sell from "../../pages/Sell";
-
+import HomePage from "../../pages/Home";
+import Sell from "../../pages/FillFormBeSell";
 
 import SellPage from "../../components/SellPage";
 import LastActionSell from "../../components/LastActionSell";
@@ -18,8 +17,6 @@ import WatchForm from "../../components/WatchForm";
 import { SellProvider } from "../../context/sellContext";
 import ContactPage from "../../pages/ContactPage";
 import OtherBrandForm from "../OtherBrandForm";
-
-
 
 export default function AppRouter() {
   return (
@@ -35,42 +32,42 @@ export default function AppRouter() {
         <Route path="/buy" element={<Buy />} />
         <Route path="/welcome" element={<HomePage />} />
         <Route path="/sell" element={<Sell />} />
-        <Route path="/contact" element={<ContactPage/>}/>
-       
-        <Route 
-          path="/sellPage" 
+        <Route path="/contact" element={<ContactPage />} />
+
+        <Route
+          path="/sellPage"
           element={
             <SellProvider>
               <SellPage />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/lastActionSell" 
+        <Route
+          path="/lastActionSell"
           element={
             <SellProvider>
               <LastActionSell />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/watchForm" 
+        <Route
+          path="/watchForm"
           element={
             <SellProvider>
               <WatchForm />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/OtherBrandForm" 
+        <Route
+          path="/OtherBrandForm"
           element={
             <SellProvider>
               <OtherBrandForm />
             </SellProvider>
-          } 
+          }
         />
         <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
     </div>
   );
 }

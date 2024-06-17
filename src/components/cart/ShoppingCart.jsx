@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import CartItem from "./CartItem";
 import { Checkbox } from "antd";
 
-export default function CartList({ list, getCheckedList }) {
+export default function ShoppingCart({ list, getCheckedList }) {
   const [checkedList, setCheckedList] = useState([]);
   const [isAllChecked, setIsAllChecked] = useState(false);
 

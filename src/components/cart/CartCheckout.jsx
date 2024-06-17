@@ -18,7 +18,7 @@ export default function CartCheckout({ getCheckoutInfo }) {
 
   const checkoutSchema = Yup.object().shape({
     name: Yup.string().required(),
-    email: Yup.email().required(),
+    email: Yup.string().email().required(),
     phone: Yup.string().required().min(9).max(11),
     address: Yup.string().required(),
   });
@@ -31,13 +31,12 @@ export default function CartCheckout({ getCheckoutInfo }) {
       address: "",
     },
     validationSchema: checkoutSchema,
-    onSubmit: async () => {
-        
-    }
+    onSubmit: async () => {},
   });
 
   useEffect(() => {
     getProvincesData();
+    logUser();
   }, []);
 
   return (
@@ -46,7 +45,7 @@ export default function CartCheckout({ getCheckoutInfo }) {
 
       <div className="w-full flex flex-col items-center justify-start">
         <div className="w-full flex items-center justify-between">
-          <p>Phone number:</p>
+          <p className="min-w-fit">Phone number:</p>
           <input type="text" />
         </div>
       </div>
