@@ -78,7 +78,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
 const gridStyle = {
@@ -92,6 +92,8 @@ export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [showMore, setShowMore] = useState(false);
+  const [visibleProducts, setVisibleProducts] = useState(8);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -105,6 +107,10 @@ export default function ProductDetail() {
     };
     fetchProductData();
   }, [id]);
+
+  const loadMore = () => {
+    setVisibleProducts(visibleProducts + 8);
+  };
 
   if (!product) {
     return <div>Loading...</div>;
@@ -151,7 +157,7 @@ export default function ProductDetail() {
       <div className="mt-8 w-full md:w-3/4">
         <h2 className="text-xl font-bold mb-4">Related Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {relatedProducts.map((relatedProduct) => (
+          {relatedProducts.slice(0, visibleProducts).map((relatedProduct) => (
             <Card
               key={relatedProduct.id}
               hoverable
@@ -167,6 +173,11 @@ export default function ProductDetail() {
             </Card>
           ))}
         </div>
+        {relatedProducts.length > visibleProducts && (
+          <div className="text-center mt-4">
+            <Button type="primary" onClick={loadMore}>Hiển thị thêm sản phẩm</Button>
+          </div>
+        )}
       </div>
     </div>
   );
