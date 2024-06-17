@@ -113,7 +113,7 @@ export default function ProductDetail() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-full md:w-1/2 mb-8">
+      <div className="w-full md:w-1/2 mb-8 my-auto">
         <Card
           hoverable
           cover={<img src={product.image} alt={product.name} className="w-full h-60 object-cover" />}
