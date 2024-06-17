@@ -5,9 +5,9 @@ import BrandSelector from './BrandSelector';
 import ModelSelector from './ModelSelector';
 import { useSellContext } from '../context/sellContext';
 import { brands } from '../data/mockData';
-import "../styles/watch-form.css";
+import "../styles/watchForm.module.css";
 
-export default function WatchForm (){
+const WatchForm = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const navigate = useNavigate();
   const { updateWatchForm } = useSellContext();
@@ -24,7 +24,22 @@ export default function WatchForm (){
     if (selectedBrand && model) {
       const brandName = selectedBrand.name;
       
-      updateWatchForm({ brand: brandName, model });
+      updateWatchForm({ brand: brandName,
+        
+          name: model.name,  // Assuming model has a 'name' property
+          image: model.image,
+          description: model.description,
+          modelNumber: model.modelNumber,
+          serialNumber: model.serialNumber,
+          type: model.type,
+          caseMaterial: model.caseMaterial,
+          braceletMaterial: model.braceletMaterial,
+          caseColor: model.caseColor,
+          dialColor: model.dialColor,
+          caseSize: model.caseSize,
+          yearOfManufacture: model.yearOfManufacture,
+          limitedEdition: model.limitedEdition,
+          marketValue: model.marketValue });
       navigate('/sellPage');
     } else {
       
@@ -34,7 +49,7 @@ export default function WatchForm (){
 
   return (
     <motion.div
-      className="min-h-screen flex items-center justify-center bg-gray-100 "
+      className="min-h-screen flex items-center justify-center bg-gray-100"
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
@@ -56,3 +71,4 @@ export default function WatchForm (){
   );
 };
 
+export default WatchForm;

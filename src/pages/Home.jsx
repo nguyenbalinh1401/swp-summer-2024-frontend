@@ -16,7 +16,7 @@ import {
   Carousel,
 } from "antd";
 import { Link } from "react-router-dom";
-import "../components/style/Home.css";
+import styles from "../styles/Home.module.css";
 
 const { Content, Sider } = Layout;
 
@@ -82,28 +82,39 @@ export default function Home() {
 
   return (
     <Layout>
-      <Sider zeroWidthTriggerStyle className="siderStyle">
-        Sider
+      <Sider zeroWidthTriggerStyle className={styles.siderStyle}>
+      <Carousel autoPlay infiniteLoop>
+                <div>
+                    <img src="https://m.media-amazon.com/images/I/61QeNWSSHaL._AC_UY1000_.jpg" alt="Image 1" />
+                </div>
+                <div>
+                    <img src="https://m.media-amazon.com/images/I/81+d6eSA0eL._AC_UY1000_.jpg" alt="Image 2" />
+                </div>
+                <div>
+                    <img src="https://m.media-amazon.com/images/I/61IduqXygwL._AC_UY350_.jpg" alt="Image 3" />
+                </div>
+               
+            </Carousel>
       </Sider>
       <FloatButton.Group
         open={open}
         trigger="click"
-        className="floatbutton"
+        className={styles.floatButton}
         icon={open ? <CloseOutlined /> : <CustomerServiceOutlined />}
         onClick={handleClick}
       >
         <FloatButton />
         <FloatButton icon={<CommentOutlined />} />
       </FloatButton.Group>
-      <Content className="content">
+      <Content className={styles.content}>
         <div
-          className="content-inner"
+          className={styles.contentInner}
           style={{
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
-          <Carousel autoplay fade arrows className="carousel">
+          <Carousel autoplay fade arrows className={styles.carousel}>
             {images.map((image, index) => (
               <div key={index}>
                 <img src={image} alt={`carousel-${index}`} />
@@ -111,7 +122,7 @@ export default function Home() {
             ))}
           </Carousel>
         </div>
-        <Title level={2} className="title">
+        <Title level={2} className={styles.title}>
           New
         </Title>
 
@@ -133,7 +144,7 @@ export default function Home() {
             </Col>
           ))}
         </Row>
-        <Title level={2} className="title">
+        <Title level={2} className={styles.title}>
           About some brand
         </Title>
         <Row gutter={[16, 16]}>

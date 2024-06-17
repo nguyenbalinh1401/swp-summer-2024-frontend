@@ -1,36 +1,36 @@
 /* watchform.css */
 
 /* BrandSelector */
-.brand-selector-container {
+.brandSelectorContainer {
     max-width: 100%;
     padding: 1rem;
     margin-top: 50px;
   }
   
-  .brand-selector-heading {
+  .brandSelectorHeading {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
   }
   
-  .brand-selector-search {
+  .brandSelectorSearch {
     margin-bottom: 1rem;
   }
   
-  .brand-selector-input {
+  .brandSelectorInput {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 0.25rem;
   }
   
-  .brand-selector-grid {
+  .brandSelectorGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
   }
   
-  .brand-selector-card {
+  .brandSelectorCard {
     cursor: pointer;
     border-radius: 0.5rem;
     overflow: hidden;
@@ -38,46 +38,46 @@
     transition: transform 0.5s ease;
   }
   
-  .brand-selector-card:hover {
+  .brandSelectorCard:hover {
     transform: scale(1.05);
   }
   
-  .brand-selector-image {
+  .brandSelectorImage {
     width: 100%;
     height: auto;
     object-fit: cover;
   }
   
-  .brand-selector-details {
+  .brandSelectorDetails {
     padding: 1rem;
   }
   
-  .brand-selector-name {
+  .brandSelectorName {
     font-size: 1.25rem;
     font-weight: bold;
   }
   
-  .brand-selector-info {
+  .brandSelectorInfo {
     display: flex;
     align-items: center;
     margin-top: 0.5rem;
   }
   
-  .info-icon {
+  .infoIcon {
     width: 1rem;
     height: 1rem;
     margin-right: 0.5rem;
   }
   
-  .info-text {
+  .infoText {
     font-size: 0.875rem;
   }
   
-  .brand-selector-button {
+  .brandSelectorButton {
     margin-top: 2rem;
   }
   
-  .brand-selector-dont-know {
+  .brandSelectorDontKnow {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 0.25rem;
@@ -87,20 +87,20 @@
     transition: background-color 0.3s ease;
   }
   
-  .brand-selector-dont-know:hover {
+  .brandSelectorDontKnow:hover {
     background-color: #000;
   }
   
   
   /* ModelSelector */
-  .model-selector-container {
+  .modelSelectorContainer {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     padding: 20px;
   }
   
-  .model-card {
+  .modelCard {
     border: 1px solid #ccc;
     border-radius: 8px;
     overflow: hidden;
@@ -109,34 +109,34 @@
     transition: transform 0.5s ease;
   }
   
-  .model-card:hover {
+  .modelCard:hover {
     transform: scale(1.05);
   }
   
-  .model-image {
+  .modelImage {
     width: 100%;
     height: auto;
     object-fit: cover;
     border-radius: 8px 8px 0 0;
   }
   
-  .model-details {
+  .modelDetails {
     padding: 20px;
   }
   
-  .model-name {
+  .modelName {
     font-size: 1.5rem;
     font-weight: bold;
     color: #333;
   }
   
-  .model-description {
+  .modelDescription {
     margin-top: 10px;
     font-size: 1rem;
     color: #666;
   }
   
-  .select-button {
+  .selectButton {
     margin-top: 20px;
     padding: 10px 20px;
     border: none;
@@ -147,26 +147,26 @@
     transition: background-color 0.3s ease;
   }
   
-  .select-button:hover {
+  .selectButton:hover {
     background-color: #0056b3;
   }
   
   
   /* WatchForm */
-  .watch-form-container {
+  .watchFormContainer {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
   }
   
-  .selected-watch-image {
+  .selectedWatchImage {
     width: 200px;
     height: 200px;
     object-fit: cover;
     border-radius: 5px;
   }
   
-  .submit-button {
+  .submitButton {
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -176,7 +176,7 @@
     transition: background-color 0.3s ease;
   }
   
-  .submit-button:hover {
+  .submitButton:hover {
     background-color: #0056b3;
   }
   

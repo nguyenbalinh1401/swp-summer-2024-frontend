@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { useSellContext } from '../context/sellContext';
 import { useNavigate } from 'react-router-dom';
 import { Select, Input, Checkbox } from 'antd';
-import "../styles/other-form.css";
+import styles from "../styles/other-form.module.css";
 
 
 
@@ -88,10 +87,10 @@ export default function OtherBrandForm() {
 
 
     return (
-        <div className="form-container-other">
+        <div className={styles.formContainerOther}>
             <h1>Fill Watch Information</h1>
             <form onSubmit={handleSubmit}>
-                <div className="form-group-other">
+                <div className={styles.formGroupOther}>
                     <label htmlFor="brand">Brand:</label>
                     <input
                         type="text"
@@ -101,7 +100,7 @@ export default function OtherBrandForm() {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="name">Name:</label>
                     <input
                         type="text"
@@ -113,7 +112,7 @@ export default function OtherBrandForm() {
                 </div>
                 
 
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="description">Description:</label>
                     <input
                         type="text"
@@ -123,7 +122,7 @@ export default function OtherBrandForm() {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="modelNumber">Model Number:</label>
                     <input
                         type="text"
@@ -133,7 +132,7 @@ export default function OtherBrandForm() {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="serialNumber">Serial Number:</label>
                     <input
                         type="text"
@@ -143,7 +142,7 @@ export default function OtherBrandForm() {
                         onChange={handleChange}
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="type">Type:</label>
                     <select
                         id="type"
@@ -160,7 +159,7 @@ export default function OtherBrandForm() {
                     </select>
                 </div>
 
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="caseMaterial">Case Material:</label>
                     <Select
                         value={newWatchForm.caseMaterial}
@@ -180,7 +179,7 @@ export default function OtherBrandForm() {
 
                     </Select>
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="braceletMaterial">Bracelet Material:</label>
                     <Select
                         value={newWatchForm.braceletMaterial}
@@ -200,7 +199,7 @@ export default function OtherBrandForm() {
 
                     </Select>
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="caseColor">Case Color:</label>
                     <Input
                         type="color"
@@ -210,7 +209,7 @@ export default function OtherBrandForm() {
                         onChange={(e) => handleColorChange(e.target.value, 'caseColor')}
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="dialColor">Dial Color:</label>
                     <Input
                         type="color"
@@ -220,7 +219,7 @@ export default function OtherBrandForm() {
                         onChange={(e) => handleColorChange(e.target.value, 'dialColor')}
                     />
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="caseSize">Case Size (mm):</label>
                     <Select
                         value={newWatchForm.caseSize}
@@ -236,7 +235,7 @@ export default function OtherBrandForm() {
                         ))}
                     </Select>
                 </div>  
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="yearOfManufacture">Year of Manufacture:</label>
                     <Select
                         value={newWatchForm.yearOfManufacture}
@@ -252,7 +251,7 @@ export default function OtherBrandForm() {
                         ))}
                     </Select>
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="limitedEdition">Limited Edition:</label>
                     <Checkbox
                         id="limitedEdition"
@@ -265,7 +264,7 @@ export default function OtherBrandForm() {
                         
                     </Checkbox>
                 </div>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                     <label htmlFor="image">Upload Image:</label>
                     <input
                         type="file"
@@ -275,7 +274,7 @@ export default function OtherBrandForm() {
                     />
                 </div>
 
-                <button type="submit" className='button-other'>Submit</button>
+                <button type="submit" className={styles.buttonOther}>Submit</button>
             </form>
         </div>
     );

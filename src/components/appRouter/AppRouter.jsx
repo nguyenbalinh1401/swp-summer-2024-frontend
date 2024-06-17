@@ -7,9 +7,6 @@ import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
 
 import Cart from "../../pages/Cart";
-import Buy from "../../pages/Buy";
-import HomePage from "../../pages/HomePage";
-import Sell from "../../pages/Sell";
 
 
 import SellPage from "../../components/SellPage";
@@ -32,9 +29,8 @@ export default function AppRouter() {
         <Route path="/product/:id" element={<ProductDetail />} />
 
         <Route path="/cart" element={<Cart />} />
-        <Route path="/buy" element={<Buy />} />
-        <Route path="/welcome" element={<HomePage />} />
-        <Route path="/sell" element={<Sell />} />
+        
+
         <Route path="/contact" element={<ContactPage/>}/>
        
         <Route 
