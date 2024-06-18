@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, Divider, Input, Modal, message } from "antd";
 import { Link } from "react-router-dom";
+
 import { EmailForm, CodeForm, ResetPasswordForm } from "./ForgotForm";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import spinner from "../../components/spinner/spinner.svg";
@@ -13,9 +15,38 @@ export default function SignIn() {
   const [rememberSignIn, setRememberSignIn] = useState(true);
   const [forgotFormOpen, setForgotFormOpen] = useState(false);
   const [resetPasswordFormOpen, setResetPasswordFormOpen] = useState(false);
+
   const [currentEmail, setCurrentEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");
+
+  useEffect(() => {
+    const passwordResetAccount = sessionStorage.passwordReset;
+    if (passwordResetAccount) {
+      const object = JSON.parse(passwordResetAccount);
+      console.log("DEFAULT ACCOUNT: ", object);
+      setSignInEmail(object.email);
+      messageApi.open({
+        type: "success",
+        content: "Your password has been reset. Please sign in to continue.",
+        duration: 5,
+      });
+      sessionStorage.removeItem("passwordReset");
+    }
+
+    const registeredAccount = sessionStorage.register;
+    if (registeredAccount) {
+      const object = JSON.parse(registeredAccount);
+      console.log("DEFAULT ACCOUNT: ", object);
+      setSignInEmail(object.email);
+      messageApi.open({
+        type: "success",
+        content: "Successfully registered. Please sign in to continue.",
+        duration: 5,
+      });
+      sessionStorage.removeItem("register");
+    }
+  }, []);
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
 
@@ -53,6 +84,7 @@ export default function SignIn() {
   const getEmail = (value) => {
     if (value) {
       console.log("GET EMAIL: ", value);
+      setCurrentEmail(value);
       setCurrentEmail(value);
       setEmailSent(true);
     }
@@ -138,7 +170,23 @@ export default function SignIn() {
   const onGoogleSuccess = async (credentialResponse) => {
     const googleLoginData = jwtDecode(credentialResponse.credential);
     console.log("Google login: ", googleLoginData);
-    console.log("Email: ", googleLoginData.email)
+    console.log("Email: ", googleLoginData.email);
+    await axios
+      .get("http://localhost:3000/auth/email", {
+        email: googleLoginData.email,
+      })
+      .then((res) => {
+        console.log("ACCOUNT: ", res.data.metadata);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // message.open({
+    //   type: "success",
+    //   content: `Successfully signed in with Google account: ${googleLoginData.name}`,
+    //   duration: 5,
+    // });
+    console.log("Email: ", googleLoginData.email);
     await axios
       .get("http://localhost:3000/auth/email", {
         email: googleLoginData.email,
@@ -158,6 +206,7 @@ export default function SignIn() {
 
   return (
     <div className="w-full flex flex-col items-center justify-center gap-8">
+     
       {contextHolder}
       <p className="text-[250%] font-bold font-title text-sky-800">SIGN IN</p>
       <div className="w-96 flex flex-col items-center justify-center gap-2">
@@ -203,7 +252,7 @@ export default function SignIn() {
           onPressEnter={() => {
             handleSignIn();
           }}
-        />
+        />       
         <div className="w-full flex items-center justify-between">
           <Checkbox
             onChange={() => {
@@ -223,6 +272,7 @@ export default function SignIn() {
             Forgot your password?
           </button>
         </div>
+
         <button
           onClick={handleSignIn}
           className="w-96 mt-4 font-bold text-xl text-white bg-sky-600 hover:bg-sky-700 py-2 px-16 rounded-full"
@@ -284,6 +334,7 @@ export default function SignIn() {
       <Modal
         maskClosable={false}
         onCancel={() => {
+          setEmailSent(false);
           setEmailSent(false);
           setResetPasswordFormOpen(false);
         }}

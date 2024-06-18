@@ -1,16 +1,16 @@
 import React from 'react';
-import '../styles/watch-form.css';
+import styles from "../styles/watchForm.module.css";
 
 const ModelSelector = ({ brand, onSelectModel }) => {
   return (
-    <div className="model-selector-container">
+    <div className={styles.modelSelectorContainer}>
       {brand.models.map((model, index) => (
-        <div key={index} className="model-card">
-          <img src={model.image} alt={model.name} className="model-image" />
-          <div className="model-details">
-            <h3 className="model-name">{model.name}</h3>
-            <p className="model-description">{model.description}</p>
-            <button onClick={() => onSelectModel(model)} className="select-button">
+        <div key={index} className={styles.modelCard}>
+          <img src={model.image} alt={model.name} className={styles.modelImage} />
+          <div className={styles.modelDetails}>
+            <h3 className={styles.modelName}>{model.name}</h3>
+            <p className={styles.modelDescription}>{model.description}</p>
+            <button onClick={() => onSelectModel(model)} className={styles.selectButton}>
               Select
             </button>
           </div>

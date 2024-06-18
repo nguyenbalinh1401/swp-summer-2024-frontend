@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Timeline, Modal, Button, message } from "antd";
 import { useSellContext } from "../context/sellContext";
-import "../styles/last-action-sell.css";
+import styles from "../styles/last-action-sell.module.css"; 
 import axios from "axios";
 
 const LastActionSell = () => {
@@ -91,17 +91,17 @@ const LastActionSell = () => {
   }, [sellForm, watchForm]);
 
   return (
-    <div className="container">
-      <div className="timeline-section">
+    <div className={styles.container}>
+      <div className={styles.timelineSection}>
         <Timeline>
           <Timeline.Item color="green">
             <h2>Sell Your Watch Enquiry
-              <span className="status complete">Completed</span>
+              <span className={styles.statusComplete}>Completed</span>
             </h2>
           </Timeline.Item>
           <Timeline.Item color="blue">
             <h2>Our Initial Offer
-              <span className="status in-progress">In Progress</span>
+              <span className={styles.statusInProgress}>In Progress</span>
             </h2>
             {sellForm ? (
               <ul>
@@ -131,24 +131,24 @@ const LastActionSell = () => {
           </Timeline.Item>
         </Timeline>
         <Timeline>
-          <Timeline.Item color="gray">
+        <Timeline.Item color="gray">
             <h2>Send Your Watch For Authentication And Inspection
-              <span className="status pending">Pending</span>
+              <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
           <Timeline.Item color="gray">
             <h2>Final Offer
-              <span className="status pending">Pending</span>
+              <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
           <Timeline.Item color="gray">
             <h2>Sale Complete
-              <span className="status pending">Pending</span>
+              <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
         </Timeline>
       </div>
-      <div className="details-section">
+      <div className={styles.detailsSection}>
         <h2>Your Watch</h2>
         {watchForm ? (
           <ul>

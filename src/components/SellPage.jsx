@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Layout, Menu, Input, Button, Checkbox } from "antd";
-import "../styles/sell-page.css";
+import {useNavigate } from "react-router-dom";
+import styles from "../styles/sell-page.module.css";
+import { Layout,  Input, Button, Checkbox } from "antd";
 import { useSellContext } from "../context/sellContext";
 
-const { Header, Content } = Layout;
+export default function SellPage() {
 
-export default function Sell() {
+const { Content } = Layout;
+
+
   const navigate = useNavigate();
   const { updateSellForm, watchForm } = useSellContext();
   const [initialOffer, setInitialOffer] = useState("");
@@ -106,7 +108,7 @@ export default function Sell() {
   }, [watchForm]);
 
   const renderWatchInfo = () => (
-    <div className="watch-info">
+    <div className={styles.watchInfo}>
       <img src={watchForm?.model?.image} alt={watchForm?.brand?.name} />
       <h3>{watchForm?.brand?.name}</h3>
     </div>
@@ -114,39 +116,26 @@ export default function Sell() {
 
   return (
     <Layout>
-      <Header className="layout-header">
-        <div className="demo-logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["3"]} className="menu">
-          <Menu.Item key="1">
-            <Link to="/">Home</Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/buy">Buy</Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Link to="/sell">Sell</Link>
-          </Menu.Item>
-        </Menu>
-      </Header>
-      <Content className="content">
-        <div className="content-inner">
+      
+      <Content className={styles.contentHome}>
+        <div className={styles.contentInner}>
           {showFirstSlide && (
-            <div className="sell-content">
+            <div className={styles.sellContent}>
               {renderWatchInfo()}
               <h2>About your watch</h2>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Do you have the original box?</label>
                 <Checkbox checked={hasOriginalBox} onChange={onOriginalBoxChange}>Yes</Checkbox>
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Do you have the original papers?</label>
                 <Checkbox checked={hasOriginalPapers} onChange={onOriginalPapersChange}>Yes</Checkbox>
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Is your watch unworn with factory stickers intact?</label>
                 <Checkbox checked={hasFactoryStickers} onChange={onFactoryStickersChange}>Yes</Checkbox>
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Is your watch a limited edition?</label>
                 <Checkbox checked={isLimitedEdition} onChange={onLimitedEditionChange}>Yes</Checkbox>
               </div>
@@ -156,7 +145,7 @@ export default function Sell() {
             </div>
           )}
           {showSecondSlide && (
-            <div className="watch-valuation-result">
+            <div className={styles.watchValuationResult}>
               <h3>Your Watch Valuation</h3>
               <p>Minimum Servicing Fee: ${minimumServicingFee}</p>
               <p>Total Valuation: ${total}</p>
@@ -165,9 +154,9 @@ export default function Sell() {
             </div>
           )}
           {showThirdSlide && (
-            <div className="user-details">
+            <div className={styles.userDetails}>
               <h3>Your Details</h3>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>First Name</label>
                 <Input
                   placeholder="Enter First Name"
@@ -175,7 +164,7 @@ export default function Sell() {
                   onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Last Name</label>
                 <Input
                   placeholder="Enter Last Name"
@@ -183,7 +172,7 @@ export default function Sell() {
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Email</label>
                 <Input
                   placeholder="Enter Email"
@@ -191,7 +180,7 @@ export default function Sell() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Telephone</label>
                 <Input
                   placeholder="Enter Telephone Number"
@@ -208,3 +197,4 @@ export default function Sell() {
     </Layout>
   );
 }
+
