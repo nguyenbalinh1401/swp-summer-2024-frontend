@@ -1,215 +1,144 @@
-//style 1
-// product detail 
+//buy
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Card, Button, Descriptions } from 'antd';
+import { Card, Input, Select, Pagination } from 'antd';
 import { Link } from 'react-router-dom';
 
 const { Meta } = Card;
+const { Search } = Input;
+const { Option } = Select;
 
-export default function ProductDetail() {
-  const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const [showMore, setShowMore] = useState(false);
-  const [visibleProducts, setVisibleProducts] = useState(8);
+const gridStyle = {
+  width: '25%',
+  textAlign: 'center',
+};
+
+export default function Buy() {
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('');
+  const [filterDialColor, setFilterDialColor] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const productsPerPage = 12;
 
   useEffect(() => {
-    const fetchProductData = async () => {
+    const fetchProductsData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/product/${id}`);
-        setProduct(response.data.product);
-        setRelatedProducts(response.data.relatedProducts);
+        const response = await axios.get('http://localhost:3000/product/buy');
+        const products = response.data.products;  
+        setProducts(products);
+        setFilteredProducts(products);
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        console.error('Failed to fetch products data', error);
       }
     };
-    fetchProductData();
-  }, [id]);
+    fetchProductsData();
+  }, []);
 
-  const loadMore = () => {
-    setVisibleProducts(visibleProducts + 8);
+  useEffect(() => {
+    let result = products;
+    
+    // Lọc theo cụm từ tìm kiếm nếu nó ko trống
+    if (searchTerm) {
+      result = result.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Lọc theo loại nếu filterType đc chọn
+    if (filterType) {
+      result = result.filter(product => product.type === filterType);
+    }
+
+    // Lọc theo màu quay số nếu filterDialColor đc chọn
+    if (filterDialColor) {
+      result = result.filter(product => product.dialColor === filterDialColor);
+    }
+
+    setFilteredProducts(result);
+    setCurrentPage(1); // Đặt lại về trang đầu tiên bất cứ khi nào bộ lọc thay đổi
+  }, [searchTerm, filterType, filterDialColor, products]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
-  if (!product) {
-    return <div>Loading...</div>;
-  }
+  // Calculate current items for pagination
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-wrap w-full md:w-3/4 mb-8">
-        <div className="w-full md:w-2/5 mb-8 pr-4">
-          <Card
-            hoverable
-            cover={<img src={product.image} alt={product.name} className="w-full h-60 object-cover" />}
-            className="w-full"
+      <div className="w-full md:w-3/4 mb-8">
+        <Search
+          placeholder="Search products"
+          enterButton
+          onSearch={value => setSearchTerm(value)}
+          className="mb-4"
+          allowClear
+          style={{ width: '100%' }}
+        />
+        <div className="flex justify-between mb-4">
+          <Select
+            placeholder="Filter by Type"
+            onChange={value => setFilterType(value)}
+            allowClear
+            className="mr-2"
+            style={{ width: '48%' }}
           >
-            <Meta title={product.name} description={product.description} />
-            <p className="text-lg font-bold text-center">Price: {product.price}</p>
-            <Link
-              to={`/cart`}
-              className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md block text-center mt-4"
-            >
-              Add to Cart
-            </Link>
-            <p className="text-sm text-gray-500 text-center mt-2">Free Shipping</p>
-            <p className="text-sm text-gray-500 text-center">2-Year Warranty</p>
-          </Card>
-        </div>
-        <div className="w-full md:w-3/5 mb-8 pl-4">
-          <Card title="Specification" className="w-full">
-            <Descriptions column={1}>
-              <Descriptions.Item label="Type">{product.type}</Descriptions.Item>
-              <Descriptions.Item label="Dial Color">{product.dialColor}</Descriptions.Item>
-              <Descriptions.Item label="Box">{product.box ? 'Yes' : 'No'}</Descriptions.Item>
-              <Descriptions.Item label="Papers">{product.papers ? 'Yes' : 'No'}</Descriptions.Item>
-              <Descriptions.Item label="Case Size">{product.caseSize} mm</Descriptions.Item>
-              <Descriptions.Item label="Past Usage Time">{product.pastUsageTime}</Descriptions.Item>
-              <Descriptions.Item label="Water Resistance">{product.waterResistance} m</Descriptions.Item>
-              <Descriptions.Item label="Case Material">{product.caseMaterial}</Descriptions.Item>
-              <Descriptions.Item label="Year of Production">{product.yearOfProduction}</Descriptions.Item>
-              <Descriptions.Item label="Remaining Insurance">{product.remainingInsurance} years</Descriptions.Item>
-              <Descriptions.Item label="Status">{product.status}</Descriptions.Item>
-            </Descriptions>
-          </Card>
+            <Option value="Quazt">Quazt</Option>
+            <Option value="Automatic">Automatic</Option>
+            <Option value="Solar">Solar</Option>
+          </Select>
+          <Select
+            placeholder="Filter by Dial Color"
+            onChange={value => setFilterDialColor(value)}
+            allowClear
+            className="ml-2"
+            style={{ width: '48%' }}
+          >
+            <Option value="Green">Green</Option>
+            <Option value="Blue">Blue</Option>
+            <Option value="Black">Black</Option>
+            <Option value="Gold/Silver">Gold/Silver</Option>
+            <Option value="Silver/Gold">Silver/Gold</Option>
+            <Option value="Gry">Gry</Option>
+            <Option value="Mltclr">Mltclr</Option>
+          </Select>
         </div>
       </div>
-
-      <div className="mt-8 w-full md:w-3/4">
-        <h2 className="text-2xl font-bold mb-4 text-center text-blue-700">Related Products</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {relatedProducts.slice(0, visibleProducts).map((relatedProduct) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        {currentProducts.length > 0 ? (
+          currentProducts.map(product => (
             <Card
-              key={relatedProduct.id}
+              key={product.id}
               hoverable
-              cover={<img src={relatedProduct.image} alt={relatedProduct.name} className="w-full h-40 object-cover" />}
+              cover={<img src={product.image} alt={product.name} className="w-full h-40 object-cover" />}
             >
-              <Meta title={relatedProduct.name} description={`Price: ${relatedProduct.price}`} />
+              <Meta title={product.name} description={`Price: ${product.price}`} />
               <Link
-                to={`/product/${relatedProduct.id}`}
+                to={`/product/${product.id}`}
                 className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md block text-center mt-4"
               >
                 View Details
               </Link>
             </Card>
-          ))}
-        </div>
-        {relatedProducts.length > visibleProducts && (
-          <div className="text-center mt-4">
-            <Button type="primary" onClick={loadMore}>Hiển thị thêm sản phẩm</Button>
-          </div>
+          ))
+        ) : (
+          <p>No products found</p>
         )}
       </div>
+      <Pagination
+        current={currentPage}
+        pageSize={productsPerPage}
+        total={filteredProducts.length}
+        onChange={handlePageChange}
+        className="mt-4"
+      />
     </div>
   );
 }
 
-//style 2
-// import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
-// import axios from 'axios';
-// import { Card, Button } from 'antd';
-// import { Link } from 'react-router-dom';
-
-// const gridStyle = {
-//   width: '25%',
-//   textAlign: 'center',
-// };
-
-// const { Meta } = Card;
-
-// export default function ProductDetail() {
-//   const { id } = useParams();
-//   const [product, setProduct] = useState(null);
-//   const [relatedProducts, setRelatedProducts] = useState([]);
-//   const [showMore, setShowMore] = useState(false);
-//   const [visibleProducts, setVisibleProducts] = useState(8);
-
-//   useEffect(() => {
-//     const fetchProductData = async () => {
-//       try {
-//         const response = await axios.get(`http://localhost:3000/product/${id}`);
-//         setProduct(response.data.product);
-//         setRelatedProducts(response.data.relatedProducts);
-//       } catch (error) {
-//         console.error("Error fetching product data:", error);
-//       }
-//     };
-//     fetchProductData();
-//   }, [id]);
-
-//   const loadMore = () => {
-//     setVisibleProducts(visibleProducts + 8);
-//   };
-
-//   if (!product) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return (
-//     <div className="flex flex-col items-center">
-//       <div className="flex flex-wrap w-full md:w-3/4 mb-8">
-//         <div className="w-full md:w-2/5 mb-8 pr-4">
-//           <Card
-//             hoverable
-//             cover={<img src={product.image} alt={product.name} className="w-full h-60 object-cover" />}
-//             className="w-full"
-//           >
-//             <Meta title={product.name} description={product.description} />
-//             <p className="text-lg font-bold text-center">Price: {product.price}</p>
-//             <Link
-//               to={`/cart`}
-//               className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md block text-center mt-4"
-//             >
-//               Add to Cart
-//             </Link>
-//             <p className="text-sm text-gray-500 text-center mt-2">Free Shipping</p>
-//             <p className="text-sm text-gray-500 text-center">2-Year Warranty</p>
-//           </Card>
-//         </div>
-//         <div className="w-full md:w-3/5 mb-8 pl-4">
-//           <Card title="Specification" className="w-full">
-//             <Card.Grid style={gridStyle}>Type: {product.type}</Card.Grid>
-//             <Card.Grid hoverable={false} style={gridStyle}>Dial Color: {product.dialColor}</Card.Grid>
-//             <Card.Grid style={gridStyle}>Box: {product.box ? 'Yes' : 'No'}</Card.Grid>
-//             <Card.Grid style={gridStyle}>Papers: {product.papers ? 'Yes' : 'No'}</Card.Grid>
-//             <Card.Grid style={gridStyle}>Case Size: {product.caseSize} mm</Card.Grid>
-//             <Card.Grid style={gridStyle}>Past Usage Time: {product.pastUsageTime}</Card.Grid>
-//             <Card.Grid style={gridStyle}>Water Resistance: {product.waterResistance} m</Card.Grid>
-//             <Card.Grid style={gridStyle}>Case Material: {product.caseMaterial}</Card.Grid>
-//             <Card.Grid style={gridStyle}>Year of Production: {product.yearOfProduction}</Card.Grid>
-//             <Card.Grid style={gridStyle}>Remaining Insurance: {product.remainingInsurance} years</Card.Grid>
-//             <Card.Grid style={gridStyle}>Status: {product.status}</Card.Grid>
-//           </Card>
-//         </div>
-//       </div>
-
-//       <div className="mt-8 w-full md:w-3/4">
-//         <h2 className="text-2xl font-bold mb-4 text-center">Related Products</h2>
-//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-//           {relatedProducts.slice(0, visibleProducts).map((relatedProduct) => (
-//             <Card
-//               key={relatedProduct.id}
-//               hoverable
-//               cover={<img src={relatedProduct.image} alt={relatedProduct.name} className="w-full h-40 object-cover" />}
-//             >
-//               <Meta title={relatedProduct.name} description={`Price: ${relatedProduct.price}`} />
-//               <Link
-//                 to={`/product/${relatedProduct.id}`}
-//                 className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md block text-center mt-4"
-//               >
-//                 View Details
-//               </Link>
-//             </Card>
-//           ))}
-//         </div>
-//         {relatedProducts.length > visibleProducts && (
-//           <div className="text-center mt-4">
-//             <Button type="primary" onClick={loadMore}>Hiển thị thêm sản phẩm</Button>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
