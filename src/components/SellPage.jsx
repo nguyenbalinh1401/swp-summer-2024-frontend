@@ -167,7 +167,7 @@ export default function SellPage() {
   return (
     <Layout>
       
-      <Content className={styles.content}>
+      <Content className={styles.contentHome}>
         <div
           className={styles.contentInner}
           style={{

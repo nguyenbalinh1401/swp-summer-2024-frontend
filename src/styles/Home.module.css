@@ -1,5 +1,5 @@
 
-.content {
+.contentHome {
   width: 80%;
   margin: 0;
   padding: 0;
@@ -19,15 +19,34 @@
   box-sizing: border-box;
 }
 
-.carousel img {
+.carouselHome img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+ 
+}
+
+.carouselInLeft{
+  position: sticky;
+  width: 100%;
+  display: flex;
+}
+
+.carouselInLeft img{
+  position: sticky;
   width: 100%;
   height: 600px;
   object-fit: cover;
 }
-
-.carousel{
-  width: 100%;
+.carouselHome{
+  width: auto;
   display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.carouselLeft{
+  width: 100%;
 }
 
 .title{
