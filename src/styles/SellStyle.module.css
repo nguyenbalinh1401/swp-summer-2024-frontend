@@ -22,7 +22,7 @@
   }
   
   .justify-content{
-    
+      
       justify-content: center;
       align-items: center;
       height: 100vh; 
@@ -31,7 +31,7 @@
   
   .content-inner{
     padding-top: 50px;
-   
+    
   }
 
   .select-option{
@@ -51,3 +51,5 @@
   .button{
     margin-top: 20px;
   }
+
+  
