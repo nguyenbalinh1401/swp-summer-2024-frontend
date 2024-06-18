@@ -1,13 +1,22 @@
 import React from "react";
 
 export default function Navbar() {
+  const user = sessionStorage.signInUser
+    ? JSON.parse(sessionStorage.signInUser)
+    : null;
+
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900"
+    <nav
+      className="bg-white border-gray-200 dark:bg-gray-900"
       style={{ position: "fixed", width: "100%", zIndex: 1000 }}
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src="https://i.pinimg.com/564x/ce/70/25/ce7025b1338b12b179262ba4b3ad7a84.jpg" className="h-8 rounded-full" alt="" />
+          <img
+            src="https://i.pinimg.com/564x/ce/70/25/ce7025b1338b12b179262ba4b3ad7a84.jpg"
+            className="h-8 rounded-full"
+            alt=""
+          />
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             Vintage Timepiece
           </span>
@@ -38,8 +47,6 @@ export default function Navbar() {
         </button>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-
-
             <li>
               <a
                 href="/signin"
@@ -66,16 +73,16 @@ export default function Navbar() {
             </li>
             <li>
               <a
-                href="/sell"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                href="/watchForm"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 Sell
               </a>
             </li>
             <li>
               <a
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                href="/contact"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 Contact
               </a>

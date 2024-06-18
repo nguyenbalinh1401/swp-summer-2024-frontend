@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import CartItem from "./CartItem";
 import { Checkbox } from "antd";
 
-export default function CartList({ list, getCheckedList }) {
+export default function ShoppingCart({ list, getCheckedList }) {
   const [checkedList, setCheckedList] = useState([]);
-  const [isAllChecked, setIsAllChecked] = useState([]);
+  const [isAllChecked, setIsAllChecked] = useState(false);
 
   const handleCheckAll = (e) => {
     if (e.target.checked) {
@@ -23,7 +23,8 @@ export default function CartList({ list, getCheckedList }) {
     console.log("Checked item: ", value.item);
     if (value.checked === true) {
       setCheckedList([...checkedList, value.item]);
-      getCheckedList(checkedList);
+      const newCheckedList = [...checkedList, value.item];
+      getCheckedList(newCheckedList);
     } else {
       const listAfterRemove = checkedList.filter((i) => i.id != value.item.id);
       setCheckedList(listAfterRemove);
@@ -55,7 +56,7 @@ export default function CartList({ list, getCheckedList }) {
             <CartItem
               key={item.id}
               item={item}
-              checked={isAllChecked}
+              allChecked={isAllChecked}
               getCheckedItem={getCheckedItem}
             />
           );
@@ -63,13 +64,16 @@ export default function CartList({ list, getCheckedList }) {
       </div>
       <div className="w-full flex items-center justify-between text-white rounded-b-xl p-4 pl-10 bg-teal-800">
         <Checkbox
+          checked={list.length === checkedList.length}
           onChange={handleCheckAll}
           className="font-bold text-white text-xl"
         >
           Select all &#40;{list.length} item{list.length > 1 ? "s" : ""}
           &#41;
         </Checkbox>
-        <p>Selected 1 item</p>
+        <p className={`${checkedList.length > 0 ? "visible" : "invisible"}`}>
+          Selected {checkedList.length} item{checkedList.length > 1 ? "s" : ""}
+        </p>
       </div>
     </div>
   );

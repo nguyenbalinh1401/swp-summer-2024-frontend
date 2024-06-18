@@ -1,7 +1,23 @@
 import { Avatar } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import CurrencySplitter from "../../assistants/currencySpliter";
 
 export default function CartSummary({ list }) {
+  const [total, setTotal] = useState(0);
+  const getTotal = () => {
+    setTotal(0);
+    if (list.length === 0) return;
+    else {
+      list.map((item) => {
+        setTotal((cur) => cur + item.price);
+      });
+    }
+  };
+
+  useEffect(() => {
+    getTotal();
+  }, [list]);
+
   return (
     <div className="w-full flex flex-col items-start gap-4 p-8 rounded-xl bg-teal-950 text-white">
       <p className="font-black text-3xl">SUMMARY</p>
@@ -38,8 +54,8 @@ export default function CartSummary({ list }) {
         </div>
 
         <div className="flex flex-col items-end gap-4">
-          <p>999,000</p>
-          <p>1,000,000</p>
+          <p>{CurrencySplitter(total)}</p>
+          <p>{CurrencySplitter(total)}</p>
         </div>
       </div>
     </div>

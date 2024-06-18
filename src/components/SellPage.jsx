@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {useNavigate } from "react-router-dom";
 import {
   Layout,
   theme,
@@ -7,31 +8,36 @@ import {
   Select,
   Checkbox,
 } from "antd";
-
-import "../components/style/SellStyle.css";
-
+import styles from "../styles/sell-page.module.css";
+import { useSellContext } from "../context/sellContext";
 const {Content } = Layout;
-
-
-
-export default function Sell() {
+export default function SellPage() {
+  const navigate = useNavigate();
+  const { updateSellForm, watchForm } = useSellContext(); 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const [watchValue, setWatchValue] = useState("");
-  const [showFirstSlide, setShowFirstSlide] = useState(true);
+  const [initialOffer, setInitialOffer] = useState("");
 
+  //-------------------calculate----------------------------
+
+  const [minimumServicingFee, setMinimumServicingFee] = useState(0); 
+  const [total, setTotal] = useState(0);
+
+
+  //-------------------end calculate -----------------------
+  const [showFirstSlide, setShowFirstSlide] = useState(true);
+  const [showSecondSlide, setShowSecondSlide] = useState(false);
+  const [showThirdSlide, setShowThirdSlide] = useState(false);
   const [sellMethod, setSellMethod] = useState("");
   const [hasOriginalBox, setHasOriginalBox] = useState(false);
   const [hasOriginalPapers, setHasOriginalPapers] = useState(false);
   const [purchasedFromWatchfinder, setPurchasedFromWatchfinder] =
     useState(false);
   const [hasFactoryStickers, setHasFactoryStickers] = useState(false);
-  const [watchYear, setWatchYear] = useState("");
   const [isLimitedEdition, setIsLimitedEdition] = useState(false);
-  const [showSecondSlide, setShowSecondSlide] = useState(false);
-  const [showThirdSlide, setShowThirdSlide] = useState(false);
   const [customsCheckOption, setCustomsCheckOption] = useState("");
+
   const onSellMethodChange = (value) => {
     setSellMethod(value);
   };
@@ -44,16 +50,8 @@ export default function Sell() {
     setHasOriginalPapers(e.target.checked);
   };
 
-  const onWatchfinderChange = (e) => {
-    setPurchasedFromWatchfinder(e.target.checked);
-  };
-
   const onFactoryStickersChange = (e) => {
     setHasFactoryStickers(e.target.checked);
-  };
-
-  const onWatchYearChange = (value) => {
-    setWatchYear(value);
   };
 
   const onLimitedEditionChange = (e) => {
@@ -61,11 +59,21 @@ export default function Sell() {
   };
 
   const handleWatchValueChange = (e) => {
-    setWatchValue(e.target.value);
+    setInitialOffer(e.target.value);
   };
 
   const handleWatchValuation = () => {
-    console.log("Watch value:", watchValue);
+    console.log("initialOffer:", initialOffer);
+
+    const marketValue = watchForm?.marketValue || 0; 
+    let fee = minimumServicingFee;
+    if (hasOriginalBox) fee -= 50;
+    if (hasOriginalPapers) fee -= 50;
+
+    const total = marketValue - fee + parseFloat(initialOffer || 0);
+
+    setTotal(total);
+
     setShowFirstSlide(false);
     setShowSecondSlide(true);
     setShowThirdSlide(false);
@@ -84,124 +92,166 @@ export default function Sell() {
   const handleCustomsCheckChange = (e) => {
     setCustomsCheckOption(e.target.value);
   };
+  const handleFormSubmit = async () => {
+    try {
+      // Tạo đối tượng mới chứa tất cả thông tin từ form
+      const newSellForm = {
+        initialOffer, // Set initialOffer to watchValue
+        sellMethod,
+        hasOriginalBox,
+        hasOriginalPapers,
+        purchasedFromWatchfinder,
+        hasFactoryStickers,
+        watchYear,
+        isLimitedEdition,
+        customsCheckOption,
+        minimumServicingFee,
+        total,
+      };
+
+      // Cập nhật sellPage trong context với đối tượng mới
+      updateSellForm(newSellForm);
+      // kiểm tra
+      console.log('Submitting form with data:', newSellForm);
+
+      // Chuyển hướng người dùng đến /sellPage
+      navigate('/lastActionSell');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      // Xử lý lỗi nếu có
+    }
+  };
+
+  const handleBackToFirstSlide = () => {
+    setShowFirstSlide(true);
+    setShowSecondSlide(false);
+    setShowThirdSlide(false);
+  };
+
+  const handleBackToSecondSlide = () => {
+    setShowFirstSlide(false);
+    setShowSecondSlide(true);
+    setShowThirdSlide(false);
+  };
+
+  //-----------------------
+  // Kiểm tra watchForm và cập nhật phí dịch vụ tối thiểu
+    useEffect(() => {
+      if (watchForm !== null) {
+        // Nếu watchForm không null, cập nhật phí dịch vụ tối thiểu là 100
+        setMinimumServicingFee(100);
+      } else {
+        // Nếu watchForm null, cập nhật phí dịch vụ tối thiểu là 200
+        setMinimumServicingFee(200);
+      }
+    }, [watchForm]);
+
+  //-----------------------
+
+  //-----------------------
+  // Địa chỉ hình ảnh đồng hồ và tên thương hiệu
+  const watchInfo = {
+    brand: watchForm?.brand?.name || "",
+    image: watchForm?.model?.image || "",
+  };
+
+  // Render phần thông tin đồng hồ
+  const renderWatchInfo = () => (
+    <div className={styles.watchInfo}>
+      <img src={watchInfo.image} alt={watchInfo.brand} />
+      <h3>{watchInfo.brand}</h3>
+    </div>
+  );
+  //-----------------------
 
   return (
     <Layout>
-      
-      <Content className="content">
+      <Content className={styles.contentHome}>
         <div
-          className="content-inner"
+          className={styles.contentInner}
           style={{
             background: colorBgContainer,
-            borderRadius: borderRadiusLG,   
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems:   "flex-start",        
+            borderRadius: borderRadiusLG,
           }}
         >
           {showFirstSlide && (
-            
-            <div className="sell-content justify-content" >
+            <div className={styles.sellContent}>
+              {/* Hiển thị thông tin đồng hồ */}
+            {renderWatchInfo()}
               <h2>About your watch</h2>
-              <div className="form-group">
-                <label>You want to Sell and Appraise or just Appraise your watch?</label>
+              <div className={styles.formGroup}>
+              <label>You want to Sell and Appraise or just Appraise your watch?</label>
+
                 <Select
                   value={sellMethod}
                   onChange={onSellMethodChange}
-                  className="select-option"
-                  
+                  style={{ width: "100%" }}
                 >
                   <Select.Option value="outright">Sell and Appraise</Select.Option>
-                  <Select.Option value="trade">Just Appraise</Select.Option>
+                  <Select.Option value="trade">Just Appraise</Select.Option>  
                 </Select>
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Do you have the original box?</label>
                 <Checkbox
                   checked={hasOriginalBox}
                   onChange={onOriginalBoxChange}
-                  className="check-option"
                 >
                   Yes
                 </Checkbox>
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Do you have the original papers?</label>
                 <Checkbox
                   checked={hasOriginalPapers}
                   onChange={onOriginalPapersChange}
-                  className="check-option"
                 >
                   Yes
                 </Checkbox>
-              </div>
-              <div className="form-group">
-                <label>Was your watch purchased from Watchfinder?</label>
-                <Checkbox
-                  checked={purchasedFromWatchfinder}
-                  onChange={onWatchfinderChange}
-                  className="check-option"
-                >
-                  Yes
-                </Checkbox>
-              </div>
-              <div className="form-group">
+              </div>              
+              <div className={styles.formGroup}>
                 <label>
                   Is your watch unworn with factory stickers intact?
                 </label>
                 <Checkbox
                   checked={hasFactoryStickers}
                   onChange={onFactoryStickersChange}
-                  className="check-option"
                 >
                   Yes
                 </Checkbox>
-              </div>            
-                <label>What year is your watch?</label>
-                <Input
-                  placeholder="Your Watch Year"
-                  value={watchYear}
-                  onChange={onWatchYearChange}                 
-                  className="select-option"
-                >                 
-                </Input>
-              
-              <div className="form-group">
+              </div>                
+              <div className={styles.formGroup}>
                 <label>Is your watch a limited edition?</label>
                 <Checkbox
                   checked={isLimitedEdition}
                   onChange={onLimitedEditionChange}
-                  className="check-option"
                 >
                   Yes
                 </Checkbox>
               </div>
-              <label>Watch Valuation</label>
+              <h3>Watch Valuation</h3>
               <Input
-                placeholder="Enter watch details"
-                value={watchValue}
+                placeholder="Enter your initialOffer: "
+                value={initialOffer}
                 onChange={handleWatchValueChange}
-                className="type-option"
               />
-              <Button type="primary" onClick={handleWatchValuation} className="button">
+              <Button type="primary" onClick={handleWatchValuation}>
                 Valuate Watch
               </Button>
             </div>
           )}
-          
           {showSecondSlide && (
-            <div className="watch-valuation-result justify-content">
+            <div className={styles.watchValuationResult}>
               <h3>Customs Check</h3>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>
                   If you are currently a resident of the United States of
                   America (the "USA"), please confirm whether you purchased the
                   watch within, and have not exported the watch outside of, the
                   USA:
                 </label>
-                <div className="radio-group">
-                  <div className="radio-option">
+                <div className={styles.radioGroupForm2}>
+                  <div className={styles.radioGroupForm2}>
                     <input
                       type="radio"
                       name="customsCheck"
@@ -211,7 +261,7 @@ export default function Sell() {
                     />
                     <span>Yes</span>
                   </div>
-                  <div className="radio-option">
+                  <div className={styles.radioGroupForm2}>
                     <input
                       type="radio"
                       name="customsCheck"
@@ -221,7 +271,7 @@ export default function Sell() {
                     />
                     <span>No</span>
                   </div>
-                  <div className="radio-option">
+                  <div className={styles.radioGroupForm2}>
                     <input
                       type="radio"
                       name="customsCheck"
@@ -231,7 +281,7 @@ export default function Sell() {
                     />
                     <span>Not a resident of the USA</span>
                   </div>
-                  <div className="radio-option">
+                  <div className={styles.radioGroupForm2}>
                     <input
                       type="radio"
                       name="customsCheck"
@@ -243,39 +293,44 @@ export default function Sell() {
                   </div>
                 </div>
               </div>
-              <Button
-                type="primary"
-                className="submit-button"
-                onClick={handleNextDetails}
-              >
-                Next: Your Details
-              </Button>
+              <div>
+                <Button type="primary" className={styles.backButton} onClick={handleBackToFirstSlide}>
+                  Back
+                </Button>
+                <Button
+                  type="primary"
+                  className={styles.submitButton}
+                  onClick={handleNextDetails}
+                >
+                  Next: Your Details
+                </Button>
+              </div>
             </div>
           )}
           {showThirdSlide && (
-            <div className="your-details justify-content">
+            <div className={styles.yourDetails}>
               <h3>Your Details</h3>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>First Name</label>
                 <Input placeholder="Enter First Name" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Last Name</label>
                 <Input placeholder="Enter Last Name" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Email</label>
                 <Input placeholder="Enter Email" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Telephone</label>
                 <Input placeholder="Enter Telephone Number" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Sell Method</label>
                 <Input value={sellMethod} placeholder="Enter Sell Method" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Original Box</label>
                 <Checkbox
                   checked={hasOriginalBox}
@@ -284,9 +339,14 @@ export default function Sell() {
                   Yes
                 </Checkbox>
               </div>
-
-              <div className="form-group">
-                <Button type="primary" className="submit-button">
+              <div>
+                <Button type="primary"
+                  className={styles.backButton}
+                  onClick={handleBackToSecondSlide}
+                >
+                  Back
+                </Button>
+                <Button type="primary" className={styles.submitButton} onClick={handleFormSubmit}>
                   Submit
                 </Button>
               </div>
@@ -297,3 +357,4 @@ export default function Sell() {
     </Layout>
   );
 }
+

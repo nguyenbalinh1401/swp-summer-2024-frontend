@@ -4,14 +4,11 @@ import {
   CommentOutlined,
   CustomerServiceOutlined,
   CloseOutlined,
-  SearchOutlined,
 } from "@ant-design/icons";
 import {
   Layout,
   theme,
   FloatButton,
-  Input,
-  Pagination,
   Row,
   Col,
   Card,
@@ -19,12 +16,11 @@ import {
   Carousel,
 } from "antd";
 import { Link } from "react-router-dom";
-import "../components/style/Home.css";
+import styles from "../styles/Home.module.css";
 
-const { Content } = Layout;
+const { Content, Sider } = Layout;
 
 const { Title, Text } = Typography;
-
 
 const images = [
   "https://images.samsung.com/vn/galaxy-watch6/feature/galaxy-watch6-banner-watch6-classic-mo.jpg",
@@ -33,9 +29,41 @@ const images = [
   "https://www.telegraph.co.uk/content/dam/fashion/2022/11/11/TELEMMGLPICT000263705496_trans_NvBQzQNjv4BqwMJYxftKZExwjop9hyNEmQEwTyzLMKRxDe4NUIzb66I.jpeg",
 ];
 
+const brands = [
+  {
+    name: "Samsung",
+    image:
+      "https://images.samsung.com/is/image/samsung/assets/vn/galaxy-watches/kv/kv_category_kv.jpg",
+    description: "Innovative and stylish watches.",
+  },
+  {
+    name: "Huawei",
+    image:
+      "https://consumer.huawei.com/content/dam/huawei-cbg-site/common/mkt/pdp/wearables/watch-gt-3-pro/design/imgs/huawei-watch-gt-3-pro-4g-1.png",
+    description: "High-performance smartwatches.",
+  },
+  {
+    name: "California Watch Co",
+    image:
+      "https://www.watches.com/cdn/shop/products/California-Watch-Co-Lifestyle-5_1200x1200.jpg",
+    description: "Classic and timeless designs.",
+  },
+  {
+    name: "Rolex",
+    image:
+      "https://content.rolex.com/dam/2022/upright-bba-with-shadow/m126610lv-0002.png?impolicy=v6-upright&imwidth=420",
+    description: "Luxury and precision timepieces.",
+  },
+  {
+    name: "Omega",
+    image:
+      "https://www.omegawatches.com/media/catalog/product/cache/8/image/400x/040ec09b1e35df139433887a97daa66f/2/1/21032422001001.png",
+    description: "Elegant and accurate watches.",
+  },
+];
+
 export default function Home() {
   const [open, setOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -57,100 +85,93 @@ export default function Home() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const handleSearch = (value) => {
-    console.log(value);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const totalProducts = products.length;
-  const pageSize = 8;
-  const totalPages = Math.ceil(totalProducts / pageSize);
-
   return (
     <Layout>
+      <Sider zeroWidthTriggerStyle={{}} className={styles.siderStyle}>
+        <Carousel autoPlay fade arrows className={styles.carouselInLeft}>
+          <div className={styles.carouselLeft}>
+            <img
+              src="https://m.media-amazon.com/images/I/61QeNWSSHaL._AC_UY1000_.jpg"
+              alt="Image 1"
+            />
+          </div>
+          <div className={styles.carouselLeft}>
+            <img
+              src="https://m.media-amazon.com/images/I/81+d6eSA0eL._AC_UY1000_.jpg"
+              alt="Image 2"
+            />
+          </div>
+          <div className={styles.carouselLeft}>
+            <img
+              src="https://m.media-amazon.com/images/I/61IduqXygwL._AC_UY350_.jpg"
+              alt="Image 3"
+            />
+          </div>
+        </Carousel>
+      </Sider>
       <FloatButton.Group
         open={open}
         trigger="click"
-        style={{ right: 24 }}
+        className={styles.floatButton}
         icon={open ? <CloseOutlined /> : <CustomerServiceOutlined />}
         onClick={handleClick}
       >
         <FloatButton />
         <FloatButton icon={<CommentOutlined />} />
       </FloatButton.Group>
-
-      
-
-      <Content className="content" style={{ paddingTop: 64 }}>
+      <Content className={styles.contentHome}>
         <div
-          className="content-inner"
+          className={styles.contentInner}
           style={{
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
-            padding: "24px",
-            width: "100%",
-            boxSizing: "border-box",
           }}
         >
-          
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "1200px",
-              margin: "0 auto",
-            }}
-          >
-            <Carousel autoplay fade arrows style={{ width: "100%" }}>
-              {images.map((image, index) => (
-                <div key={index}>
-                  <img
-                    src={image}
-                    alt={`carousel-${index}`}
-                    style={{
-                      width: "100%",
-                      height: "400px",
-                      objectFit: "cover",
-                    }}
-                  />
-                </div>
-              ))}
-            </Carousel>
-          </div>
-          <Title level={2} style={{ marginTop: 48 }}>
-            New
-          </Title>
-
-          <Row gutter={[8,8]}>
-            {products.map((product) => (
-              <Col key={product.id} span={6}>
-                <Link to={'/HomePage/${product.id}'}>
-                  <Card
-                    hoverable
-                    cover={<img alt={product.name} src={product.image} />}
-                  >
-                    <Card.Meta
-                      title={product.name}
-                      description={product.description}
-                    />
-                    <Text style={{ marginTop: 16 }}>
-                      Price: {product.price}
-                    </Text>
-                  </Card>
-                </Link>
-              </Col>
+          <Carousel autoplay fade arrows className={styles.carouselHome}>
+            {images.map((image, index) => (
+              <div key={index}>
+                <img src={image} alt={`carousel-${index}`} />
+              </div>
             ))}
-          </Row>
-          <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={totalProducts}
-            onChange={handlePageChange}
-            style={{ textAlign: "center", marginTop: "24px" }}
-          />
+          </Carousel>
         </div>
+        <Title level={2} className={styles.title}>
+          New
+        </Title>
+
+        <Row gutter={[8, 8]}>
+          {products.map((product) => (
+            <Col key={product.id} span={6}>
+              <Link to={`/product/${product.id}`}>
+                <Card
+                  hoverable
+                  cover={<img alt={product.name} src={product.image} />}
+                >
+                  <Card.Meta
+                    title={product.name}
+                    description={product.description}
+                  />
+                  <Text style={{ marginTop: 16 }}>Price: {product.price}</Text>
+                </Card>
+              </Link>
+            </Col>
+          ))}
+        </Row>
+        <Title level={2} className={styles.title}>
+          About some brand
+        </Title>
+        <Row gutter={[16, 16]}>
+          {brands.map((brand, index) => (
+            <Col key={index} span={6}>
+              <Card
+                hoverable
+                cover={<img alt={brand.name} src={brand.image} />}
+              >
+                <Card.Meta title={brand.name} description={brand.description} />
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </Content>
     </Layout>
   );
