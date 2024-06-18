@@ -1,10 +1,8 @@
-body{
+
+.contentHome {
+  width: 80%;
   margin: 0;
   padding: 0;
-}
-.content {
-  width: 80%;
-  
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -13,7 +11,7 @@ body{
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-.content-inner {
+.contentInner {
   background: #fff;
   border-radius: 8px;
   padding: 24px;
@@ -21,15 +19,34 @@ body{
   box-sizing: border-box;
 }
 
-.carousel img {
+.carouselHome img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+ 
+}
+
+.carouselInLeft{
+  position: sticky;
+  width: 100%;
+  display: flex;
+}
+
+.carouselInLeft img{
+  position: sticky;
   width: 100%;
   height: 600px;
   object-fit: cover;
 }
-
-.carousel{
-  width: 100%;
+.carouselHome{
+  width: auto;
   display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.carouselLeft{
+  width: 100%;
 }
 
 .title{
@@ -41,7 +58,7 @@ body{
  
 }
 
-.floatbutton{
+.floatButton{
   right: 50px;
 }
 

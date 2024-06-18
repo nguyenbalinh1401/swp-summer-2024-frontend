@@ -5,9 +5,10 @@ import BrandSelector from './BrandSelector';
 import ModelSelector from './ModelSelector';
 import { useSellContext } from '../context/sellContext';
 import { brands } from '../data/mockData';
-import "../styles/watch-form.css";
+import styles from "../styles/watchForm.module.css";
+import { Content } from 'antd/es/layout/layout';
 
-export default function WatchForm (){
+const WatchForm = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const navigate = useNavigate();
   const { updateWatchForm } = useSellContext();
@@ -24,7 +25,22 @@ export default function WatchForm (){
     if (selectedBrand && model) {
       const brandName = selectedBrand.name;
       
-      updateWatchForm({ brand: brandName, model });
+      updateWatchForm({ brand: brandName,
+        
+          name: model.name,  // Assuming model has a 'name' property
+          image: model.image,
+          description: model.description,
+          modelNumber: model.modelNumber,
+          serialNumber: model.serialNumber,
+          type: model.type,
+          caseMaterial: model.caseMaterial,
+          braceletMaterial: model.braceletMaterial,
+          caseColor: model.caseColor,
+          dialColor: model.dialColor,
+          caseSize: model.caseSize,
+          yearOfManufacture: model.yearOfManufacture,
+          limitedEdition: model.limitedEdition,
+          marketValue: model.marketValue });
       navigate('/sellPage');
     } else {
       
@@ -33,14 +49,16 @@ export default function WatchForm (){
   };
 
   return (
-    <motion.div
-      className="min-h-screen flex items-center justify-center bg-gray-100 "
+    <Content className={styles.contentWatchForm}>
+    <motion.div 
+      className="min-h-screen flex items-center justify-center bg-gray-100"
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-screen-xl w-full p-8 bg-white rounded-lg shadow-lg overflow-hidden">
+      
+      <div className="max-w-screen-xl w-500px p-8 bg-white rounded-lg shadow-lg overflow-hidden">
         {!selectedBrand ? (
           <BrandSelector brands={brands} onSelectBrand={handleSelectBrand} navigate={navigate} />
         ) : (
@@ -51,8 +69,12 @@ export default function WatchForm (){
             <ModelSelector brand={selectedBrand} onSelectModel={handleFormSubmit} />
           </>
         )}
+        
       </div>
+     
     </motion.div>
+    </Content>
   );
 };
 
+export default WatchForm;

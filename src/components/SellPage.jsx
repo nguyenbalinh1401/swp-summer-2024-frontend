@@ -8,7 +8,7 @@ import {
   Select,
   Checkbox,
 } from "antd";
-import "../styles/sell-page.css";
+import styles from "../styles/sell-page.module.css";
 import { useSellContext } from "../context/sellContext";
 const {Content } = Layout;
 export default function SellPage() {
@@ -157,7 +157,7 @@ export default function SellPage() {
 
   // Render phần thông tin đồng hồ
   const renderWatchInfo = () => (
-    <div className="watch-info">
+    <div className={styles.watchInfo}>
       <img src={watchInfo.image} alt={watchInfo.brand} />
       <h3>{watchInfo.brand}</h3>
     </div>
@@ -167,20 +167,20 @@ export default function SellPage() {
   return (
     <Layout>
       
-      <Content className="content">
+      <Content className={styles.contentHome}>
         <div
-          className="content-inner"
+          className={styles.contentInner}
           style={{
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
           {showFirstSlide && (
-            <div className="sell-content">
+            <div className={styles.sellContent}>
               {/* Hiển thị thông tin đồng hồ */}
             {renderWatchInfo()}
               <h2>About your watch</h2>
-              <div className="form-group">
+              <div className={styles.formGroup}>
               <label>You want to Sell and Appraise or just Appraise your watch?</label>
 
                 <Select
@@ -192,7 +192,7 @@ export default function SellPage() {
                   <Select.Option value="trade">Just Appraise</Select.Option>  
                 </Select>
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Do you have the original box?</label>
                 <Checkbox
                   checked={hasOriginalBox}
@@ -201,7 +201,7 @@ export default function SellPage() {
                   Yes
                 </Checkbox>
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Do you have the original papers?</label>
                 <Checkbox
                   checked={hasOriginalPapers}
@@ -210,7 +210,7 @@ export default function SellPage() {
                   Yes
                 </Checkbox>
               </div>              
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>
                   Is your watch unworn with factory stickers intact?
                 </label>
@@ -221,7 +221,7 @@ export default function SellPage() {
                   Yes
                 </Checkbox>
               </div>                
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Is your watch a limited edition?</label>
                 <Checkbox
                   checked={isLimitedEdition}
@@ -242,17 +242,17 @@ export default function SellPage() {
             </div>
           )}
           {showSecondSlide && (
-            <div className="watch-valuation-result">
+            <div className={styles.watchValuationResult}>
               <h3>Customs Check</h3>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>
                   If you are currently a resident of the United States of
                   America (the "USA"), please confirm whether you purchased the
                   watch within, and have not exported the watch outside of, the
                   USA:
                 </label>
-                <div className="radio-group-form2">
-                  <div className="radio-option-form2">
+                <div className={styles.radioGroupForm2}>
+                  <div className={styles.radioGroupForm2}>
                     <input
                       type="radio"
                       name="customsCheck"
@@ -262,7 +262,7 @@ export default function SellPage() {
                     />
                     <span>Yes</span>
                   </div>
-                  <div className="radio-option-form2">
+                  <div className={styles.radioGroupForm2}>
                     <input
                       type="radio"
                       name="customsCheck"
@@ -272,7 +272,7 @@ export default function SellPage() {
                     />
                     <span>No</span>
                   </div>
-                  <div className="radio-option-form2">
+                  <div className={styles.radioGroupForm2}>
                     <input
                       type="radio"
                       name="customsCheck"
@@ -282,7 +282,7 @@ export default function SellPage() {
                     />
                     <span>Not a resident of the USA</span>
                   </div>
-                  <div className="radio-option-form2">
+                  <div className={styles.radioGroupForm2}>
                     <input
                       type="radio"
                       name="customsCheck"
@@ -295,12 +295,12 @@ export default function SellPage() {
                 </div>
               </div>
               <div>
-                <Button type="primary" className="back-button" onClick={handleBackToFirstSlide}>
+                <Button type="primary" className={styles.backButton} onClick={handleBackToFirstSlide}>
                   Back
                 </Button>
                 <Button
                   type="primary"
-                  className="submit-button"
+                  className={styles.submitButton}
                   onClick={handleNextDetails}
                 >
                   Next: Your Details
@@ -309,29 +309,29 @@ export default function SellPage() {
             </div>
           )}
           {showThirdSlide && (
-            <div className="your-details">
+            <div className={styles.yourDetails}>
               <h3>Your Details</h3>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>First Name</label>
                 <Input placeholder="Enter First Name" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Last Name</label>
                 <Input placeholder="Enter Last Name" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Email</label>
                 <Input placeholder="Enter Email" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Telephone</label>
                 <Input placeholder="Enter Telephone Number" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Sell Method</label>
                 <Input value={sellMethod} placeholder="Enter Sell Method" />
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Original Box</label>
                 <Checkbox
                   checked={hasOriginalBox}
@@ -342,12 +342,12 @@ export default function SellPage() {
               </div>
               <div>
                 <Button type="primary"
-                  className="back-button"
+                  className={styles.backButton}
                   onClick={handleBackToSecondSlide}
                 >
                   Back
                 </Button>
-                <Button type="primary" className="submit-button" onClick={handleFormSubmit}>
+                <Button type="primary" className={styles.submitButton} onClick={handleFormSubmit}>
                   Submit
                 </Button>
               </div>

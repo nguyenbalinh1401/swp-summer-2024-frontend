@@ -1,4 +1,4 @@
-.form-container-other {
+.formContainerOther {
     border: 1px solid #8d0606; /* Viền màu xám nhạt */
     border-radius: 5px; /* Đường cong viền */
     padding: 15px; /* Giảm khoảng cách giữa nội dung và viền */
@@ -9,7 +9,7 @@
     margin-top: 100px;
 }
 
-.form-group {
+.formGroup {
     margin-bottom: 10px; /* Giảm khoảng cách giữa các nhóm trường */
 }
 
@@ -57,7 +57,7 @@ select {
     font-size: 14px; /* Giảm kích thước của chữ */
 }
 
-.button-other {
+.buttonOther {
     display: block; /* Biến nút thành phần block để có thể căn giữa */
     margin: 0 auto; /* Căn nút ra giữa theo chiều ngang */
     padding: 10px 20px;
@@ -69,7 +69,7 @@ select {
     font-size: 14px;
 }
 
-.button-other:hover {
+.buttonOther:hover {
     background-color: #0056b3;
     border-color: #0056b3; /* Thay đổi màu viền khi di chuột qua */
 }

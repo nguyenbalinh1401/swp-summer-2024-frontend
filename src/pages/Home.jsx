@@ -16,7 +16,7 @@ import {
   Carousel,
 } from "antd";
 import { Link } from "react-router-dom";
-import "../components/style/Home.css";
+import styles from "../styles/Home.module.css";
 
 const { Content, Sider } = Layout;
 
@@ -32,27 +32,32 @@ const images = [
 const brands = [
   {
     name: "Samsung",
-    image: "https://images.samsung.com/is/image/samsung/assets/vn/galaxy-watches/kv/kv_category_kv.jpg",
+    image:
+      "https://images.samsung.com/is/image/samsung/assets/vn/galaxy-watches/kv/kv_category_kv.jpg",
     description: "Innovative and stylish watches.",
   },
   {
     name: "Huawei",
-    image: "https://consumer.huawei.com/content/dam/huawei-cbg-site/common/mkt/pdp/wearables/watch-gt-3-pro/design/imgs/huawei-watch-gt-3-pro-4g-1.png",
+    image:
+      "https://consumer.huawei.com/content/dam/huawei-cbg-site/common/mkt/pdp/wearables/watch-gt-3-pro/design/imgs/huawei-watch-gt-3-pro-4g-1.png",
     description: "High-performance smartwatches.",
   },
   {
     name: "California Watch Co",
-    image: "https://www.watches.com/cdn/shop/products/California-Watch-Co-Lifestyle-5_1200x1200.jpg",
+    image:
+      "https://www.watches.com/cdn/shop/products/California-Watch-Co-Lifestyle-5_1200x1200.jpg",
     description: "Classic and timeless designs.",
   },
   {
     name: "Rolex",
-    image: "https://content.rolex.com/dam/2022/upright-bba-with-shadow/m126610lv-0002.png?impolicy=v6-upright&imwidth=420",
+    image:
+      "https://content.rolex.com/dam/2022/upright-bba-with-shadow/m126610lv-0002.png?impolicy=v6-upright&imwidth=420",
     description: "Luxury and precision timepieces.",
   },
   {
     name: "Omega",
-    image: "https://www.omegawatches.com/media/catalog/product/cache/8/image/400x/040ec09b1e35df139433887a97daa66f/2/1/21032422001001.png",
+    image:
+      "https://www.omegawatches.com/media/catalog/product/cache/8/image/400x/040ec09b1e35df139433887a97daa66f/2/1/21032422001001.png",
     description: "Elegant and accurate watches.",
   },
 ];
@@ -82,28 +87,47 @@ export default function Home() {
 
   return (
     <Layout>
-      <Sider zeroWidthTriggerStyle className="siderStyle">
-        Sider
+      <Sider zeroWidthTriggerStyle={{}} className={styles.siderStyle}>
+        <Carousel autoPlay fade arrows className={styles.carouselInLeft}>
+          <div className={styles.carouselLeft}>
+            <img
+              src="https://m.media-amazon.com/images/I/61QeNWSSHaL._AC_UY1000_.jpg"
+              alt="Image 1"
+            />
+          </div>
+          <div className={styles.carouselLeft}>
+            <img
+              src="https://m.media-amazon.com/images/I/81+d6eSA0eL._AC_UY1000_.jpg"
+              alt="Image 2"
+            />
+          </div>
+          <div className={styles.carouselLeft}>
+            <img
+              src="https://m.media-amazon.com/images/I/61IduqXygwL._AC_UY350_.jpg"
+              alt="Image 3"
+            />
+          </div>
+        </Carousel>
       </Sider>
       <FloatButton.Group
         open={open}
         trigger="click"
-        className="floatbutton"
+        className={styles.floatButton}
         icon={open ? <CloseOutlined /> : <CustomerServiceOutlined />}
         onClick={handleClick}
       >
         <FloatButton />
         <FloatButton icon={<CommentOutlined />} />
       </FloatButton.Group>
-      <Content className="content">
+      <Content className={styles.contentHome}>
         <div
-          className="content-inner"
+          className={styles.contentInner}
           style={{
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
           }}
         >
-          <Carousel autoplay fade arrows className="carousel">
+          <Carousel autoplay fade arrows className={styles.carouselHome}>
             {images.map((image, index) => (
               <div key={index}>
                 <img src={image} alt={`carousel-${index}`} />
@@ -111,7 +135,7 @@ export default function Home() {
             ))}
           </Carousel>
         </div>
-        <Title level={2} className="title">
+        <Title level={2} className={styles.title}>
           New
         </Title>
 
@@ -133,7 +157,7 @@ export default function Home() {
             </Col>
           ))}
         </Row>
-        <Title level={2} className="title">
+        <Title level={2} className={styles.title}>
           About some brand
         </Title>
         <Row gutter={[16, 16]}>
@@ -143,10 +167,7 @@ export default function Home() {
                 hoverable
                 cover={<img alt={brand.name} src={brand.image} />}
               >
-                <Card.Meta
-                  title={brand.name}
-                  description={brand.description}
-                />
+                <Card.Meta title={brand.name} description={brand.description} />
               </Card>
             </Col>
           ))}
