@@ -3,7 +3,7 @@ import { PDFViewer } from '@react-pdf/renderer';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Spin, Divider } from 'antd';
-import ReportPDF from './ReportPDF'; // Path to ReportPDF component
+import ReportPDF from './ReportPDF'; 
 import { StyleSheet } from '@react-pdf/renderer';
 
 const ReportPage = () => {
@@ -114,20 +114,18 @@ const ReportPage = () => {
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <div
             style={styles.actionButton}
-            onClick={handleDownloadPDF}
+            // onClick={handleDownloadPDF}
           >
-            Download PDF
+            Other
           </div>
 
           <div
             style={styles.actionButton}
-            onClick={() => {
-              // Handle other action
-              console.log('Other action clicked');
-            }}
+            // onClick={handleDownloadPDF}
           >
-            Other Action
+            Other
           </div>
+
         </div>
 
         <Divider />

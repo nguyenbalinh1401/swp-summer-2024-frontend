@@ -62,7 +62,7 @@ const BrandSelector = ({ brands, onSelectBrand, updateWatchForm, navigate }) => 
                   <svg className="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                   </svg>
-                  <span className="info-text">More info about {brand.name}</span>
+                  <span className="info-text">More info about: {brand.moreInfo}</span>
                 </div>
               )}
             </div>
