@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import styles from "../style/ContactStyle.module.css";
+import React, { useState} from "react";
+import styles from "../../styles/ContactStyle.module.css";
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -32,24 +32,22 @@ export default function Contact() {
   // }, []);
   return (
     <div className={styles.containerContact}>
+    
       <h1>Contact Us</h1>
-      <form onSubmit={handleSubmit} className="form-contact">
-        <label htmlFor="name" className="label-contact">
-          Name:
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-
+      <form onSubmit={handleSubmit} className={styles.formContact}>
+        
+          <label htmlFor="name" className={styles.labelContact}>Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        
         <div>
-          <label htmlFor="email" className="label-contact">
-            Email:
-          </label>
+          <label htmlFor="email" className={styles.labelContact}>Email:</label>
           <input
             type="email"
             id="email"
@@ -60,9 +58,7 @@ export default function Contact() {
           />
         </div>
         <div>
-          <label htmlFor="message" className="label-contact">
-            Message:
-          </label>
+          <label htmlFor="message" className={styles.labelContact}>Message:</label>
           <textarea
             id="message"
             name="message"
@@ -71,9 +67,7 @@ export default function Contact() {
             required
           />
         </div>
-        <button type="submit" className="button-contact">
-          Submit
-        </button>
+        <button type="submit" className={styles.buttonContact}>Submit</button>
       </form>
     </div>
   );

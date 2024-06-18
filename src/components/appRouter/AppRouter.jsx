@@ -7,9 +7,6 @@ import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
 
 import Cart from "../../pages/Cart";
-import Buy from "../../pages/Buy";
-import HomePage from "../../pages/Home";
-import Sell from "../../pages/FillFormBeSell";
 
 import SellPage from "../../components/SellPage";
 import LastActionSell from "../../components/LastActionSell";
@@ -27,13 +24,8 @@ export default function AppRouter() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/product" element={<div>Product</div>} />
         <Route path="/product/:id" element={<ProductDetail />} />
-
         <Route path="/cart" element={<Cart />} />
-        <Route path="/buy" element={<Buy />} />
-        <Route path="/welcome" element={<HomePage />} />
-        <Route path="/sell" element={<Sell />} />
         <Route path="/contact" element={<ContactPage />} />
-
         <Route
           path="/sellPage"
           element={
