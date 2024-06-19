@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Spin, Divider } from 'antd';
 import ReportPDF from './ReportPDF'; 
-import { StyleSheet } from '@react-pdf/renderer';
+
 
 const ReportPage = () => {
   const [sellRequest, setSellRequest] = useState(null);
@@ -31,62 +31,16 @@ const ReportPage = () => {
   }
 
   // Define inline styles using StyleSheet.create
-  const styles = StyleSheet.create({
-    reportContainer: {
-      fontFamily: 'Arial, sans-serif',
-      padding: '20px',
-      minHeight: '100vh', // Ensure the container takes up at least the full viewport height
-      width: '100%', // Take up full width
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#f0f2f5', // Example background color
-    },
-    report: {
-      backgroundColor: '#fff',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-      width: '100%',
-      maxWidth: '800px', // Example: Limiting max width to 800px
-    },
-    section: {
-      marginBottom: '20px',
-    },
-    sectionTitle: {
-      fontSize: '20px',
-      fontWeight: 'bold',
-      marginBottom: '10px',
-    },
-    text: {
-      fontSize: '16px',
-      marginBottom: '8px',
-    },
-    pdfViewer: {
-      width: '100%',
-      height: '600px',
-      border: '1px solid #ccc',
-      borderRadius: '1px',
-      overflow: 'hidden',
-    },
-    actionButton: {
-      padding: '10px 20px',
-      backgroundColor: '#1890ff',
-      color: '#fff',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      margin: '0 10px',
-      boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.2)',
-      transition: 'background-color 0.3s ease',
-      textDecoration: 'none',
-      display: 'inline-block',
-      textAlign: 'center',
-    },
-    actionButtonDisabled: {
-      backgroundColor: '#ccc',
-      cursor: 'not-allowed',
-    },
-  });
+  const styles = {
+    reportContainer: "font-sans p-5 min-h-screen w-full flex justify-center items-center bg-gray-200",
+    report: "bg-white p-5 rounded-lg shadow-md w-full max-w-4xl",
+    section: "mb-5",
+    sectionTitle: "text-xl font-bold mb-2",
+    text: "text-base mb-2",
+    pdfViewer: "w-full h-150 border border-gray-300 rounded overflow-hidden",
+    actionButton: "px-5 py-2 bg-blue-600 text-white rounded cursor-pointer mx-2 shadow-md transition-colors duration-300 ease-in-out inline-block text-center",
+    actionButtonDisabled: "bg-gray-300 cursor-not-allowed",
+  };
 
   // Function to handle PDF download
   const handleDownloadPDF = () => {
