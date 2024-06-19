@@ -7,13 +7,13 @@ import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
 
 import Cart from "../../pages/Cart";
-
 import SellPage from "../../components/SellPage";
 import LastActionSell from "../../components/LastActionSell";
 import WatchForm from "../../components/WatchForm";
 import { SellProvider } from "../../context/sellContext";
 import ContactPage from "../../pages/ContactPage";
 import OtherBrandForm from "../OtherBrandForm";
+import Products from "../../pages/ProductsList";
 
 export default function AppRouter() {
   return (
@@ -22,7 +22,7 @@ export default function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/product" element={<div>Product</div>} />
+        <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactPage />} />

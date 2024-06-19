@@ -39,7 +39,7 @@ export default function CartItem({
       duration: 5,
     });
   };
-
+  
   useEffect(() => {
     if (allChecked) {
       setIsChecked(true);

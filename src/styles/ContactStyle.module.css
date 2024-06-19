@@ -1,5 +1,10 @@
 /* 
-  h1 {
+  .contentForm{
+    width: 450px;
+    margin-left: 60px;
+  }
+
+  .h1Contact {
     text-align: center;
     font-size: 3rem; 
     margin-bottom: 30px; 
