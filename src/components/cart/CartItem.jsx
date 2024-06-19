@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import CurrencySplitter from "../../assistants/currencySpliter";
-import { Checkbox } from "antd";
+import { Checkbox, message, Tooltip } from "antd";
 
-export default function CartItem({ item, allChecked, getCheckedItem }) {
+export default function CartItem({
+  item,
+  allChecked,
+  getCheckedItem,
+  getListIsChanged,
+}) {
   const [isChecked, setIsChecked] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const handleCheck = (e) => {
     if (e.target.checked) {
@@ -21,6 +27,19 @@ export default function CartItem({ item, allChecked, getCheckedItem }) {
     }
   };
 
+  const handleRemove = () => {
+    const cart = JSON.parse(sessionStorage.cartList);
+    const updated = cart.filter((i) => i.id !== item.id);
+    sessionStorage.setItem("cartList", JSON.stringify(updated));
+    getListIsChanged(true);
+    message.open({
+      key: "remove",
+      type: "info",
+      content: "Item has been removed from cart.",
+      duration: 5,
+    });
+  };
+
   useEffect(() => {
     if (allChecked) {
       setIsChecked(true);
@@ -31,6 +50,7 @@ export default function CartItem({ item, allChecked, getCheckedItem }) {
 
   return (
     <div className="w-full min-h-[18vh] max-h-[18vh] flex items-center justify-between p-3 border-b border-gray-600 last:border-none overflow-hidden">
+      {contextHolder}
       <div className="max-w-[100%] max-h-[100%] flex items-center gap-2">
         <Checkbox
           checked={isChecked}
@@ -46,10 +66,14 @@ export default function CartItem({ item, allChecked, getCheckedItem }) {
         />
         <div className="w-1/3 flex flex-col items-start justify-center gap-8">
           <div>
-            <p className="font-bold text-xl">{item.name}</p>
+            <Tooltip title={item.name}>
+              <p className="max-w-[500px] font-bold text-xl text-ellipsis text-nowrap overflow-hidden">
+                {item.name}
+              </p>
+            </Tooltip>
             <p className="font-light text-sm">brand</p>
           </div>
-          <div className="flex items-center gap-16">
+          <div className="flex items-center gap-8">
             <button className="min-w-fit text-teal-600 hover:text-teal-700 font-semibold flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +87,10 @@ export default function CartItem({ item, allChecked, getCheckedItem }) {
               View statistics
             </button>
 
-            <button className="min-w-fit text-red-600 hover:text-red-700 font-semibold flex items-center gap-1">
+            <button
+              onClick={handleRemove}
+              className="min-w-fit text-red-600 hover:text-red-700 font-semibold flex items-center gap-1"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -80,7 +107,7 @@ export default function CartItem({ item, allChecked, getCheckedItem }) {
       </div>
 
       <div className="min-w-fit text-2xl font-semibold">
-        {CurrencySplitter(item.price)} &#8363;
+        {Math.round(item.price * 100) / 100} $
       </div>
     </div>
   );
