@@ -47,8 +47,7 @@ export default function Contact() {
             onChange={handleChange}
             required
           />
-
-          <div>
+    <div>
             <label htmlFor="email" className={styles.labelContact}>
               Email:
             </label>

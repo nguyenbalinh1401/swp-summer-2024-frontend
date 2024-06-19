@@ -67,7 +67,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/product/latest")
+    fetch("http://localhost:3000/product")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
