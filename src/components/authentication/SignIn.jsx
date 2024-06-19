@@ -7,9 +7,11 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import spinner from "../../components/spinner/spinner.svg";
+import Loading from "../loading/Loading";
 
 export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isAutoSigningIn, setIsAutoSigningIn] = useState(false);
   const [rememberSignIn, setRememberSignIn] = useState(true);
   const [forgotFormOpen, setForgotFormOpen] = useState(false);
   const [resetPasswordFormOpen, setResetPasswordFormOpen] = useState(false);
@@ -20,9 +22,9 @@ export default function SignIn() {
   const [signInPassword, setSignInPassword] = useState("");
 
   const [messageApi, contextHolder] = message.useMessage();
-  const [cookies, setCookie] = useCookies(["signIn"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["signInUser"]);
 
-  useEffect(() => {
+  const handleRedirect = () => {
     const passwordResetAccount = sessionStorage.passwordReset;
     if (passwordResetAccount) {
       const object = JSON.parse(passwordResetAccount);
@@ -48,6 +50,23 @@ export default function SignIn() {
       });
       sessionStorage.removeItem("register");
     }
+  };
+
+  const checkSignInCookie = () => {
+    if (cookies.signInUser) {
+      setIsAutoSigningIn(true);
+      console.log("User cookie: ", cookies.signInUser);
+      sessionStorage.setItem("signInUser", JSON.stringify(cookies.signInUser));
+      setTimeout(() => {
+        setIsAutoSigningIn(false);
+        window.location.replace("/");
+      }, 2000);
+    }
+  };
+
+  useEffect(() => {
+    handleRedirect();
+    checkSignInCookie();
   }, []);
 
   const getEmail = (value) => {
@@ -88,7 +107,9 @@ export default function SignIn() {
             const account = jwtDecode(res.data.metadata);
             sessionStorage.setItem("signInUser", JSON.stringify(account));
             if (rememberSignIn) {
-              setCookie("signIn", JSON.stringify(account));
+              setCookie("signInUser", JSON.stringify(account));
+            } else {
+              removeCookie("signInUser");
             }
             messageApi.open({
               type: "success",
@@ -96,7 +117,7 @@ export default function SignIn() {
               duration: 5,
             });
             setIsLoading(false);
-            // window.location.replace("/");
+            window.location.replace("/");
           }, 2000);
         })
         .catch((err) => {
@@ -120,7 +141,7 @@ export default function SignIn() {
   const onGoogleSuccess = async (credentialResponse) => {
     const googleLoginData = jwtDecode(credentialResponse.credential);
     console.log("Google login: ", googleLoginData);
-    console.log("Email: ", googleLoginData.email)
+    console.log("Email: ", googleLoginData.email);
     await axios
       .get("http://localhost:3000/auth/email", {
         email: googleLoginData.email,
@@ -141,6 +162,7 @@ export default function SignIn() {
   return (
     <div className="w-full flex flex-col items-center justify-center gap-8">
       {contextHolder}
+      {isAutoSigningIn ? <Loading /> : null}
       <p className="text-[250%] font-bold font-title text-sky-800">SIGN IN</p>
       <div className="w-96 flex flex-col items-center justify-center gap-2">
         <Input

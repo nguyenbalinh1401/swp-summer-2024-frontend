@@ -1,4 +1,5 @@
-
+/* 
+.content {
 .contentHome {
   width: 80%;
   margin: 0;
@@ -18,6 +19,16 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+.carousel img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+}
+
+.carousel{
+  width: 100%;
+  display: flex;
 
 .carouselHome img {
   width: 100%;
@@ -68,4 +79,4 @@
   color: #fff;
   background-color: #fff;
   margin-top: 64px;
-}
+} */
