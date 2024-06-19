@@ -11,7 +11,6 @@ import Buy from "../../pages/Buy";
 import HomePage from "../../pages/HomePage";
 import Sell from "../../pages/Sell";
 
-
 export default function AppRouter() {
   return (
     <div className="w-full min-h-[80vh] flex items-start justify-start py-24">
