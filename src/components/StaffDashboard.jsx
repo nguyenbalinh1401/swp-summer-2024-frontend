@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, message } from "antd";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-
+import styles from "../styles/StaffDashBoardStyle.module.css";
 export default function StaffDashboard() {
   const { role } = useParams(); // Lấy vai trò từ URL
   const [sellRequests, setSellRequests] = useState([]);
@@ -46,8 +46,8 @@ export default function StaffDashboard() {
   ];
 
   return (
-    <div>
-      <h2>{role === 'staff1' ? 'Staff 1' : 'Staff 2'} - Sell Requests</h2>
+    <div className={styles.StaffDashBoard}>
+      <h2 className={styles.h2Style}>{role === 'staff1' ? 'Staff 1' : 'Staff 2'} - Sell Requests</h2>
       <Table
         columns={columns}
         dataSource={sellRequests}

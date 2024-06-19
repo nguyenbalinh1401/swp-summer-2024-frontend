@@ -15,7 +15,6 @@ export default function SignIn() {
   const [rememberSignIn, setRememberSignIn] = useState(true);
   const [forgotFormOpen, setForgotFormOpen] = useState(false);
   const [resetPasswordFormOpen, setResetPasswordFormOpen] = useState(false);
-
   const [currentEmail, setCurrentEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");

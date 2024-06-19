@@ -7,6 +7,7 @@
     width: 50%;
     height: 100%;
     margin-top: 100px;
+    margin-left: 400px;
 }
 
 .formGroup {
@@ -74,7 +75,7 @@ select {
     border-color: #0056b3; /* Thay đổi màu viền khi di chuột qua */
 }
 
-h1 {
+.h1Other {
     text-align: center; /* Căn giữa tiêu đề */
     font-size: 24px; /* Điều chỉnh kích thước tiêu đề */
     margin-bottom: 20px; /* Tạo khoảng cách dưới tiêu đề */
