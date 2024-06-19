@@ -5,7 +5,8 @@ import BrandSelector from './BrandSelector';
 import ModelSelector from './ModelSelector';
 import { useSellContext } from '../context/sellContext';
 import { brands } from '../data/mockData';
-import "../styles/watchForm.module.css";
+import styles from "../styles/watchForm.module.css";
+import { Content } from 'antd/es/layout/layout';
 
 const WatchForm = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -48,6 +49,7 @@ const WatchForm = () => {
   };
 
   return (
+    <Content className={styles.contentWatchForm}>
     <motion.div
       className="min-h-screen flex items-center justify-center bg-gray-100"
       initial={{ opacity: 0, y: -50 }}
@@ -55,7 +57,8 @@ const WatchForm = () => {
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-screen-xl w-full p-8 bg-white rounded-lg shadow-lg overflow-hidden">
+      
+      <div className="max-w-screen-xl w-500px p-8 bg-white rounded-lg shadow-lg overflow-hidden">
         {!selectedBrand ? (
           <BrandSelector brands={brands} onSelectBrand={handleSelectBrand} navigate={navigate} />
         ) : (
@@ -66,8 +69,11 @@ const WatchForm = () => {
             <ModelSelector brand={selectedBrand} onSelectModel={handleFormSubmit} />
           </>
         )}
+        
       </div>
+     
     </motion.div>
+    </Content>
   );
 };
 

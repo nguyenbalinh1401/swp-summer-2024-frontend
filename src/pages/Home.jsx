@@ -87,21 +87,21 @@ export default function Home() {
 
   return (
     <Layout>
-      <Sider zeroWidthTriggerStyle className={styles.siderStyle}>
-        <Carousel autoPlay infiniteLoop>
-          <div>
+      <Sider zeroWidthTriggerStyle={{}} className={styles.siderStyle}>
+        <Carousel autoPlay fade arrows className={styles.carouselInLeft}>
+          <div className={styles.carouselLeft}>
             <img
               src="https://m.media-amazon.com/images/I/61QeNWSSHaL._AC_UY1000_.jpg"
               alt="Image 1"
             />
           </div>
-          <div>
+          <div className={styles.carouselLeft}>
             <img
               src="https://m.media-amazon.com/images/I/81+d6eSA0eL._AC_UY1000_.jpg"
               alt="Image 2"
             />
           </div>
-          <div>
+          <div className={styles.carouselLeft}>
             <img
               src="https://m.media-amazon.com/images/I/61IduqXygwL._AC_UY350_.jpg"
               alt="Image 3"
@@ -119,7 +119,7 @@ export default function Home() {
         <FloatButton />
         <FloatButton icon={<CommentOutlined />} />
       </FloatButton.Group>
-      <Content className={styles.content}>
+      <Content className={styles.contentHome}>
         <div
           className={styles.contentInner}
           style={{
@@ -127,7 +127,7 @@ export default function Home() {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Carousel autoplay fade arrows className={styles.carousel}>
+          <Carousel autoplay fade arrows className={styles.carouselHome}>
             {images.map((image, index) => (
               <div key={index}>
                 <img src={image} alt={`carousel-${index}`} />

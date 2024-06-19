@@ -1,6 +1,9 @@
-/* watchform.css */
 
-/* BrandSelector */
+.contentWatchForm{
+  display: flex;
+  margin-left: 120px;
+}
+
 .brandSelectorContainer {
     max-width: 100%;
     padding: 1rem;
