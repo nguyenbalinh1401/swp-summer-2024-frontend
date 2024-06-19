@@ -15,7 +15,7 @@ import WatchForm from "../../components/WatchForm";
 import { SellProvider } from "../../context/sellContext";
 import ContactPage from "../../pages/ContactPage";
 import OtherBrandForm from "../OtherBrandForm";
-import Buy from "../../pages/Buy";
+import Products from "../../pages/ProductsList";
 
 
 
@@ -28,7 +28,7 @@ export default function AppRouter() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/product" element={<div>Product</div>} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/Buy" element={<Buy />} />
+        <Route path="/Products" element={<Products />} />
         <Route path="/cart" element={<Cart />} />
         
 
