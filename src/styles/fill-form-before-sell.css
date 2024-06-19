@@ -1,84 +1,83 @@
-/* Đặt phong cách tổng thể cho trang */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
-    margin: 0;
-    padding: 0;
+/* body {
+  font-family: "Arial", sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
 }
 
-/* Tiêu đề */
-h1, h2 {
-    text-align: center;
-    color: #4a4a4a;
+h1,
+h2 {
+  text-align: center;
+  color: #4a4a4a;
 }
 
-/* Container chính của form */
 .container {
-    max-width: 600px; /* Giảm kích thước để phù hợp hơn */
-    margin: 30px auto; /* Căn giữa và đặt khoảng cách trên */
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
-/* Đặt phong cách cho các nhãn và input */
-label, input, select, textarea, button {
-    display: block;
-    width: calc(100% - 20px); /* Trừ đi padding */
-    margin: 10px auto; /* Căn giữa và đặt khoảng cách */
-    padding: 10px;
+label,
+input,
+select,
+textarea,
+button {
+  display: block;
+  width: calc(100% - 20px);
+  margin: 10px auto;
+  padding: 10px;
 }
 
 label {
-    font-weight: bold;
-    color: #555;
+  font-weight: bold;
+  color: #555;
 }
 
-input, select, textarea {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
+input,
+select,
+textarea {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
-/* Nút bấm */
 button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
-/* Đặt phong cách cho phần chi tiết đồng hồ */
 .watch-details {
-    background-color: #e9ecef;
-    border-radius: 4px;
-    font-weight: bold;
-    padding: 15px;
-    margin: 10px auto;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  font-weight: bold;
+  padding: 15px;
+  margin: 10px auto;
 }
 
 .watch-details p span {
-    font-weight: normal;
+  font-weight: normal;
 }
 
-/* Hiệu ứng cho các phần thông tin */
 form h2 {
-    color: #007bff;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 5px;
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
 }
 
-/* Đặt phong cách cho các phần phụ thuộc */
 .dependent {
-    margin-left: 20px;
-    padding-left: 10px;
-    border-left: 2px solid #ddd;
-}
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: 2px solid #ddd;
+} */

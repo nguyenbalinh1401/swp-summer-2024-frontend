@@ -1,96 +1,89 @@
-/* Global Styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
-    margin: 0;
-    padding: 0;
-  }
-  
-  h1, h2 {
-    text-align: left;
-    color: #333;
-    position: relative;
-  }
-  
-  h2 .status {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  
-  /* Container Styles */
-  .container {
-    max-width: 1200px;
-    margin: 40px auto;
-    display: flex;
-    margin-top: 100px;
-  }
-  
-  /* Timeline Section */
-  .timeline-section {
-    flex: 1;
-    margin-right: 20px;
-  }
-  
-  /* Details Section */
-  .details-section {
-    flex: 1;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  
-  /* Common Styles */
-  h2, h3 {
-    margin-top: 0;
-    color: #007bff;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 5px;
-  }
-  
-  p {
-    margin: 10px 0;
-  }
-  
-  /* Status Styles */
+/* body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2 {
+  text-align: left;
+  color: #333;
+  position: relative;
+}
+
+h2 .status {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  display: flex;
+  margin-top: 100px;
+}
+
+.timeline-section {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.details-section {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h2,
+h3 {
+  margin-top: 0;
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+p {
+  margin: 10px 0;
+}
+
 .status {
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 4px;
-  }
-  
-  .complete {
-    color: green;
-  }
-  
-  .in-progress {
-    color: orange;
-  }
-  
-  .pending {
-    color: gray;
-  }
-  
-/* Button Styles */
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.complete {
+  color: green;
+}
+
+.in-progress {
+  color: orange;
+}
+
+.pending {
+  color: gray;
+}
+
 button {
-  background-color: #000000; /* Màu nền đen */
-  color: #ffffff; /* Màu chữ trắng */
-  padding: 4px 8px; /* Giảm padding để kích thước nút nhỏ gọn hơn */
-  border: 2px solid #ffffff; /* Thêm viền màu trắng */
+  background-color: #000000;
+  color: #ffffff;
+  padding: 4px 8px;
+  border: 2px solid #ffffff;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px; /* Giảm kích thước font */
+  font-size: 12px;
   transition: background-color 0.3s ease;
-  margin: 0 auto; /* Căn giữa nút */
-  display: inline-block; /* Inline-block để margin auto hoạt động và thu gọn kích thước */
+  margin: 0 auto;
+  display: inline-block;
 }
 
 button:hover {
-  background-color: #333333; /* Màu nền khi hover */
-}
+  background-color: #333333;
+} */
 
-
-  

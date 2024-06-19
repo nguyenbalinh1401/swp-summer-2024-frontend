@@ -1,10 +1,5 @@
-
-  .contentForm{
-    width: 450px;
-    margin-left: 60px;
-  }
-
-  .h1Contact {
+/* 
+  h1 {
     text-align: center;
     font-size: 3rem; 
     margin-bottom: 30px; 
@@ -16,14 +11,21 @@
   }
   
   .containerContact {
+  .containerContact {
     display: flex;
     flex-direction: column;
     width: 300%;
     margin: 0;
   
     padding: 0;
+    width: 300%;
+    margin: 0;
+  
+    padding: 0;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
     min-height: 100vh;
     font-family: 'Arial', sans-serif;
     padding: 20px;
@@ -33,6 +35,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
 
+.formContact {
 .formContact {
     width: 100%;
     margin: 0 auto;
@@ -44,9 +47,11 @@
   }
   
   .formDivContact {
+  .formDivContact {
     margin-bottom: 15px;
   }
   
+  .labelContact {
   .labelContact {
     display: block;
     margin-bottom: 5px;
@@ -69,6 +74,7 @@
   }
   
   .buttonContact {
+  .buttonContact {
     display: inline-block;
     padding: 10px 20px;
     color: #fff;
@@ -81,4 +87,4 @@
   
   button:hover {
     background-color: #0056b3;
-  }
+  } */

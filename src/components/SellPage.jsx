@@ -166,7 +166,6 @@ export default function SellPage() {
 
   return (
     <Layout>
-      
       <Content className={styles.contentHome}>
         <div
           className={styles.contentInner}

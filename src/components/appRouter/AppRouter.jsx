@@ -4,10 +4,9 @@ import NotFound from "../notFound/NotFound";
 import SignIn from "../../pages/Signin";
 import SignUp from "../../pages/SignUp";
 import Home from "../../pages/Home";
+import Products from "../../pages/Products";
 import ProductDetail from "../../pages/ProductDetail";
-
 import Cart from "../../pages/Cart";
-
 
 import SellPage from "../../components/SellPage";
 import LastActionSell from "../../components/LastActionSell";
@@ -15,9 +14,6 @@ import WatchForm from "../../components/WatchForm";
 import { SellProvider } from "../../context/sellContext";
 import ContactPage from "../../pages/ContactPage";
 import OtherBrandForm from "../OtherBrandForm";
-import Buy from "../../pages/Buy";
-
-
 
 export default function AppRouter() {
   return (
@@ -26,16 +22,12 @@ export default function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/product" element={<div>Product</div>} />
+        <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/Buy" element={<Buy />} />
         <Route path="/cart" element={<Cart />} />
-        
-
-        <Route path="/contact" element={<ContactPage/>}/>
-       
-        <Route 
-          path="/sellPage" 
+        <Route path="/contact" element={<ContactPage />} />
+        <Route
+          path="/sellPage"
           element={
             <SellProvider>
               <SellPage />
