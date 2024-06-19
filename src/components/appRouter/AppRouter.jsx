@@ -17,7 +17,7 @@ import Products from "../../pages/ProductsList";
 
 export default function AppRouter() {
   return (
-    <div className="w-full min-h-[80vh] flex items-start justify-start py-24">
+    <div className="min-h-[80vh] flex items-start justify-start py-24">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
