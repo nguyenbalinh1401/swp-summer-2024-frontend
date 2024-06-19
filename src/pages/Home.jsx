@@ -67,7 +67,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/product")
+    fetch("http://localhost:3000/product/latest")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -76,7 +76,6 @@ export default function Home() {
         console.error("Error fetching products:", error);
       });
   }, []);
-
   const handleClick = () => {
     setOpen(!open);
   };
@@ -149,9 +148,8 @@ export default function Home() {
                 >
                   <Card.Meta
                     title={product.name}
-                    description={product.description}
-                  />
-                  <Text style={{ marginTop: 16 }}>Price: {product.price}</Text>
+                  
+                  />                
                 </Card>
               </Link>
             </Col>
