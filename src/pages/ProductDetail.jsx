@@ -1,3 +1,5 @@
+//TRANG NÀY RENDER DANH SÁCH CÁC PRODUCT 
+
 //style 1
 // product detail 
 // import React, { useEffect, useState } from 'react';

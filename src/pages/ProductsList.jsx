@@ -13,7 +13,7 @@ const gridStyle = {
   textAlign: 'center',
 };
 
-export default function Buy() {
+export default function Products() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
