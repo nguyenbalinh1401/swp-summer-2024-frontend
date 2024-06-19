@@ -21,7 +21,7 @@ export default function Buy() {
   const [filterDialColor, setFilterDialColor] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const productsPerPage = 12;
+  const productsPerPage = 8;
 
   useEffect(() => {
     const fetchProductsData = async () => {
