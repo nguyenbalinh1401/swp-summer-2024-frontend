@@ -50,7 +50,7 @@ const WatchForm = () => {
 
   return (
     <Content className={styles.contentWatchForm}>
-    <motion.div 
+    <motion.div
       className="min-h-screen flex items-center justify-center bg-gray-100"
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}

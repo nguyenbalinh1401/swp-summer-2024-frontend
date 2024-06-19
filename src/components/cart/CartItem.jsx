@@ -1,30 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CurrencySplitter from "../../assistants/currencySpliter";
 import { Checkbox } from "antd";
 
-export default function CartItem({ item, checked, getCheckedItem }) {
+export default function CartItem({ item, allChecked, getCheckedItem }) {
+  const [isChecked, setIsChecked] = useState(false);
+
   const handleCheck = (e) => {
     if (e.target.checked) {
+      setIsChecked(true);
       getCheckedItem({
         item: item,
         checked: true,
       });
     } else {
+      setIsChecked(false);
       getCheckedItem({
         item: item,
         checked: false,
       });
     }
   };
+
+  useEffect(() => {
+    if (allChecked) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }, [allChecked]);
+
   return (
-    <div className="w-full min-h-[18vh] max-h-[18vh] flex items-start justify-between p-3 border-b border-gray-600 last:border-none">
-      <div className="w-full flex items-center gap-2">
+    <div className="w-full min-h-[18vh] max-h-[18vh] flex items-center justify-between p-3 border-b border-gray-600 last:border-none overflow-hidden">
+      <div className="max-w-[100%] max-h-[100%] flex items-center gap-2">
         <Checkbox
-          checked={checked}
+          checked={isChecked}
           onChange={handleCheck}
           className="px-4"
         ></Checkbox>
-        <img src={item.image} alt="" className="w-8 md:w-16 xl:w-24" />
+        <img
+          src={item.image}
+          alt=""
+          width="15%"
+          height="15%"
+          className="object-cover"
+        />
         <div className="w-1/3 flex flex-col items-start justify-center gap-8">
           <div>
             <p className="font-bold text-xl">{item.name}</p>
@@ -60,7 +79,7 @@ export default function CartItem({ item, checked, getCheckedItem }) {
         </div>
       </div>
 
-      <div className="min-w-fit text-2xl font-semibold self-center">
+      <div className="min-w-fit text-2xl font-semibold">
         {CurrencySplitter(item.price)} &#8363;
       </div>
     </div>

@@ -5,6 +5,8 @@ import SignIn from "../../pages/Signin";
 import SignUp from "../../pages/SignUp";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
+
+
 import SellPage from "../../components/SellPage";
 import LastActionSell from "../../components/LastActionSell";
 import WatchForm from "../../components/WatchForm";
@@ -36,35 +38,35 @@ export default function AppRouter() {
             <SellProvider>
               <SellPage />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/LastActionSell" 
+        <Route
+          path="/LastActionSell"
           element={
             <SellProvider>
               <LastActionSell />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/watchForm" 
+        <Route
+          path="/watchForm"
           element={
             <SellProvider>
               <WatchForm />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/OtherBrandForm" 
+        <Route
+          path="/OtherBrandForm"
           element={
             <SellProvider>
               <OtherBrandForm />
             </SellProvider>
-          } 
+          }
         />
         
         <Route path="*" element={<NotFound />} />
-      </Routes>
+        </Routes>
     </div>
   );
 }
