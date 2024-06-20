@@ -112,6 +112,7 @@ export default function SignIn() {
               removeCookie("signInUser");
             }
             messageApi.open({
+              key: "signInStatus",
               type: "success",
               content: "Successfully signed in",
               duration: 5,
@@ -123,6 +124,7 @@ export default function SignIn() {
         .catch((err) => {
           console.log("Sign in failed: ", err);
           messageApi.open({
+            key: "signInStatus",
             type: "error",
             content: "Incorrect credentials. Please try again.",
             duration: 5,
@@ -131,6 +133,7 @@ export default function SignIn() {
         });
     } else {
       messageApi.open({
+        key: "signInStatus",
         type: "warning",
         content: "Please fulfill your email and password!",
         duration: 5,
@@ -141,26 +144,51 @@ export default function SignIn() {
   const onGoogleSuccess = async (credentialResponse) => {
     const googleLoginData = jwtDecode(credentialResponse.credential);
     console.log("Google login: ", googleLoginData);
-    console.log("Email: ", googleLoginData.email);
+    console.log(
+      "GET: ",
+      `http://localhost:3000/auth/email/${googleLoginData.email}`
+    );
     await axios
-      .get("http://localhost:3000/auth/email", {
-        email: googleLoginData.email,
-      })
+      .get(`http://localhost:3000/auth/email/${googleLoginData.email}`)
       .then((res) => {
-        console.log("ACCOUNT: ", res.data.metadata);
+        console.log("ACCOUNT: ", res.data);
+        const found = res.data;
+        if (found.email === googleLoginData.email) {
+          sessionStorage.setItem("signInUser", JSON.stringify(found));
+          window.location.replace("/");
+        } else {
+          messageApi.open({
+            key: "signInStatus",
+            type: "error",
+            content: "Failed to sign in with Google. Please try again!",
+            duration: 5,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
+        const registerData = {
+          email: googleLoginData.email,
+          password: "12345678",
+          username: googleLoginData.name,
+          phone: "",
+        };
+        axios
+          .post("http://localhost:3000/auth/create-account", registerData)
+          .then((res) => {
+            console.log("Register for new google account: ", res.data);
+            sessionStorage.setItem(
+              "signInUser",
+              JSON.stringify(res.data.metadata)
+            );
+            window.location.replace("/");
+          })
+          .catch((err) => console.log(err));
       });
-    // message.open({
-    //   type: "success",
-    //   content: `Successfully signed in with Google account: ${googleLoginData.name}`,
-    //   duration: 5,
-    // });
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-8">
+    <div className="w-full flex flex-col items-center justify-center gap-8 pt-16">
       {contextHolder}
       {isAutoSigningIn ? <Loading /> : null}
       <p className="text-[250%] font-bold font-title text-sky-800">SIGN IN</p>
