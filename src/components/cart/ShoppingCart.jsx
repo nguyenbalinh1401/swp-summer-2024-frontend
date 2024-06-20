@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import CartItem from "./CartItem";
 import { Checkbox } from "antd";
 
-export default function ShoppingCart({ list, getCheckedList }) {
+export default function ShoppingCart({
+  list,
+  getCheckedList,
+  getListIsChanged,
+}) {
   const [checkedList, setCheckedList] = useState([]);
   const [isAllChecked, setIsAllChecked] = useState(false);
 
@@ -29,6 +33,12 @@ export default function ShoppingCart({ list, getCheckedList }) {
       const listAfterRemove = checkedList.filter((i) => i.id != value.item.id);
       setCheckedList(listAfterRemove);
       getCheckedList(listAfterRemove);
+    }
+  };
+
+  const handleIsChangedList = (value) => {
+    if (value) {
+      getListIsChanged(true);
     }
   };
 
@@ -58,6 +68,7 @@ export default function ShoppingCart({ list, getCheckedList }) {
               item={item}
               allChecked={isAllChecked}
               getCheckedItem={getCheckedItem}
+              getListIsChanged={handleIsChangedList}
             />
           );
         })}
