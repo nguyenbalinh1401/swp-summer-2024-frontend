@@ -19,10 +19,10 @@ export function EmailForm(props) {
       })
       .then(
         () => {
-          console.log("SUCCESS!");
+          console.log("SUCCESSFULLY SENT VERIFICATION CODE TO EMAIL.");
         },
         (error) => {
-          console.log("FAILED TO SEND EMAIL", error.text);
+          console.log("FAILED TO SEND EMAIL!", error.text);
         }
       );
   };
@@ -41,7 +41,7 @@ export function EmailForm(props) {
   const submitForm = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // sendEmail();
+    sendEmail();
     setTimeout(() => {
       props.email(currentEmail);
       props.code(generatedCode);
