@@ -26,6 +26,7 @@ export default function AppRouter() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/watchForm" element ={<WatchForm/>} />
         <Route
           path="/sellPage"
           element={

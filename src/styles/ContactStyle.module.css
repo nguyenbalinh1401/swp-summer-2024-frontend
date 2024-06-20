@@ -1,4 +1,4 @@
-/* 
+
   .contentForm{
     width: 450px;
     margin-left: 60px;
@@ -15,7 +15,7 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); 
   }
   
-  .containerContact {
+
   .containerContact {
     display: flex;
     flex-direction: column;
@@ -40,7 +40,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
 
-.formContact {
+
 .formContact {
     width: 100%;
     margin: 0 auto;
@@ -51,12 +51,12 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  .formDivContact {
+  
   .formDivContact {
     margin-bottom: 15px;
   }
   
-  .labelContact {
+ 
   .labelContact {
     display: block;
     margin-bottom: 5px;
@@ -78,7 +78,7 @@
     outline: none;
   }
   
-  .buttonContact {
+ 
   .buttonContact {
     display: inline-block;
     padding: 10px 20px;
@@ -92,4 +92,4 @@
   
   button:hover {
     background-color: #0056b3;
-  } */
+  }
