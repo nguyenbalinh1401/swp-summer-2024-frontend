@@ -13,7 +13,7 @@ function App() {
         maxAge: 1 * 24 * 60 * 60,
       }}
     >
-      <div className="w-screen min-h-screen flex flex-col justify-between font-montserrat">
+      <div className="w-full min-h-screen flex flex-col justify-between font-montserrat">
         <Navbar />
         <AppRouter />
         <Footer />

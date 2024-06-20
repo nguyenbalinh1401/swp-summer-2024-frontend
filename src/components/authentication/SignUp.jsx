@@ -47,6 +47,14 @@ export default function SignUp() {
   };
 
   useEffect(() => {
+    if (accountData.email.length === 0) {
+      setDataError({
+        ...dataError,
+        email: false,
+      });
+      return;
+    }
+
     if (!accountData.email.match(/\S+@\S+\.\S+/)) {
       setDataError({
         ...dataError,
@@ -61,6 +69,14 @@ export default function SignUp() {
   }, [accountData.email]);
 
   useEffect(() => {
+    if (accountData.password.length === 0) {
+      setDataError({
+        ...dataError,
+        password: false,
+      });
+      return;
+    }
+
     if (accountData.password.length < 8 || accountData.password.length > 20) {
       setDataError({
         ...dataError,
@@ -75,6 +91,14 @@ export default function SignUp() {
   }, [accountData.password]);
 
   useEffect(() => {
+    if (accountData.phone.length === 0) {
+      setDataError({
+        ...dataError,
+        phone: false,
+      });
+      return;
+    }
+
     if (
       accountData.phone.length < 9 ||
       accountData.phone.length > 11 ||
@@ -106,7 +130,7 @@ export default function SignUp() {
     console.log("VERIFY CODE: ", generatedCode);
     console.log(accountData);
     console.log(formRef.current);
-    // sendEmail();
+    sendEmail();
     setModalOpen(true);
   };
 
@@ -132,7 +156,6 @@ export default function SignUp() {
   };
 
   const register = async () => {
-    console.log("registering...");
     await axios
       .post("http://localhost:3000/auth/create-account", {
         email: accountData.email,
@@ -168,7 +191,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center gap-8">
+    <div className="w-full flex flex-col items-center justify-center gap-8 pt-16">
       {contextHolder}
       <p className="text-[250%] font-bold font-title text-sky-800">SIGN UP</p>
       <div className="w-1/2 xl:w-1/3">
@@ -179,7 +202,7 @@ export default function SignUp() {
           className="w-full flex flex-col justify-center gap-2"
         >
           <div className="flex gap-4">
-            <div className="flex flex-col justify-center items-end gap-8">
+            <div className="flex flex-col justify-center items-end gap-10">
               <p>
                 <span className="text-red-600">*</span> Email:
               </p>
@@ -209,7 +232,7 @@ export default function SignUp() {
                   }}
                 />
                 <div
-                  className={`absolute top-8 left-0 text-xs font-light text-red-500 ${
+                  className={`absolute top-10 left-0 text-xs font-light text-red-500 ${
                     dataError.email ? "visible" : "invisible"
                   }`}
                 >
@@ -219,6 +242,7 @@ export default function SignUp() {
 
               <div className="relative w-full flex flex-col items-start gap-1">
                 <Input.Password
+                  size="large"
                   type="password"
                   name="password"
                   required
@@ -231,7 +255,7 @@ export default function SignUp() {
                   }}
                 />
                 <div
-                  className={`absolute top-8 left-0 text-xs font-light text-red-500 ${
+                  className={`absolute top-10 left-0 text-xs font-light text-red-500 ${
                     dataError.password ? "visible" : "invisible"
                   }`}
                 >
@@ -268,7 +292,7 @@ export default function SignUp() {
                   }}
                 />
                 <div
-                  className={`absolute top-8 left-0 text-xs font-light text-red-500 ${
+                  className={`absolute top-10 left-0 text-xs font-light text-red-500 ${
                     dataError.phone ? "visible" : "invisible"
                   }`}
                 >
@@ -286,7 +310,23 @@ export default function SignUp() {
             />
             <p
               className="font-montserrat font-light cursor-pointer"
-              onClick={() => setChecked(!checked)}
+              onClick={() => {
+                if (
+                  accountData.email === "" ||
+                  accountData.password === "" ||
+                  accountData.username === "" ||
+                  accountData.phone === ""
+                ) {
+                  messageApi.open({
+                    key: "emptyData",
+                    type: "warning",
+                    content: "Please fulfill all of the boxes above!",
+                    duration: 5,
+                  });
+                } else {
+                  setChecked(!checked);
+                }
+              }}
             >
               By ticking, you are confirming that you have guaranteed the
               authenticity of the information you entered.

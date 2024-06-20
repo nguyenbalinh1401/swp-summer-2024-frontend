@@ -2,20 +2,23 @@ import { Avatar } from "antd";
 import React, { useEffect, useState } from "react";
 import CurrencySplitter from "../../assistants/currencySpliter";
 
-export default function CartSummary({ list }) {
+export default function CartSummary({ list, getTotal }) {
   const [total, setTotal] = useState(0);
-  const getTotal = () => {
+  const handleGetTotal = () => {
     setTotal(0);
     if (list.length === 0) return;
     else {
+      let temp = 0;
       list.map((item) => {
-        setTotal((cur) => cur + item.price);
+        temp += parseFloat(item.price);
+        setTotal((cur) => cur + parseFloat(item.price));
       });
+      getTotal(temp);
     }
   };
 
   useEffect(() => {
-    getTotal();
+    handleGetTotal();
   }, [list]);
 
   return (
@@ -54,8 +57,8 @@ export default function CartSummary({ list }) {
         </div>
 
         <div className="flex flex-col items-end gap-4">
-          <p>{CurrencySplitter(total)}</p>
-          <p>{CurrencySplitter(total)}</p>
+          <p>{Math.round(total * 100) / 100} $</p>
+          <p>{Math.round(total * 100) / 100} $</p>
         </div>
       </div>
     </div>

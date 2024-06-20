@@ -1,4 +1,4 @@
-/* 
+
   .contentForm{
     width: 450px;
     margin-left: 60px;
@@ -15,9 +15,14 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); 
   }
   
+
   .containerContact {
     display: flex;
     flex-direction: column;
+    width: 300%;
+    margin: 0;
+  
+    padding: 0;
     width: 300%;
     margin: 0;
   
@@ -26,12 +31,15 @@
     align-items: center;
     min-height: 100vh;
     font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
+
 
 .formContact {
     width: 100%;
@@ -43,10 +51,12 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
+  
   .formDivContact {
     margin-bottom: 15px;
   }
   
+ 
   .labelContact {
     display: block;
     margin-bottom: 5px;
@@ -68,6 +78,7 @@
     outline: none;
   }
   
+ 
   .buttonContact {
     display: inline-block;
     padding: 10px 20px;
@@ -81,4 +92,4 @@
   
   button:hover {
     background-color: #0056b3;
-  } */
+  }
