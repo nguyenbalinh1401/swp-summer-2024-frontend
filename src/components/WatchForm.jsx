@@ -3,15 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import BrandSelector from './BrandSelector';
 import ModelSelector from './ModelSelector';
-import { useSellContext } from '../context/sellContext';
+
 import { brands } from '../data/mockData';
 import styles from "../styles/watchForm.module.css";
 import { Content } from 'antd/es/layout/layout';
+import { useSellContext } from '../context/sellContext';
 
 const WatchForm = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const navigate = useNavigate();
-  const {updateWatchForm} = useSellContext();
+  const {updateWatchForm} = useSellContext
 
   const handleSelectBrand = (brand) => {
     setSelectedBrand(brand);
@@ -49,7 +50,7 @@ const WatchForm = () => {
   };
 
   return (
-    <Content className={styles.contentWatchForm}>
+    <Content className="flex ml[120px]">
     <motion.div
       className="min-h-screen flex items-center justify-center bg-gray-100"
       initial={{ opacity: 0, y: -50 }}

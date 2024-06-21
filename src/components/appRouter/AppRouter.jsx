@@ -14,6 +14,7 @@ import { SellProvider } from "../../context/sellContext";
 import ContactPage from "../../pages/ContactPage";
 import OtherBrandForm from "../OtherBrandForm";
 import Products from "../../pages/ProductsList";
+import Sell from "../../pages/Sell";
 
 export default function AppRouter() {
   return (
@@ -27,6 +28,7 @@ export default function AppRouter() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/watchForm" element ={<WatchForm/>} />
+        <Route path="/sell" element={<Sell/>}/>
         <Route
           path="/sellPage"
           element={
