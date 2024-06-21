@@ -99,7 +99,7 @@ export default function Products() {
             className="mb-2"
             style={{ width: '100%' }}
           >
-            <Option value="Quazt">Quazt</Option>
+            <Option value="Quartz">Quartz</Option>
             <Option value="Automatic">Automatic</Option>
             <Option value="Solar">Solar</Option>
           </Select>
@@ -113,8 +113,8 @@ export default function Products() {
             <Option value="Green">Green</Option>
             <Option value="Blue">Blue</Option>
             <Option value="Black">Black</Option>
-            <Option value="Gold/Silver">Gold/Silver</Option>
-            <Option value="Silver/Gold">Silver/Gold</Option>
+            <Option value="Silver">Silver</Option>
+            <Option value="Gold">Gold</Option>
             <Option value="Gry">Gry</Option>
             <Option value="Mltclr">Mltclr</Option>
           </Select>
