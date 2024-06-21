@@ -5,7 +5,6 @@ import SignIn from "../../pages/Signin";
 import SignUp from "../../pages/SignUp";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
-
 import Cart from "../../pages/Cart";
 import SellPage from "../../components/SellPage";
 import LastActionSell from "../../components/LastActionSell";
@@ -14,6 +13,8 @@ import { SellProvider } from "../../context/sellContext";
 import ContactPage from "../../pages/ContactPage";
 import OtherBrandForm from "../OtherBrandForm";
 import Products from "../../pages/ProductsList";
+import ThankYou from "../../pages/ThankYou";
+import Profile from "../../pages/Profile";
 import Sell from "../../pages/Sell";
 
 export default function AppRouter() {
@@ -26,6 +27,8 @@ export default function AppRouter() {
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/order_completed/:id" element={<ThankYou />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/watchForm" element ={<WatchForm/>} />
         <Route path="/sell" element={<Sell/>}/>
