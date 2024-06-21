@@ -1,4 +1,4 @@
-/* body {
+ .bodyLast {
   font-family: Arial, sans-serif;
   background-color: #f0f2f5;
   color: #333;
@@ -6,33 +6,21 @@
   padding: 0;
 }
 
-h1,
-h2 {
-  text-align: left;
-  color: #333;
-  position: relative;
-}
 
-h2 .status {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
 
-.container {
+.containerLast {
   max-width: 1200px;
   margin: 40px auto;
   display: flex;
   margin-top: 100px;
 }
 
-.timeline-section {
+.timelineSectionLast {
   flex: 1;
   margin-right: 20px;
 }
 
-.details-section {
+.detailsSectionLast {
   flex: 1;
   background-color: #fff;
   padding: 20px;
@@ -40,29 +28,29 @@ h2 .status {
   border-radius: 8px;
 }
 
-h2,
-h3 {
+.h2Last,
+.h3Last {
   margin-top: 0;
   color: #007bff;
   border-bottom: 2px solid #007bff;
   padding-bottom: 5px;
 }
 
-p {
+.pLast {
   margin: 10px 0;
 }
 
-.status {
+.statusLast {
   font-weight: bold;
   padding: 10px;
   border-radius: 4px;
 }
 
-.complete {
+.completeLast {
   color: green;
 }
 
-.in-progress {
+.inProgressLast {
   color: orange;
 }
 
@@ -70,7 +58,7 @@ p {
   color: gray;
 }
 
-button {
+.buttonLast {
   background-color: #000000;
   color: #ffffff;
   padding: 4px 8px;
@@ -83,7 +71,7 @@ button {
   display: inline-block;
 }
 
-button:hover {
+.buttonLast:hover {
   background-color: #333333;
-} */
+} 
 

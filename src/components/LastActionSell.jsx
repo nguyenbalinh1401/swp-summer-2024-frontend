@@ -43,18 +43,18 @@ const LastActionSell = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.timelineSection}>
+    <div className={styles.containerLast}>
+      <div className={styles.timelineSectionLast}>
         <Timeline>
           <Timeline.Item color="green">
-            <h2>Sell Your Watch Enquiry
-              <span className={styles.statusComplete}>Completed</span>
-            </h2>
+            <h2 className={styles.h2Last}>Sell Your Watch Enquiry
+              <span className={styles.completeLast}>Completed</span>
+            </h2 >
           </Timeline.Item>
           <Timeline.Item color="blue">
-            <h2>Our Initial Offer
-              <span className={styles.statusInProgress}>In Progress</span>
-            </h2>
+            <h2 className={styles.h2Last}>Our Initial Offer
+              <span className={styles.inProgressLast}>In Progress</span>
+            </h2 >
             {sellForm ? (
               <ul>
                 <li>Initial offer (subject to inspection): {sellForm.initialOffer}</li>
@@ -63,12 +63,12 @@ const LastActionSell = () => {
             ) : (
               <p>No sell form data available</p>
             )}
-            <h3>Title: Total expected payout</h3>
-            <p>
+            <h3 className={styles.h3Last}>Title: Total expected payout</h3>
+            <p className={styles.pLast}>
               This estimate is valid until {getFormattedDate()}. For us to make your final offer, you'll need to send us your watch to be checked by one of our experts. Once this is done, we'll contact you with a quote. You can get your watch to us for inspection in this way:
             </p>
             <div >
-              <Button type="primary" onClick={() => setModalVisible(true)}>Drop off in Boutique</Button>
+              <Button className={styles.buttonLast} type="primary" onClick={() => setModalVisible(true)}>Drop off in Boutique</Button>
               {selectedAddress && (
                 <div>
                   <p>Selected address: {selectedAddress}</p>
@@ -76,31 +76,31 @@ const LastActionSell = () => {
                 </div>
               )}
             </div>
-            <Button type="primary" onClick={handleSendRequest} disabled={requestSent}>
+            <Button className={styles.buttonLast} type="primary" onClick={handleSendRequest} disabled={requestSent}>
               {requestSent ? "Request Sent" : "Send Request"}
             </Button>
           </Timeline.Item>
         </Timeline>
         <Timeline>
         <Timeline.Item color="gray">
-            <h2>Send Your Watch For Authentication And Inspection
+            <h2 className={styles.h2Last}>Send Your Watch For Authentication And Inspection
               <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
           <Timeline.Item color="gray">
-            <h2>Final Offer
+            <h2 className={styles.h2Last}>Final Offer
               <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
           <Timeline.Item color="gray">
-            <h2>Sale Complete
+            <h2 className={styles.h2Last}>Sale Complete
               <span className={styles.statusPending}>Pending</span>
             </h2>
           </Timeline.Item>
         </Timeline>
       </div>
-      <div className={styles.detailsSection}>
-        <h2>Your Watch</h2>
+      <div className={styles.detailsSectionLast}>
+        <h2 className={styles.h2Last}>Your Watch</h2>
         {watchForm ? (
           <ul>
             <li>Brand: {watchForm.brand?.name}</li>
@@ -119,7 +119,7 @@ const LastActionSell = () => {
             <li><img src={watchForm.model?.image} alt={watchForm.model?.name} style={{ width: '200px', height: '200px' }} /></li>
           </ul>
         ) : (
-          <p>No watch form data available</p>
+          <p >No watch form data available</p>
         )}
       </div>
       <Modal
@@ -130,11 +130,11 @@ const LastActionSell = () => {
       >
         <div style={{ marginBottom: '10px' }}>
           <img src="/images/address_0.jpg" alt="123 Street, City, Country" style={{ width: '100%', height: 'auto', marginBottom: '5px' }} />
-          <Button type="primary" onClick={() => handleSelectAddress("123 Street, City, Country")}>Select</Button>
+          <Button className={styles.buttonLast} type="primary" onClick={() => handleSelectAddress("123 Street, City, Country")}>Select</Button>
         </div>
         <div style={{ marginBottom: '10px' }}>
           <img src="/images/address_1.jpg" alt="456 Avenue, Town, Country" style={{ width: '100%', height: 'auto', marginBottom: '5px' }} />
-          <Button type="primary" onClick={() => handleSelectAddress("456 Avenue, Town, Country")}>Select</Button>
+          <Button className={styles.buttonLast} type="primary" onClick={() => handleSelectAddress("456 Avenue, Town, Country")}>Select</Button>
         </div>
       </Modal>
     </div>

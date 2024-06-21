@@ -17,7 +17,7 @@ import Products from "../../pages/ProductsList";
 
 export default function AppRouter() {
   return (
-    <div className="min-h-[80vh] flex items-start justify-start py-24">
+    <div className="w-full min-h-[80vh] flex items-start justify-start">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
@@ -26,6 +26,7 @@ export default function AppRouter() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/watchForm" element ={<WatchForm/>} />
         <Route
           path="/sellPage"
           element={

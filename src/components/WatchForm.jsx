@@ -11,7 +11,7 @@ import { Content } from 'antd/es/layout/layout';
 const WatchForm = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
   const navigate = useNavigate();
-  const { updateWatchForm } = useSellContext();
+  const {updateWatchForm} = useSellContext();
 
   const handleSelectBrand = (brand) => {
     setSelectedBrand(brand);
@@ -27,7 +27,7 @@ const WatchForm = () => {
       
       updateWatchForm({ brand: brandName,
         
-          name: model.name,  // Assuming model has a 'name' property
+          name: model.name, 
           image: model.image,
           description: model.description,
           modelNumber: model.modelNumber,
