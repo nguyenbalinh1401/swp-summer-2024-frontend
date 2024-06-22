@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import EmptyOrderImage from "../../assets/images/profile/empty-order.webp";
 import SingleOrder from "./SingleOrder";
 
@@ -9,7 +9,6 @@ export default function OrderHistory({ list }) {
   const getFilteredList = () => {
     if (listState === "all") {
       setCurrentList(list);
-      console.log("Current list: ", list.length);
     } else if (listState === "on going") {
       setCurrentList(
         list.filter(
@@ -33,9 +32,9 @@ export default function OrderHistory({ list }) {
     }
   };
 
-  useMemo(() => {
+  useEffect(() => {
     getFilteredList();
-  }, [listState]);
+  }, [listState, list]);
 
   return (
     <div className="w-full min-h-full bg-white rounded-xl">
