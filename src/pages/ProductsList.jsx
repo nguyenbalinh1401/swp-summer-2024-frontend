@@ -91,15 +91,15 @@ export default function Products() {
           allowClear
           style={{ width: '100%' }}
         />
-        <div className="w-full flex">
+        <div className="flex w-full justify-center mb-4">
           <Select
             placeholder="Filter by Type"
             onChange={value => setFilterType(value)}
             allowClear
-            className="mb-2"
-            style={{ width: '100%' }}
+            className="mr-2"
+            style={{ width: '23%' }}
           >
-            <Option value="Quartz">Quartz</Option>
+            <Option value="Quazt">Quazt</Option>
             <Option value="Automatic">Automatic</Option>
             <Option value="Solar">Solar</Option>
           </Select>
@@ -107,14 +107,14 @@ export default function Products() {
             placeholder="Filter by Dial Color"
             onChange={value => setFilterDialColor(value)}
             allowClear
-            className="mb-2"
-            style={{ width: '100%' }}
+            className="ml-2"
+            style={{ width: '23%' }}
           >
             <Option value="Green">Green</Option>
             <Option value="Blue">Blue</Option>
             <Option value="Black">Black</Option>
-            <Option value="Silver">Silver</Option>
-            <Option value="Gold">Gold</Option>
+            <Option value="Gold/Silver">Gold/Silver</Option>
+            <Option value="Silver/Gold">Silver/Gold</Option>
             <Option value="Gry">Gry</Option>
             <Option value="Mltclr">Mltclr</Option>
           </Select>
@@ -129,21 +129,21 @@ export default function Products() {
           </Button>
           <Button
             onClick={() => setFilterDialColor('Black')}
-            style={{ backgroundColor: '#fff', color: '#FF5133', flexGrow: 1 }}
+            style={{ backgroundColor: '#fff', color: '#FF5133', fontWeight: 'bold', flexGrow: 1 }}
             className="mr-2"
           >
             Black Color
           </Button>
           <Button
             onClick={() => setFilterType('Automatic')}
-            style={{ backgroundColor: '#fff', color: '#FFB733', flexGrow: 1 }}
+            style={{ backgroundColor: '#fff', color: '#fff#FFB733', fontWeight: 'bold', flexGrow: 1 }}
             className="mr-2"
           >
             Automatic Type
           </Button>
           <Button
             onClick={() => setSortOrder('newest')}
-            style={{ backgroundColor: '#fff', color: '#2CC82E', flexGrow: 1 }}
+            style={{ backgroundColor: '#fff', color: '#2CC82E', fontWeight: 'bold', flexGrow: 1 }}
             className="mr-2"
           >
             Newest Post
