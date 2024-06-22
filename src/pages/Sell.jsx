@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Upload, message,notification } from "antd";
+import { Form, Input, Button, Upload, message, notification } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Sell() {
   const [form] = Form.useForm();
@@ -15,23 +16,29 @@ export default function Sell() {
       }
       const formData = new FormData();
       formData.append("image", fileList[0].originFileObj);
-      const imageResponse = await fetch("http://localhost:3000/sell/uploadImage", {
-        method: "POST",
-        body: formData,
-      });
+      const imageResponse = await fetch(
+        "http://localhost:3000/sell/uploadImage",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       if (!imageResponse.ok) {
         throw new Error("Image upload failed");
       }
       const imageData = await imageResponse.json();
       console.log("Image uploaded successfully:", imageData);
       values.imagePath = imageData.imagePath;
-      const dataResponse = await fetch("http://localhost:3000/sell/information", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+      const dataResponse = await fetch(
+        "http://localhost:3000/sell/information",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
 
       if (!dataResponse.ok) {
         throw new Error("Data submission failed");
@@ -41,26 +48,31 @@ export default function Sell() {
       console.log("Data saved successfully:", data);
 
       notification.success({
-        message: 'Success',
-        description: 'Your information has been submitted successfully!',
+        message: "Success",
+        description: "Your information has been submitted successfully!",
       });
 
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      const latestProductsResponse = await axios.get(
+        "http://localhost:3000/product/latest"
+      );
 
+      setTimeout(() => {
+        navigate("/", {
+          state: { latestProducts: latestProductsResponse.data },
+        });
+      }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error);
 
       notification.error({
-        message: 'Error',
-        description: 'There was an error submitting the form. Please try again.',
+        message: "Error",
+        description:
+          "There was an error submitting the form. Please try again.",
       });
 
       setTimeout(() => {
-        navigate('/sell');
+        navigate("/sell");
       }, 2000);
-
     }
   };
 
@@ -90,16 +102,31 @@ export default function Sell() {
         <Form.Item
           label="Phone Number"
           name="phoneNumber"
-          rules={[{ required: true, message: "Please enter your phone number" }]}
+          rules={[
+            { required: true, message: "Please enter your phone number" },
+          ]}
         >
           <Input size="large" />
         </Form.Item>
         <Form.Item
           label="Email"
           name="email"
-          rules={[{ required: true, type: "email", message: "Please enter a valid email" }]}
+          rules={[
+            {
+              required: true,
+              type: "email",
+              message: "Please enter a valid email",
+            },
+          ]}
         >
           <Input size="large" />
+        </Form.Item>
+        <Form.Item
+          label="Price"
+          name="price"
+          rules={[{ required: true, message: "Please enter the price" }]}
+        >
+          <Input size="large" type="number" />
         </Form.Item>
         <Form.Item
           label="Image"
