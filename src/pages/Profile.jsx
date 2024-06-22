@@ -13,7 +13,6 @@ export default function Profile() {
     await axios
       .get(`http://localhost:3000/order/user/${user.id}`)
       .then((res) => {
-        console.log("Order list: ", res.data);
         setOrders(res.data);
       })
       .catch((err) => console.log(err));
