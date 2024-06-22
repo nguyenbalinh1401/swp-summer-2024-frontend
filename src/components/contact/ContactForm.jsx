@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styles from "../../styles/ContactStyle.module.css";
 import { Content } from "antd/es/layout/layout";
 export default function Contact() {
@@ -7,6 +7,8 @@ export default function Contact() {
     email: "",
     message: "",
   });
+
+  const [product,setProducts] = useState();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,16 +23,16 @@ export default function Contact() {
     console.log("Form submitted:", formData);
   };
 
-  // useEffect(() => {
-  //   fetch("http://localhost:3000/contact/report")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setProducts(data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching Contact", error);
-  //     });
-  // }, []);
+  useEffect(() => {
+     fetch("http://localhost:3000/contact/report")
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching Contact", error);
+      });
+  }, []);
   return (
     <Content className={styles.contentForm}>
       <div className={styles.containerContact}>
