@@ -87,38 +87,40 @@ export default function Sell() {
       title: "Check",
       content: (
         <>
-        <Form form={form} onFinish={onFinish} layout="vertical">
-          <Form.Item
-            label="Watch Name"
-            name="watchName"
-            rules={[{ required: true, message: "Please enter the watch name" }]}
-            className="mb-4"
-          >
-            <Input size="large" className="full" />
-          </Form.Item>
-          <Form.Item
-            label="Your Name"
-            name="name"
-            rules={[{ required: true, message: "Please enter your name" }]}
-            className="mb-4"
-          >
-            <Input size="large" className="full" />
-          </Form.Item>
-          <Form.Item
-            label="Phone Number"
-            name="phoneNumber"
-            rules={[
-              { required: true, message: "Please enter your phone number" },
-            ]}
-            className="mb-4"
-          >
-            <InputNumber
-              controls={false}
-              size="large"
-              min={0}
-              style={{ width: "98.5%" }}
-            />
-          </Form.Item>
+          <Form form={form} onFinish={onFinish} layout="vertical">
+            <Form.Item
+              label="Watch Name"
+              name="watchName"
+              rules={[
+                { required: true, message: "Please enter the watch name" },
+              ]}
+              className="mb-4"
+            >
+              <Input size="large" className="full" />
+            </Form.Item>
+            <Form.Item
+              label="Your Name"
+              name="name"
+              rules={[{ required: true, message: "Please enter your name" }]}
+              className="mb-4"
+            >
+              <Input size="large" className="full" />
+            </Form.Item>
+            <Form.Item
+              label="Phone Number"
+              name="phoneNumber"
+              rules={[
+                { required: true, message: "Please enter your phone number" },
+              ]}
+              className="mb-4"
+            >
+              <InputNumber
+                controls={false}
+                size="large"
+                min={0}
+                style={{ width: "98.5%" }}
+              />
+            </Form.Item>
           </Form>
           <div className="flex flex-col items-start">
             <Form.Item
@@ -142,7 +144,7 @@ export default function Sell() {
               </Radio.Group>
             </Form.Item>
             {box === "yes" && (
-              <Form.Item
+              <><Form.Item
                 label="Upload Your watch appraisal certificate"
                 name="boxImage"
                 rules={[{ required: true, message: "Please upload an image" }]}
@@ -159,6 +161,19 @@ export default function Sell() {
                   </Button>
                 </Upload>
               </Form.Item>
+              <Form.Item
+                label="Price you want to sell"
+                name="price"
+                rules={[{ required: true, message: "Please enter the price" }]}
+                layout="vertical"
+                className="flex flex-col"
+              >
+                  <InputNumber
+                    controls={false}
+                    size="large"
+                    min={0}
+                    style={{ width: "1380px" }} />
+                </Form.Item></>
             )}
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Form.Item>
@@ -178,7 +193,6 @@ export default function Sell() {
               </Form.Item>
             </div>
           </div>
-          
         </>
       ),
     },
