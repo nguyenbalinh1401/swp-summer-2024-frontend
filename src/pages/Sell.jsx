@@ -1,9 +1,24 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Upload, message, notification } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Upload,
+  message,
+  notification,
+  Radio,
+  InputNumber,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import * as Yup from "yup";
 
+const validationSchema = Yup.object().shape({
+  price: Yup.number()
+    .typeError("Please enter a valid number")
+    .required("Please enter the price")
+    .min(0, "Price must be greater than or equal to 0"),
+});
 export default function Sell() {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
@@ -52,15 +67,15 @@ export default function Sell() {
         description: "Your information has been submitted successfully!",
       });
 
-      const latestProductsResponse = await axios.get(
-        "http://localhost:3000/product/latest"
-      );
+      // const latestProductsResponse = await axios.get(
+      //   "http://localhost:3000/product/latest"
+      // );
 
-      setTimeout(() => {
-        navigate("/", {
-          state: { latestProducts: latestProductsResponse.data },
-        });
-      }, 2000);
+      // setTimeout(() => {
+      //   navigate("", {
+      //     state: { latestProducts: latestProductsResponse.data },
+      //   });
+      // }, 2000);
     } catch (error) {
       console.error("Error submitting form:", error);
 
@@ -79,10 +94,18 @@ export default function Sell() {
   const onFileChange = ({ fileList }) => {
     setFileList(fileList);
   };
+  const validateNotNull = (_, value) => {
+    if (value === null || value === undefined || value.trim() === "") {
+      return Promise.reject(new Error("The input cannot be null"));
+    }
+    return Promise.resolve();
+  };
 
   return (
-    <div className="w-1/2 mt-10 ml-20 justify-center">
-      <h1 className="text-3xl font-bold mb-4">Information For Sell</h1>
+    <div className="w-full max-w-full p-10 border border-gray-300 rounded-lg shadow-lg bg-white mx-5">
+      <h1 className="text-center text-3xl font-bold mb-4">
+        Information For Sell
+      </h1>
       <Form form={form} onFinish={onFinish} layout="vertical">
         <Form.Item
           label="Watch Name"
@@ -106,27 +129,72 @@ export default function Sell() {
             { required: true, message: "Please enter your phone number" },
           ]}
         >
-          <Input size="large" />
+          <InputNumber
+            controls={false}
+            size="large"
+            min={0}
+            style={{ width: "98.5%" }}
+          />
         </Form.Item>
         <Form.Item
-          label="Email"
-          name="email"
+          label="Do you have original box ?"
+          name="agree"
+          valuePropName="checked"
           rules={[
             {
               required: true,
-              type: "email",
-              message: "Please enter a valid email",
+              message: "Please select yes or no",
             },
           ]}
         >
-          <Input size="large" />
+          <Radio.Group>
+            <Radio value="yes">Yes</Radio>
+            <Radio value="no">No</Radio>
+          </Radio.Group>
         </Form.Item>
         <Form.Item
-          label="Price"
+          label="Does your watch have original documents ?"
+          name="agree"
+          valuePropName="checked"
+          rules={[
+            {
+              required: true,
+              message: "Please select yes or no",
+            },
+          ]}
+        >
+          <Radio.Group>
+            <Radio value="yes">Yes</Radio>
+            <Radio value="no">No</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item
+          label="Is your watch a limited edition ?"
+          name="agree"
+          valuePropName="checked"
+          rules={[
+            {
+              required: true,
+              message: "Please select yes or no",
+            },
+          ]}
+        >
+          <Radio.Group>
+            <Radio value="yes">Yes</Radio>
+            <Radio value="no">No</Radio>
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item
+          label="Price you want to sell"
           name="price"
           rules={[{ required: true, message: "Please enter the price" }]}
         >
-          <Input size="large" type="number" />
+          <InputNumber
+            controls={false}
+            size="large"
+            min={0}
+            style={{ width: "98.5%" }}
+          />
         </Form.Item>
         <Form.Item
           label="Image"
