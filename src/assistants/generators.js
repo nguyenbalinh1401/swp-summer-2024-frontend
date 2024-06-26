@@ -31,3 +31,15 @@ export function generateNumericCode(length) {
   }
   return result;
 }
+
+export function generateChatRoomId() {
+  let result = "";
+  const characters = "0123456789";
+  let counter = 1;
+  while (counter < 17) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+    if ((counter * 3 + 4) % 4 === 0 && counter !== 16) result += "-";
+    counter += 1;
+  }
+  return result;
+}

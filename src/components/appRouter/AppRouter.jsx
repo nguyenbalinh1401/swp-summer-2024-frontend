@@ -16,6 +16,7 @@ import Products from "../../pages/ProductsList";
 import ThankYou from "../../pages/ThankYou";
 import Profile from "../../pages/Profile";
 import Sell from "../../pages/Sell";
+import Chat from "../../pages/Chat";
 
 export default function AppRouter() {
   return (
@@ -29,9 +30,12 @@ export default function AppRouter() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/order_completed/:id" element={<ThankYou />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/manage-product" element={<Profile />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/:id" element={<Chat />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/watchForm" element ={<WatchForm/>} />
-        <Route path="/sell" element={<Sell/>}/>
+        <Route path="/watchForm" element={<WatchForm />} />
+        <Route path="/sell" element={<Sell />} />
         <Route
           path="/sellPage"
           element={

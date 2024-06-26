@@ -15,7 +15,9 @@ function App() {
     >
       <div className="w-full min-h-screen flex flex-col justify-between font-montserrat">
         <Navbar />
-        <AppRouter />
+        <div className="grow">
+          <AppRouter />
+        </div>
         <Footer />
       </div>
     </CookiesProvider>
