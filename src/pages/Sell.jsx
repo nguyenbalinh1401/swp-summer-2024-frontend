@@ -248,8 +248,8 @@ export default function Sell() {
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            label="Does your watch have original documents ?"
-            name="documents"
+            label="Does your watch have original paper ?"
+            name="paper"
             rules={[
               {
                 required: true,
