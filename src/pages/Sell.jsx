@@ -1,299 +1,156 @@
 import React, { useState } from "react";
-import {
-  Layout,
-  theme,
-  Input,
-  Button,
-  Select,
-  Checkbox,
-} from "antd";
-
-import "../components/style/SellStyle.css";
-
-const {Content } = Layout;
-
-
+import { Form, Input, Button, Upload, message, notification } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Sell() {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-  const [watchValue, setWatchValue] = useState("");
-  const [showFirstSlide, setShowFirstSlide] = useState(true);
+  const [form] = Form.useForm();
+  const [fileList, setFileList] = useState([]);
+  const navigate = useNavigate();
+  const onFinish = async (values) => {
+    try {
+      if (fileList.length === 0) {
+        message.error("Please upload an image.");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("image", fileList[0].originFileObj);
+      const imageResponse = await fetch(
+        "http://localhost:3000/sell/uploadImage",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      if (!imageResponse.ok) {
+        throw new Error("Image upload failed");
+      }
+      const imageData = await imageResponse.json();
+      console.log("Image uploaded successfully:", imageData);
+      values.imagePath = imageData.imagePath;
+      const dataResponse = await fetch(
+        "http://localhost:3000/sell/information",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
 
-  const [sellMethod, setSellMethod] = useState("");
-  const [hasOriginalBox, setHasOriginalBox] = useState(false);
-  const [hasOriginalPapers, setHasOriginalPapers] = useState(false);
-  const [purchasedFromWatchfinder, setPurchasedFromWatchfinder] =
-    useState(false);
-  const [hasFactoryStickers, setHasFactoryStickers] = useState(false);
-  const [watchYear, setWatchYear] = useState("");
-  const [isLimitedEdition, setIsLimitedEdition] = useState(false);
-  const [showSecondSlide, setShowSecondSlide] = useState(false);
-  const [showThirdSlide, setShowThirdSlide] = useState(false);
-  const [customsCheckOption, setCustomsCheckOption] = useState("");
-  const onSellMethodChange = (value) => {
-    setSellMethod(value);
+      if (!dataResponse.ok) {
+        throw new Error("Data submission failed");
+      }
+
+      const data = await dataResponse.json();
+      console.log("Data saved successfully:", data);
+
+      notification.success({
+        message: "Success",
+        description: "Your information has been submitted successfully!",
+      });
+
+      const latestProductsResponse = await axios.get(
+        "http://localhost:3000/product/latest"
+      );
+
+      setTimeout(() => {
+        navigate("/", {
+          state: { latestProducts: latestProductsResponse.data },
+        });
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+
+      notification.error({
+        message: "Error",
+        description:
+          "There was an error submitting the form. Please try again.",
+      });
+
+      setTimeout(() => {
+        navigate("/sell");
+      }, 2000);
+    }
   };
 
-  const onOriginalBoxChange = (e) => {
-    setHasOriginalBox(e.target.checked);
-  };
-
-  const onOriginalPapersChange = (e) => {
-    setHasOriginalPapers(e.target.checked);
-  };
-
-  const onWatchfinderChange = (e) => {
-    setPurchasedFromWatchfinder(e.target.checked);
-  };
-
-  const onFactoryStickersChange = (e) => {
-    setHasFactoryStickers(e.target.checked);
-  };
-
-  const onWatchYearChange = (value) => {
-    setWatchYear(value);
-  };
-
-  const onLimitedEditionChange = (e) => {
-    setIsLimitedEdition(e.target.checked);
-  };
-
-  const handleWatchValueChange = (e) => {
-    setWatchValue(e.target.value);
-  };
-
-  const handleWatchValuation = () => {
-    console.log("Watch value:", watchValue);
-    setShowFirstSlide(false);
-    setShowSecondSlide(true);
-    setShowThirdSlide(false);
-  };
-
-  const handleNextDetails = () => {
-    setShowFirstSlide(false);
-    setShowSecondSlide(false);
-    setShowThirdSlide(true);
-  };
-
-  const handleOriginalBoxChange = () => {
-    setHasOriginalBox(!hasOriginalBox);
-  };
-
-  const handleCustomsCheckChange = (e) => {
-    setCustomsCheckOption(e.target.value);
+  const onFileChange = ({ fileList }) => {
+    setFileList(fileList);
   };
 
   return (
-    <Layout>
-      
-      <Content className="content">
-        <div
-          className="content-inner"
-          style={{
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,   
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems:   "flex-start",        
-          }}
+    <div className="w-1/2 mt-10 ml-20 justify-center">
+      <h1 className="text-3xl font-bold mb-4">Information For Sell</h1>
+      <Form form={form} onFinish={onFinish} layout="vertical">
+        <Form.Item
+          label="Watch Name"
+          name="watchName"
+          rules={[{ required: true, message: "Please enter the watch name" }]}
         >
-          {showFirstSlide && (
-            
-            <div className="sell-content justify-content" >
-              <h2>About your watch</h2>
-              <div className="form-group">
-                <label>You want to Sell and Appraise or just Appraise your watch?</label>
-                <Select
-                  value={sellMethod}
-                  onChange={onSellMethodChange}
-                  className="select-option"
-                  
-                >
-                  <Select.Option value="outright">Sell and Appraise</Select.Option>
-                  <Select.Option value="trade">Just Appraise</Select.Option>
-                </Select>
-              </div>
-              <div className="form-group">
-                <label>Do you have the original box?</label>
-                <Checkbox
-                  checked={hasOriginalBox}
-                  onChange={onOriginalBoxChange}
-                  className="check-option"
-                >
-                  Yes
-                </Checkbox>
-              </div>
-              <div className="form-group">
-                <label>Do you have the original papers?</label>
-                <Checkbox
-                  checked={hasOriginalPapers}
-                  onChange={onOriginalPapersChange}
-                  className="check-option"
-                >
-                  Yes
-                </Checkbox>
-              </div>
-              <div className="form-group">
-                <label>Was your watch purchased from Watchfinder?</label>
-                <Checkbox
-                  checked={purchasedFromWatchfinder}
-                  onChange={onWatchfinderChange}
-                  className="check-option"
-                >
-                  Yes
-                </Checkbox>
-              </div>
-              <div className="form-group">
-                <label>
-                  Is your watch unworn with factory stickers intact?
-                </label>
-                <Checkbox
-                  checked={hasFactoryStickers}
-                  onChange={onFactoryStickersChange}
-                  className="check-option"
-                >
-                  Yes
-                </Checkbox>
-              </div>            
-                <label>What year is your watch?</label>
-                <Input
-                  placeholder="Your Watch Year"
-                  value={watchYear}
-                  onChange={onWatchYearChange}                 
-                  className="select-option"
-                >                 
-                </Input>
-              
-              <div className="form-group">
-                <label>Is your watch a limited edition?</label>
-                <Checkbox
-                  checked={isLimitedEdition}
-                  onChange={onLimitedEditionChange}
-                  className="check-option"
-                >
-                  Yes
-                </Checkbox>
-              </div>
-              <label>Watch Valuation</label>
-              <Input
-                placeholder="Enter watch details"
-                value={watchValue}
-                onChange={handleWatchValueChange}
-                className="type-option"
-              />
-              <Button type="primary" onClick={handleWatchValuation} className="button">
-                Valuate Watch
-              </Button>
-            </div>
-          )}
-          
-          {showSecondSlide && (
-            <div className="watch-valuation-result justify-content">
-              <h3>Customs Check</h3>
-              <div className="form-group">
-                <label>
-                  If you are currently a resident of the United States of
-                  America (the "USA"), please confirm whether you purchased the
-                  watch within, and have not exported the watch outside of, the
-                  USA:
-                </label>
-                <div className="radio-group">
-                  <div className="radio-option">
-                    <input
-                      type="radio"
-                      name="customsCheck"
-                      value="yes"
-                      checked={customsCheckOption === "yes"}
-                      onChange={handleCustomsCheckChange}
-                    />
-                    <span>Yes</span>
-                  </div>
-                  <div className="radio-option">
-                    <input
-                      type="radio"
-                      name="customsCheck"
-                      value="no"
-                      checked={customsCheckOption === "no"}
-                      onChange={handleCustomsCheckChange}
-                    />
-                    <span>No</span>
-                  </div>
-                  <div className="radio-option">
-                    <input
-                      type="radio"
-                      name="customsCheck"
-                      value="nonResident"
-                      checked={customsCheckOption === "nonResident"}
-                      onChange={handleCustomsCheckChange}
-                    />
-                    <span>Not a resident of the USA</span>
-                  </div>
-                  <div className="radio-option">
-                    <input
-                      type="radio"
-                      name="customsCheck"
-                      value="dontKnow"
-                      checked={customsCheckOption === "dontKnow"}
-                      onChange={handleCustomsCheckChange}
-                    />
-                    <span>Don't Know</span>
-                  </div>
-                </div>
-              </div>
-              <Button
-                type="primary"
-                className="submit-button"
-                onClick={handleNextDetails}
-              >
-                Next: Your Details
-              </Button>
-            </div>
-          )}
-          {showThirdSlide && (
-            <div className="your-details justify-content">
-              <h3>Your Details</h3>
-              <div className="form-group">
-                <label>First Name</label>
-                <Input placeholder="Enter First Name" />
-              </div>
-              <div className="form-group">
-                <label>Last Name</label>
-                <Input placeholder="Enter Last Name" />
-              </div>
-              <div className="form-group">
-                <label>Email</label>
-                <Input placeholder="Enter Email" />
-              </div>
-              <div className="form-group">
-                <label>Telephone</label>
-                <Input placeholder="Enter Telephone Number" />
-              </div>
-              <div className="form-group">
-                <label>Sell Method</label>
-                <Input value={sellMethod} placeholder="Enter Sell Method" />
-              </div>
-              <div className="form-group">
-                <label>Original Box</label>
-                <Checkbox
-                  checked={hasOriginalBox}
-                  onChange={handleOriginalBoxChange}
-                >
-                  Yes
-                </Checkbox>
-              </div>
+          <Input size="large" />
+        </Form.Item>
 
-              <div className="form-group">
-                <Button type="primary" className="submit-button">
-                  Submit
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      </Content>
-    </Layout>
+        <Form.Item
+          label="Your Name"
+          name="name"
+          rules={[{ required: true, message: "Please enter your name" }]}
+        >
+          <Input size="large" />
+        </Form.Item>
+        <Form.Item
+          label="Phone Number"
+          name="phoneNumber"
+          rules={[
+            { required: true, message: "Please enter your phone number" },
+          ]}
+        >
+          <Input size="large" />
+        </Form.Item>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            {
+              required: true,
+              type: "email",
+              message: "Please enter a valid email",
+            },
+          ]}
+        >
+          <Input size="large" />
+        </Form.Item>
+        <Form.Item
+          label="Price"
+          name="price"
+          rules={[{ required: true, message: "Please enter the price" }]}
+        >
+          <Input size="large" type="number" />
+        </Form.Item>
+        <Form.Item
+          label="Image"
+          name="image"
+          rules={[{ required: true, message: "Please upload an image" }]}
+        >
+          <Upload
+            name="image"
+            listType="picture"
+            beforeUpload={() => false}
+            onChange={onFileChange}
+            fileList={fileList}
+          >
+            <Button size="large" icon={<UploadOutlined />}>
+              Click to upload
+            </Button>
+          </Upload>
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" size="large" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 }

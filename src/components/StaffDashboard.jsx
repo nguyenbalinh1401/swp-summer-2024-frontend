@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, message } from "antd";
+import { Table, Button, message, Tag } from "antd";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { SellRequestStatus } from './create-sell-request.dto'; // Import enum if required
 
 export default function StaffDashboard() {
-  const { role } = useParams(); // Lấy vai trò từ URL
   const [sellRequests, setSellRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchSellRequests();
-  }, [role]);
+  }, []);
 
   const fetchSellRequests = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/sell-request/view/staff1`);
+      const response = await axios.get(`http://localhost:3000/sell-request/view`);
       setSellRequests(response.data.sellRequests);
       setLoading(false);
     } catch (error) {
@@ -26,16 +26,20 @@ export default function StaffDashboard() {
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
-    { 
-      title: "Name", 
-      dataIndex: "firstName", 
-      key: "firstName",
-      render: (text, record) => `${record.sellForm.firstName} ${record.sellForm.lastName}`
+    { title: "Watch Name", dataIndex: "watchName", key: "watchName" },
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber" },
+    { title: "Price Want To Sell", dataIndex: "priceWantToSell", key: "priceWantToSell" },
+    {
+      title: "Status", 
+      dataIndex: "status", 
+      key: "status",
+      render: (status) => (
+        <Tag color={status === SellRequestStatus.APPROVED ? 'green' : 'volcano'}>
+          {status.toUpperCase()}
+        </Tag>
+      ),
     },
-    { title: "Watch Model", dataIndex: ["watchForm", "model", "name"], key: "modelName" ,
-      render: (text, record) => `${record.watchForm.name} `
-    },
-    
     {
       title: "Action",
       key: "action",
@@ -47,7 +51,7 @@ export default function StaffDashboard() {
 
   return (
     <div>
-      <h2>{role === 'staff1' ? 'Staff 1' : 'Staff 2'} - Sell Requests</h2>
+      <h2>Sell Requests</h2>
       <Table
         columns={columns}
         dataSource={sellRequests}

@@ -1,28 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Layout, Menu, Input, Button, Checkbox } from "antd";
-import "../styles/sell-page.css";
+import { useNavigate } from "react-router-dom";
+import { Layout, Input, Button, Checkbox, Upload, theme } from "antd";
+import { UploadOutlined } from '@ant-design/icons';
+import styles from "../styles/sell-page.module.css";
 import { useSellContext } from "../context/sellContext";
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
-export default function Sell() {
+export default function SellPage() {
   const navigate = useNavigate();
-  const { updateSellForm, watchForm } = useSellContext();
+  const { updateWatchForm, watchForm } = useSellContext();
   const [initialOffer, setInitialOffer] = useState("");
   const [minimumServicingFee, setMinimumServicingFee] = useState(0);
   const [total, setTotal] = useState(0);
   const [showFirstSlide, setShowFirstSlide] = useState(true);
   const [showSecondSlide, setShowSecondSlide] = useState(false);
-  const [showThirdSlide, setShowThirdSlide] = useState(false);
   const [hasOriginalBox, setHasOriginalBox] = useState(false);
   const [hasOriginalPapers, setHasOriginalPapers] = useState(false);
-  const [hasFactoryStickers, setHasFactoryStickers] = useState(false);
   const [isLimitedEdition, setIsLimitedEdition] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [telephone, setTelephone] = useState("");
+  const [hasReport, setHasReport] = useState(false);
+  const [fileList, setFileList] = useState([]);
 
   const onOriginalBoxChange = (e) => {
     setHasOriginalBox(e.target.checked);
@@ -30,10 +27,6 @@ export default function Sell() {
 
   const onOriginalPapersChange = (e) => {
     setHasOriginalPapers(e.target.checked);
-  };
-
-  const onFactoryStickersChange = (e) => {
-    setHasFactoryStickers(e.target.checked);
   };
 
   const onLimitedEditionChange = (e) => {
@@ -53,50 +46,63 @@ export default function Sell() {
     setTotal(total);
     setShowFirstSlide(false);
     setShowSecondSlide(true);
-    setShowThirdSlide(false);
   };
 
-  const handleNextDetails = () => {
-    setShowFirstSlide(false);
-    setShowSecondSlide(false);
-    setShowThirdSlide(true);
+  const handleReportChange = (e) => {
+    setHasReport(e.target.checked);
   };
 
-  const handleFormSubmit = async () => {
+  const handleFileChange = ({ fileList }) => {
+    setFileList(fileList);
+  };
+
+  const handleFormSubmitWithReport = async () => {
     try {
-      const newSellForm = {
+      const moreWatchForm = {
         initialOffer,
         hasOriginalBox,
         hasOriginalPapers,
-        hasFactoryStickers,
         isLimitedEdition,
         minimumServicingFee,
         total,
-        firstName,
-        lastName,
-        email,
-        telephone,
+        reportFile: fileList[0]?.originFileObj,
       };
-      updateSellForm({ ...newSellForm });
-      console.log('Submitting form with data:', { ...newSellForm });
-      navigate('/LastActionSell');
+
+      // Update sell form in context
+      updateWatchForm(moreWatchForm);
+
+      // Redirect user to success page
+      navigate('/success');
     } catch (error) {
       console.error('Error submitting form:', error);
     }
   };
 
-  const handleBackToFirstSlide = () => {
-    setShowFirstSlide(true);
-    setShowSecondSlide(false);
-    setShowThirdSlide(false);
+  const handleFormSubmitWithoutReport = () => {
+
+    try {
+      const moreWatchForm = {
+        initialOffer,
+        hasOriginalBox,
+        hasOriginalPapers,
+        isLimitedEdition,
+        minimumServicingFee,
+        total,
+        reportFile: fileList[0]?.originFileObj,
+      };
+
+      // Update sell form in context
+      updateWatchForm(moreWatchForm);
+
+      // Redirect user to success page
+      navigate('/lastActionSell');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
-  const handleBackToSecondSlide = () => {
-    setShowFirstSlide(false);
-    setShowSecondSlide(true);
-    setShowThirdSlide(false);
-  };
-
+  //-----------------------
+  // Check watchForm and update minimum servicing fee
   useEffect(() => {
     if (watchForm !== null) {
       setMinimumServicingFee(100);
@@ -105,48 +111,47 @@ export default function Sell() {
     }
   }, [watchForm]);
 
-  const renderWatchInfo = () => (
-    <div className="watch-info">
-      <img src={watchForm?.model?.image} alt={watchForm?.brand?.name} />
-      <h3>{watchForm?.brand?.name}</h3>
-    </div>
-  );
+  const renderWatchInfo = () => {
+    if (!watchForm) {
+      return <p>No watch information available.</p>;
+    }
+
+    return (
+      <div className={styles.watchInfo}>
+        <img src={watchForm.image} alt={watchForm.brand} />
+        <h3>{watchForm.brand}</h3>
+      </div>
+    );
+  };
 
   return (
     <Layout>
-      <Header className="layout-header">
-        <div className="demo-logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["3"]} className="menu">
-          <Menu.Item key="1">
-            <Link to="/">Home</Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/buy">Buy</Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Link to="/sell">Sell</Link>
-          </Menu.Item>
-        </Menu>
-      </Header>
-      <Content className="content">
-        <div className="content-inner">
+      <Content className={styles.contentHome}>
+        <div
+          className={styles.contentInner}
+          style={{
+            background: theme.colorBgContainer,
+            borderRadius: theme.borderRadiusLG,
+          }}
+        >
           {showFirstSlide && (
-            <div className="sell-content">
+            <div className={styles.sellContent}>
               {renderWatchInfo()}
               <h2>About your watch</h2>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Do you have the original box?</label>
                 <Checkbox checked={hasOriginalBox} onChange={onOriginalBoxChange}>Yes</Checkbox>
               </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Do you have the original papers?</label>
-                <Checkbox checked={hasOriginalPapers} onChange={onOriginalPapersChange}>Yes</Checkbox>
+                <Checkbox
+                  checked={hasOriginalPapers}
+                  onChange={onOriginalPapersChange}
+                >
+                  Yes
+                </Checkbox>
               </div>
-              <div className="form-group">
-                <label>Is your watch unworn with factory stickers intact?</label>
-                <Checkbox checked={hasFactoryStickers} onChange={onFactoryStickersChange}>Yes</Checkbox>
-              </div>
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>Is your watch a limited edition?</label>
                 <Checkbox checked={isLimitedEdition} onChange={onLimitedEditionChange}>Yes</Checkbox>
               </div>
@@ -156,51 +161,46 @@ export default function Sell() {
             </div>
           )}
           {showSecondSlide && (
-            <div className="watch-valuation-result">
-              <h3>Your Watch Valuation</h3>
-              <p>Minimum Servicing Fee: ${minimumServicingFee}</p>
-              <p>Total Valuation: ${total}</p>
-              <Button type="primary" onClick={handleNextDetails}>Next</Button>
-              <Button onClick={handleBackToFirstSlide}>Back</Button>
-            </div>
-          )}
-          {showThirdSlide && (
-            <div className="user-details">
-              <h3>Your Details</h3>
-              <div className="form-group">
-                <label>First Name</label>
-                <Input
-                  placeholder="Enter First Name"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
+            <div className={styles.watchValuationResult}>
+              <h3>Watch Report</h3>
+              <div className={styles.formGroup}>
+                <label>Do you have a report for the watch?</label>
+                <Checkbox checked={hasReport} onChange={handleReportChange}>Yes</Checkbox>
               </div>
-              <div className="form-group">
-                <label>Last Name</label>
-                <Input
-                  placeholder="Enter Last Name"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                />
+              {hasReport && (
+                <div className={styles.formGroup}>
+                  <Upload
+                    fileList={fileList}
+                    onChange={handleFileChange}
+                    beforeUpload={() => false} // Prevent auto upload
+                  >
+                    <Button icon={<UploadOutlined />}>Upload Report</Button>
+                  </Upload>
+                </div>
+              )}
+              <div>
+                <Button type="primary" className={styles.backButton} onClick={() => setShowFirstSlide(true)}>
+                  Back
+                </Button>
+                {hasReport ? (
+                  <Button
+                    type="primary"
+                    className={styles.submitButton}
+                    onClick={handleFormSubmitWithReport}
+                    disabled={!fileList.length}
+                  >
+                    Submit
+                  </Button>
+                ) : (
+                  <Button
+                    type="primary"
+                    className={styles.submitButton}
+                    onClick={handleFormSubmitWithoutReport}
+                  >
+                    Next
+                  </Button>
+                )}
               </div>
-              <div className="form-group">
-                <label>Email</label>
-                <Input
-                  placeholder="Enter Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label>Telephone</label>
-                <Input
-                  placeholder="Enter Telephone Number"
-                  value={telephone}
-                  onChange={(e) => setTelephone(e.target.value)}
-                />
-              </div>
-              <Button type="primary" onClick={handleFormSubmit}>Submit</Button>
-              <Button onClick={handleBackToSecondSlide}>Back</Button>
             </div>
           )}
         </div>

@@ -17,12 +17,15 @@
     "axios": "^1.7.2",
     "framer-motion": "^11.2.10",
     "jwt-decode": "^4.0.0",
+    "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-cookie": "^7.1.4",
     "react-dom": "^18.2.0",
-    "react-particles-js": "^3.6.0",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "react-slick": "^0.30.2",
+    "react-tsparticles": "^2.12.2",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
@@ -42,6 +45,4 @@
   "keywords": [],
   "author": "",
   "license": "ISC"
-  
 }
-

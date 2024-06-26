@@ -2,14 +2,19 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import NotFound from "../notFound/NotFound";
 import SignIn from "../../pages/Signin";
+import SignUp from "../../pages/SignUp";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
+import Cart from "../../pages/Cart";
 import SellPage from "../../components/SellPage";
 import LastActionSell from "../../components/LastActionSell";
 import WatchForm from "../../components/WatchForm";
 import { SellProvider } from "../../context/sellContext";
-import Buy from "../../pages/Buy";
-import HomePage from "../../pages/HomePage";
+import ContactPage from "../../pages/ContactPage";
+
+import Products from "../../pages/ProductsList";
+import ThankYou from "../../pages/ThankYou";
+import Profile from "../../pages/Profile";
 import Sell from "../../pages/Sell";
 import OtherBrandForm from "../OtherBrandForm";
 import StaffDashboard from "../StaffDashboard";
@@ -18,53 +23,54 @@ import ReportPage from "../ReportPage";
 
 export default function AppRouter() {
   return (
-    <div className="w-full min-h-[80vh] flex items-center justify-center">
+    <div className="w-full min-h-[80vh] flex items-start justify-start">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/product" element={<div>Product</div>} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/buy" element={<Buy />} />
-        <Route path="/homepage" element={<HomePage />} />
-        <Route path="/sell" element={<Sell />} />
-        <Route path="/staffDashboard" element={<StaffDashboard />} />
-        <Route path="/sell-request/:id" element={<SellRequestDetail />} />
-        <Route path="/sell-request/report/:id" element={<ReportPage />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/order_completed/:id" element={<ThankYou />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/contact" element={<ContactPage />} />
         
         
-        <Route 
-          path="/sellPage" 
+        <Route path="/staffDashboard" element={<StaffDashboard/>}/>
+        <Route path="/sellRequestDetail" element={<SellRequestDetail/>}/>
+        <Route path="/reportPage" element={<ReportPage/>}/>
+        <Route
+          path="/SellPage"
           element={
             <SellProvider>
               <SellPage />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/LastActionSell" 
+        <Route
+          path="/lastActionSell"
           element={
             <SellProvider>
               <LastActionSell />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/watchForm" 
+        <Route
+          path="/watchForm"
           element={
             <SellProvider>
               <WatchForm />
             </SellProvider>
-          } 
+          }
         />
-        <Route 
-          path="/OtherBrandForm" 
+        <Route
+          path="/OtherBrandForm"
           element={
             <SellProvider>
               <OtherBrandForm />
             </SellProvider>
-          } 
+          }
         />
-        
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
