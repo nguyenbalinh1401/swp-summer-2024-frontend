@@ -22,63 +22,63 @@ export default function Sell() {
   const [formValues, setFormValues] = useState({});
   const navigate = useNavigate();
 
-  const onFinish = async (values) => {
-    try {
-      if (fileList.length === 0) {
-        message.error("Please upload an image.");
-        return;
-      }
-      const formData = new FormData();
-      formData.append("image", fileList[0].originFileObj);
-      const imageResponse = await fetch(
-        "http://localhost:3000/sell/uploadImage",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      if (!imageResponse.ok) {
-        throw new Error("Image upload failed");
-      }
-      const imageData = await imageResponse.json();
-      console.log("Image uploaded successfully:", imageData);
-      values.imagePath = imageData.imagePath;
-      const dataResponse = await fetch(
-        "http://localhost:3000/sell/information",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        }
-      );
+  // const onFinish = async (values) => {
+  //   try {
+  //     if (fileList.length === 0) {
+  //       message.error("Please upload an image.");
+  //       return;
+  //     }
+  //     const formData = new FormData();
+  //     formData.append("image", fileList[0].originFileObj);
+  //     const imageResponse = await fetch(
+  //       "http://localhost:3000/sell/uploadImage",
+  //       {
+  //         method: "POST",
+  //         body: formData,
+  //       }
+  //     );
+  //     if (!imageResponse.ok) {
+  //       throw new Error("Image upload failed");
+  //     }
+  //     const imageData = await imageResponse.json();
+  //     console.log("Image uploaded successfully:", imageData);
+  //     values.imagePath = imageData.imagePath;
+  //     const dataResponse = await fetch(
+  //       "http://localhost:3000/sell/information",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(values),
+  //       }
+  //     );
 
-      if (!dataResponse.ok) {
-        throw new Error("Data submission failed");
-      }
+  //     if (!dataResponse.ok) {
+  //       throw new Error("Data submission failed");
+  //     }
 
-      const data = await dataResponse.json();
-      console.log("Data saved successfully:", data);
+  //     const data = await dataResponse.json();
+  //     console.log("Data saved successfully:", data);
 
-      notification.success({
-        message: "Success",
-        description: "Your information has been submitted successfully!",
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
+  //     notification.success({
+  //       message: "Success",
+  //       description: "Your information has been submitted successfully!",
+  //     });
+  //   } catch (error) {
+  //     console.error("Error submitting form:", error);
 
-      notification.error({
-        message: "Error",
-        description:
-          "There was an error submitting the form. Please try again.",
-      });
+  //     notification.error({
+  //       message: "Error",
+  //       description:
+  //         "There was an error submitting the form. Please try again.",
+  //     });
 
-      setTimeout(() => {
-        navigate("/sell");
-      }, 2000);
-    }
-  };
+  //     setTimeout(() => {
+  //       navigate("/sell");
+  //     }, 2000);
+  //   }
+  // };
 
   const onFileChange = ({ fileList }) => {
     setFileList(fileList);
@@ -95,8 +95,8 @@ export default function Sell() {
               setFormValues(values);
               setCurrentStep(box === "yes" ? 2 : 1);
             }}
-            layout="vertical"
-          >
+           className="mt-5"
+           >
             <Form.Item
               label="Watch Name"
               name="watchName"
@@ -146,9 +146,11 @@ export default function Sell() {
                     setBox(e.target.value);
                   }}
                   value={box}
+                  
+                  buttonStyle="solid"
                 >
-                  <Radio value="yes">Yes</Radio>
-                  <Radio value="no">No</Radio>
+                  <Radio.Button value="yes">Yes</Radio.Button>
+                  <Radio.Button value="no">No</Radio.Button>
                 </Radio.Group>
               </Form.Item>
               {box === "yes" && (
@@ -242,9 +244,9 @@ export default function Sell() {
               },
             ]}
           >
-            <Radio.Group>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
+            <Radio.Group buttonStyle="solid">
+              <Radio.Button value="yes">Yes</Radio.Button>
+              <Radio.Button value="no">No</Radio.Button>
             </Radio.Group>
           </Form.Item>
           <Form.Item
@@ -257,9 +259,9 @@ export default function Sell() {
               },
             ]}
           >
-            <Radio.Group>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
+            <Radio.Group buttonStyle="solid">
+              <Radio.Button value="yes">Yes</Radio.Button>
+              <Radio.Button value="no">No</Radio.Button>
             </Radio.Group>
           </Form.Item>
           <Form.Item
@@ -272,9 +274,9 @@ export default function Sell() {
               },
             ]}
           >
-            <Radio.Group>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
+            <Radio.Group buttonStyle="solid">
+              <Radio.Button value="yes">Yes</Radio.Button>
+              <Radio.Button value="no">No</Radio.Button>
             </Radio.Group>
           </Form.Item>
           <Form.Item
@@ -376,7 +378,7 @@ export default function Sell() {
   ];
 
   return (
-    <div className="w-full max-w-full p-10 border border-gray-300 rounded-lg shadow-lg bg-white mx-5">
+    <div className="w-2/3 max-w-full p-10 border border-gray-300 rounded-lg shadow-lg bg-white mx-5 mt-10">
       <h1 className="text-center text-3xl font-bold mb-4">
         Information For Sell
       </h1>
