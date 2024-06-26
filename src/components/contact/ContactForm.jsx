@@ -1,5 +1,4 @@
 import React, { useState,useEffect } from "react";
-import styles from "../../styles/ContactStyle.module.css";
 import { Content } from "antd/es/layout/layout";
 export default function Contact() {
   const [formData, setFormData] = useState({
