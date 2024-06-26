@@ -155,13 +155,32 @@ export default function Sell() {
                 <>
                   <Form.Item
                     label="Upload Your watch appraisal certificate"
-                    name="boxImage"
+                    name="documents"
                     rules={[
                       { required: true, message: "Please upload an image" },
                     ]}
                   >
                     <Upload
-                      name="boxImage"
+                      name="documents"
+                      listType="picture"
+                      beforeUpload={() => false}
+                      onChange={onFileChange}
+                      fileList={fileList}
+                    >
+                      <Button size="large" icon={<UploadOutlined />}>
+                        Click to upload
+                      </Button>
+                    </Upload>
+                  </Form.Item>
+                  <Form.Item
+                    label="Image"
+                    name="image"
+                    rules={[
+                      { required: true, message: "Please upload an image" },
+                    ]}
+                  >
+                    <Upload
+                      name="image"
                       listType="picture"
                       beforeUpload={() => false}
                       onChange={onFileChange}
@@ -229,8 +248,8 @@ export default function Sell() {
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            label="Does your watch have original documents ?"
-            name="documents"
+            label="Does your watch have original paper ?"
+            name="paper"
             rules={[
               {
                 required: true,
@@ -310,7 +329,9 @@ export default function Sell() {
       title: "Submit",
       content: (
         <div>
-          <h2 className="text-center text-3xl font-bold mb-4">Check Information</h2>
+          <h2 className="text-center text-3xl font-bold mb-4">
+            Check Information
+          </h2>
           <div>
             <h3>Watch Name: {formValues.watchName}</h3>
             <h3>Your Name: {formValues.name}</h3>
