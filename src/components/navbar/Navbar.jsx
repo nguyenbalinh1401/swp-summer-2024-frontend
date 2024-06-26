@@ -14,7 +14,7 @@ export default function Navbar() {
     console.log("Sign out");
     sessionStorage.removeItem("signInUser");
     removeCookie("signInUser");
-    window.location.replace("/signin");
+    window.location.href = "/signin";
   };
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function Navbar() {
       key: "1",
       label: (
         <div
-          onClick={() => window.location.replace("/profile")}
+          onClick={() => (window.location.href = "/profile")}
           className="w-full min-w-fit flex items-center gap-2"
         >
           <svg
@@ -46,7 +46,7 @@ export default function Navbar() {
       key: "2",
       label: (
         <div
-          onClick={() => window.location.replace("/cart")}
+          onClick={() => (window.location.href = "/profile/manage-product")}
           className="w-full min-w-fit flex items-center gap-2"
         >
           <svg
@@ -56,9 +56,9 @@ export default function Navbar() {
             height="16"
             fill="currentColor"
           >
-            <path d="M4.00436 6.41686L0.761719 3.17422L2.17593 1.76001L5.41857 5.00265H20.6603C21.2126 5.00265 21.6603 5.45037 21.6603 6.00265C21.6603 6.09997 21.6461 6.19678 21.6182 6.29L19.2182 14.29C19.0913 14.713 18.7019 15.0027 18.2603 15.0027H6.00436V17.0027H17.0044V19.0027H5.00436C4.45207 19.0027 4.00436 18.5549 4.00436 18.0027V6.41686ZM6.00436 7.00265V13.0027H17.5163L19.3163 7.00265H6.00436ZM5.50436 23.0027C4.67593 23.0027 4.00436 22.3311 4.00436 21.5027C4.00436 20.6742 4.67593 20.0027 5.50436 20.0027C6.33279 20.0027 7.00436 20.6742 7.00436 21.5027C7.00436 22.3311 6.33279 23.0027 5.50436 23.0027ZM17.5044 23.0027C16.6759 23.0027 16.0044 22.3311 16.0044 21.5027C16.0044 20.6742 16.6759 20.0027 17.5044 20.0027C18.3328 20.0027 19.0044 20.6742 19.0044 21.5027C19.0044 22.3311 18.3328 23.0027 17.5044 23.0027Z"></path>
+            <path d="M21 13.2422V20H22V22H2V20H3V13.2422C1.79401 12.435 1 11.0602 1 9.5C1 8.67286 1.22443 7.87621 1.63322 7.19746L4.3453 2.5C4.52393 2.1906 4.85406 2 5.21132 2H18.7887C19.1459 2 19.4761 2.1906 19.6547 2.5L22.3575 7.18172C22.7756 7.87621 23 8.67286 23 9.5C23 11.0602 22.206 12.435 21 13.2422ZM19 13.9725C18.8358 13.9907 18.669 14 18.5 14C17.2409 14 16.0789 13.478 15.25 12.6132C14.4211 13.478 13.2591 14 12 14C10.7409 14 9.5789 13.478 8.75 12.6132C7.9211 13.478 6.75911 14 5.5 14C5.331 14 5.16417 13.9907 5 13.9725V20H19V13.9725ZM5.78865 4L3.35598 8.21321C3.12409 8.59843 3 9.0389 3 9.5C3 10.8807 4.11929 12 5.5 12C6.53096 12 7.44467 11.3703 7.82179 10.4295C8.1574 9.59223 9.3426 9.59223 9.67821 10.4295C10.0553 11.3703 10.969 12 12 12C13.031 12 13.9447 11.3703 14.3218 10.4295C14.6574 9.59223 15.8426 9.59223 16.1782 10.4295C16.5553 11.3703 17.469 12 18.5 12C19.8807 12 21 10.8807 21 9.5C21 9.0389 20.8759 8.59843 20.6347 8.19746L18.2113 4H5.78865Z"></path>
           </svg>
-          Cart
+          <p className="min-w-fit">Timepiece Management</p>
         </div>
       ),
     },
@@ -93,7 +93,7 @@ export default function Navbar() {
   return (
     <nav className="w-full h-20 bg-teal-950 font-montserrat flex items-center justify-between px-4 md:px-8 text-white">
       <button
-        onClick={() => window.location.replace("/")}
+        onClick={() => (window.location.href = "/")}
         className="w-1/3 flex items-center gap-4 font-bold text-[1.5em] md:text-[2.5em] min-w-fit"
       >
         <img src={logo} width={24} />
@@ -103,7 +103,7 @@ export default function Navbar() {
       {user ? (
         <div className="w-full flex justify-end gap-4 xl:gap-8 font-semibold text-sm">
           <button
-            onClick={() => window.location.replace("/products")}
+            onClick={() => (window.location.href = "/products")}
             className={`min-w-fit hidden lg:flex items-center gap-2 hover:text-slate-300 hover:underline underline-offset-8 ${
               window.location.pathname === "/products" &&
               "underline text-teal-400"
@@ -157,7 +157,7 @@ export default function Navbar() {
             ALL WATCHES
           </button>
           <button
-            onClick={() => window.location.replace("/sell")}
+            onClick={() => (window.location.href = "/sell")}
             className={`min-w-fit hidden lg:flex items-center gap-2 hover:text-slate-300 hover:underline underline-offset-8
             ${
               window.location.pathname === "/sell" && "underline text-teal-400"
@@ -175,7 +175,7 @@ export default function Navbar() {
             APPRAISE & SELL
           </button>
           <button
-            onClick={() => window.location.replace("/contact")}
+            onClick={() => (window.location.href = "/contact")}
             className={`min-w-fit hidden lg:flex items-center gap-2 hover:text-slate-300 hover:underline underline-offset-8
             ${
               window.location.pathname === "/contact" &&
@@ -212,7 +212,7 @@ export default function Navbar() {
       ) : (
         <button
           className="xs:min-w-fit flex items-center gap-2 hover:text-gray-800 border border-white p-2 rounded-xl hover:bg-white duration-300"
-          onClick={() => window.location.replace("/signin")}
+          onClick={() => (window.location.href = "/signin")}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

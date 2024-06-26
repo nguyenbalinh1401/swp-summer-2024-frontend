@@ -9,7 +9,7 @@ export default function LatestProducts({ list }) {
       </p>
       <div className="w-full flex justify-end px-16 mb-8 font-light">
         <button
-          onClick={() => window.location.replace("/products")}
+          onClick={() => (window.location.href = "/products")}
           className="flex items-center gap-2 hover:underline"
         >
           See more
