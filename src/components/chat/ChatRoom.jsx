@@ -1,18 +1,25 @@
 import { Avatar } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ScrollableFeed from "react-scrollable-feed";
 import anime from "animejs/lib/anime.es.js";
 import { generateNumericCode } from "../../assistants/generators";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  serverTimestamp,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../../firebase-config";
 
-export default function ChatRoom({ socket, user, room }) {
+export default function ChatRoom({ user, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [isAtBottom, setIsAtBottom] = useState(true);
 
-  useEffect(() => {
-    socket.emit("join_room", room);
-    console.log(`User ${socket.id} joined room ${room}`);
-  }, [room]);
+  const messageRef = collection(db, "messages");
 
   const sendMessage = async () => {
     if (currentMessage.trim() !== "") {
@@ -27,9 +34,9 @@ export default function ChatRoom({ socket, user, room }) {
           ":" +
           (new Date(Date.now()).getMinutes() < 10 ? "0" : "") +
           new Date(Date.now()).getMinutes(),
+        createdAt: serverTimestamp(),
       };
-
-      await socket.emit("send_message", messageData);
+      await addDoc(messageRef, messageData);
       setMessageList((current) => [...current, messageData]);
     }
     setCurrentMessage("");
@@ -43,6 +50,12 @@ export default function ChatRoom({ socket, user, room }) {
     }
   };
 
+  const handleEnterPressed = (e) => {
+    if (e.keyCode === 13) {
+      sendMessage();
+    }
+  };
+
   useEffect(() => {
     anime({
       targets: ".toBottomButton",
@@ -52,21 +65,24 @@ export default function ChatRoom({ socket, user, room }) {
       loop: true,
       easing: "easeInOutSine",
     });
-
-    const messageInput = document.getElementById("message-input");
-    messageInput?.addEventListener("keypress", (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        document.getElementById("send-message-btn").click();
-      }
-    });
   }, []);
 
-  useMemo(() => {
-    socket.on("receive_message", (data) => {
-      setMessageList((current) => [...current, data]);
+  useEffect(() => {
+    const queryMessages = query(
+      messageRef,
+      where("room", "==", room),
+      orderBy("createdAt", "asc")
+    );
+    const realTimeHandler = onSnapshot(queryMessages, (snapshot) => {
+      let tempMessages = [];
+      snapshot.forEach((doc) => {
+        tempMessages.push({ ...doc.data(), id: doc.id });
+      });
+      setMessageList(tempMessages);
     });
-  }, [socket]);
+
+    return () => realTimeHandler();
+  }, []);
 
   return (
     <div className="relative w-1/2 h-[85vh] rounded-r-xl bg-white border-l border-gray-400 flex flex-col items-start justify-end py-2">
@@ -182,6 +198,8 @@ export default function ChatRoom({ socket, user, room }) {
           value={currentMessage}
           placeholder="Enter message..."
           onChange={(e) => setCurrentMessage(e.target.value)}
+          onKeyDown={(e) => handleEnterPressed(e)}
+          className="w-full border border-gray-400 rounded-xl px-4 py-2"
         />
         <button
           disabled={currentMessage.trim().length === 0}
