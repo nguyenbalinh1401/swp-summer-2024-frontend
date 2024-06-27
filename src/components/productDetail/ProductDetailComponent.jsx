@@ -1,16 +1,43 @@
 import { Avatar, message } from "antd";
 import React, { useState } from "react";
 
-export default function ProductDetailComponent({ product }) {
-  const [messageApi, contextHolder] = message.useMessage();
+export default function ProductDetailComponent({ product, isInWishList }) {
+  const [wishListState, setWishListState] = useState(isInWishList);
 
-  const handleBuyNow = () => {
-    window.location.href = "/cart";
+  const addToFavorite = () => {
+    const wishList = sessionStorage.wishList
+      ? JSON.parse(sessionStorage.wishList)
+      : [];
+    if (wishList.length === 0) {
+      sessionStorage.setItem("wishList", JSON.stringify([product]));
+      message.success({
+        key: "wishList",
+        content: "Added to your wish list.",
+        duration: 5,
+      });
+      setWishListState(true);
+    } else {
+      if (wishList.some((item) => item.id === product.id)) {
+        message.info({
+          key: "wishList",
+          content: "Already added to your wish list.",
+          duration: 5,
+        });
+      } else {
+        wishList.push(product);
+        sessionStorage.setItem("wishList", JSON.stringify(wishList));
+        message.success({
+          key: "wishList",
+          content: "Added to your wish list.",
+          duration: 5,
+        });
+        setWishListState(true);
+      }
+    }
   };
 
   return (
     <div className="w-full flex flex-col justify-center font-montserrat gap-4">
-      {contextHolder}
       <div className="w-full flex items-center justify-between">
         <img src={product.image} alt="" className="w-[400px]" />
         <div className="w-1/2 flex flex-col items-start justify-between text-xl gap-8">
@@ -28,6 +55,9 @@ export default function ProductDetailComponent({ product }) {
             </p>
             <p className="text-[30px] font-bold">
               $ {Math.round(product.price * 100) / 100}
+            </p>
+            <p className="text-[30px] font-bold">
+              {isInWishList ? "true" : "false"}
             </p>
           </div>
 
@@ -47,21 +77,39 @@ export default function ProductDetailComponent({ product }) {
               </svg>
               Chat with the owner
             </button>
-            <button
-              onClick={handleBuyNow}
-              className="w-full flex items-center justify-center gap-2 rounded-md bg-teal-500 hover:bg-teal-700 font-bold text-sm text-white mx-auto py-3"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="currentColor"
+            {wishListState ? (
+              <button
+                onClick={addToFavorite}
+                className="w-full flex items-center justify-center gap-2 rounded-md bg-green-500 hover:bg-green-700 font-bold text-sm text-white mx-auto py-3 duration-200"
               >
-                <path d="M7.00488 7.99966V5.99966C7.00488 3.23824 9.24346 0.999664 12.0049 0.999664C14.7663 0.999664 17.0049 3.23824 17.0049 5.99966V7.99966H20.0049C20.5572 7.99966 21.0049 8.44738 21.0049 8.99966V20.9997C21.0049 21.5519 20.5572 21.9997 20.0049 21.9997H4.00488C3.4526 21.9997 3.00488 21.5519 3.00488 20.9997V8.99966C3.00488 8.44738 3.4526 7.99966 4.00488 7.99966H7.00488ZM7.00488 9.99966H5.00488V19.9997H19.0049V9.99966H17.0049V11.9997H15.0049V9.99966H9.00488V11.9997H7.00488V9.99966ZM9.00488 7.99966H15.0049V5.99966C15.0049 4.34281 13.6617 2.99966 12.0049 2.99966C10.348 2.99966 9.00488 4.34281 9.00488 5.99966V7.99966Z"></path>
-              </svg>
-              Buy now
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path d="M16.5 3C19.5376 3 22 5.5 22 9C22 16 14.5 20 12 21.5C9.5 20 2 16 2 9C2 5.5 4.5 3 7.5 3C9.35997 3 11 4 12 5C13 4 14.64 3 16.5 3ZM12.9339 18.6038C13.8155 18.0485 14.61 17.4955 15.3549 16.9029C18.3337 14.533 20 11.9435 20 9C20 6.64076 18.463 5 16.5 5C15.4241 5 14.2593 5.56911 13.4142 6.41421L12 7.82843L10.5858 6.41421C9.74068 5.56911 8.5759 5 7.5 5C5.55906 5 4 6.6565 4 9C4 11.9435 5.66627 14.533 8.64514 16.9029C9.39 17.4955 10.1845 18.0485 11.0661 18.6038C11.3646 18.7919 11.6611 18.9729 12 19.1752C12.3389 18.9729 12.6354 18.7919 12.9339 18.6038Z"></path>
+                </svg>
+                Added to wishlist
+              </button>
+            ) : (
+              <button
+                onClick={addToFavorite}
+                className="w-full flex items-center justify-center gap-2 rounded-md bg-red-500 hover:bg-red-700 font-bold text-sm text-white mx-auto py-3 duration-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                >
+                  <path d="M16.5 3C19.5376 3 22 5.5 22 9C22 16 14.5 20 12 21.5C9.5 20 2 16 2 9C2 5.5 4.5 3 7.5 3C9.35997 3 11 4 12 5C13 4 14.64 3 16.5 3ZM12.9339 18.6038C13.8155 18.0485 14.61 17.4955 15.3549 16.9029C18.3337 14.533 20 11.9435 20 9C20 6.64076 18.463 5 16.5 5C15.4241 5 14.2593 5.56911 13.4142 6.41421L12 7.82843L10.5858 6.41421C9.74068 5.56911 8.5759 5 7.5 5C5.55906 5 4 6.6565 4 9C4 11.9435 5.66627 14.533 8.64514 16.9029C9.39 17.4955 10.1845 18.0485 11.0661 18.6038C11.3646 18.7919 11.6611 18.9729 12 19.1752C12.3389 18.9729 12.6354 18.7919 12.9339 18.6038Z"></path>
+                </svg>
+                Add to wishlist
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -89,7 +137,7 @@ export default function ProductDetailComponent({ product }) {
             </div>
           </div>
           <div className="flex flex-row items-center justify-between flex-[100%] sm:flex-[45%] md:flex-[30%] lg:flex-[20%]">
-            <p className="font-bold">Year of production:</p>
+            <p className="font-bold">Year of manufacture:</p>
             <p className="font-light">{product.yearOfProduction}</p>
           </div>
           <div className="flex flex-row items-center justify-between flex-[100%] sm:flex-[45%] md:flex-[30%] lg:flex-[20%]">

@@ -5,14 +5,14 @@ import SignIn from "../../pages/Signin";
 import SignUp from "../../pages/SignUp";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
-import Cart from "../../pages/Cart";
 import ContactPage from "../../pages/ContactPage";
-import Products from "../../pages/ProductsList";
+import ProductList from "../../pages/ProductsList";
 import ThankYou from "../../pages/ThankYou";
 import Profile from "../../pages/Profile";
 import Sell from "../../pages/Sell";
 import Chat from "../../pages/Chat";
 import Appraisers from "../profile/Appraisers";
+import WishList from "../../pages/WishList";
 
 export default function AppRouter() {
   return (
@@ -21,9 +21,9 @@ export default function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/products" element={<ProductList />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<WishList />} />
         <Route path="/order_completed/:id" element={<ThankYou />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/manage-product" element={<Profile />} />
@@ -32,38 +32,6 @@ export default function AppRouter() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/appraisers" element={<Appraisers />} />
-        {/* <Route
-          path="/sellPage"
-          element={
-            <SellProvider>
-              <SellPage />
-            </SellProvider>
-          }
-        /> */}
-        {/* <Route
-          path="/lastActionSell"
-          element={
-            <SellProvider>
-              <LastActionSell />
-            </SellProvider>
-          }
-        /> */}
-        {/* <Route
-          path="/watchForm"
-          element={
-            <SellProvider>
-              <WatchForm />
-            </SellProvider>
-          }
-        /> */}
-        {/* <Route
-          path="/OtherBrandForm"
-          element={
-            <SellProvider>
-              <OtherBrandForm />
-            </SellProvider>
-          }
-        /> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
