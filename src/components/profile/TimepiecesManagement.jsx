@@ -182,7 +182,7 @@ export default function TimepiecesManagement({ list }) {
                 })}
               <Pagination
                 total={currentList.length}
-                pageSize={8}
+                pageSize={defaultPageSize}
                 hideOnSinglePage
                 size="default"
                 onChange={handlePageChange}

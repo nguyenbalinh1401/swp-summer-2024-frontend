@@ -7,7 +7,7 @@ export default function RelatedProductList({ list }) {
       <h2 className="text-2xl font-bold">Related Products</h2>
       <div className="max-w-[95vw] flex flex-row items-center justify-start gap-4 overflow-auto mx-auto">
         {list.map((relatedProduct) => (
-          <ProductCard product={relatedProduct} />
+          <ProductCard key={relatedProduct.id} product={relatedProduct} />
         ))}
       </div>
     </div>
