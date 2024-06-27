@@ -2,19 +2,13 @@ import { Avatar } from "antd";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export default function RoomItem({ room, socket }) {
+export default function RoomItem({ room }) {
   const roomId = useParams().id;
   const currentlySelected = roomId && room === roomId;
 
-  const joinRoom = () => {
-    socket.emit("join_room", room);
-    console.log(`User ${socket.id} joined room ${room}`);
-    window.location.replace(`/chat/${room}`);
-  };
-
   return (
     <div
-      onClick={() => joinRoom()}
+      onClick={() => (window.location.href = `/chat/${room}`)}
       className={`w-full flex items-center justify-between gap-2 p-2 cursor-default border-b border-gray-200 ${
         currentlySelected ? "bg-slate-200" : "bg-white hover:bg-slate-100"
       }`}
