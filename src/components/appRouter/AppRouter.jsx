@@ -17,7 +17,6 @@ import StaffDashboard from "../StaffDashboard";
 import SellRequestDetail from "../SellRequestDetail";
 import ReportPage from "../ReportPage";
 
-
 export default function AppRouter() {
   return (
     <div className="w-full min-h-[80vh] flex items-start justify-center">
@@ -37,15 +36,9 @@ export default function AppRouter() {
         <Route path="/sell" element={<Sell />} />
         <Route path="/appraisers" element={<Appraisers />} />
         <Route path="*" element={<NotFound />} />
-        
-        
-        
-        
-        <Route path="/staffDashboard" element={<StaffDashboard/>}/>
+        <Route path="/staffDashboard" element={<StaffDashboard />} />
         <Route path="/sell-request/:id" element={<SellRequestDetail />} />
-
-        <Route path="/reportPage" element={<ReportPage/>}/>
-        
+        <Route path="/reportPage" element={<ReportPage />} />
       </Routes>
     </div>
   );
