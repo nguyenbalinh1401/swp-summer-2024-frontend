@@ -4,7 +4,7 @@ import { Modal } from "antd";
 export default function ProductEdit({ open, setOpen, product }) {
   const [name, setName] = useState(product.name);
   const [box, setBox] = useState(product.box);
-  
+
   const handleEdit = () => {
     console.log("Name: ", name);
     console.log("Box: ", box);

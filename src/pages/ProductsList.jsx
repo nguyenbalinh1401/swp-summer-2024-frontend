@@ -23,13 +23,11 @@ export default function ProductList() {
 
   const fetchBrandList = async () => {
     await axios
-      .get("http://localhost:3000/product")
+      .get("http://localhost:3000/product/brand")
       .then((res) => {
         let tempBrandList = [];
         res.data.map((item) => {
-          if (!tempBrandList.some((i) => i === item.brand)) {
-            tempBrandList.push(item.brand);
-          }
+          tempBrandList.push(item.brand);
         });
         setBrandList(tempBrandList);
       })
@@ -63,7 +61,6 @@ export default function ProductList() {
       if (!current) {
         current = currentList;
       }
-      console.log("Sort order: ", value);
       let temp = [...current];
       let sorted = [];
       if (value === "price_asc") {
@@ -87,7 +84,6 @@ export default function ProductList() {
           return new Date(b.createdAt) - new Date(a.createdAt);
         });
       }
-      console.log("Sorted list: ", sorted);
       setCurrentList(sorted);
     }
   };

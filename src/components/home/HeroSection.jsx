@@ -14,7 +14,7 @@ export default function HeroSection() {
         </p>
         <button
           onClick={() => (window.location.href = "/products")}
-          className="w-3/4 min-w-fit text-md md:text-2xl bg-white font-semibold py-2 md:py-4 rounded-xl text-black border-white hover:border hover:bg-[#CDBE4A] hover:text-slate-100 duration-300 mt-16"
+          className="w-3/4 min-w-fit text-md md:text-2xl bg-white font-semibold py-2 md:py-4 rounded-xl text-black border-white hover:border hover:bg-[#CDBE4A] hover:border-black duration-300 mt-16"
         >
           SHOP NOW
         </button>

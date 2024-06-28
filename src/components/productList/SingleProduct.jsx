@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import { Avatar, message, Tooltip } from "antd";
+import CurrencySplitter from "../../assistants/currencySpliter";
 
 export default function SingleProduct({
   product,
@@ -85,7 +86,7 @@ export default function SingleProduct({
       />
       <div className="absolute inset-0 transition-opacity duration-300 peer-hover:opacity-0 pointer-events-none"></div>
       <div
-        onClick={() => window.location.replace(`/product/${product.id}`)}
+        onClick={() => (window.location.href = `/product/${product.id}`)}
         className="w-full absolute bottom-0 left-0 text-white overflow-hidden z-10 group/semi cursor-pointer"
       >
         <div className="w-full px-2 py-4 text-[1em] font-semibold bg-white text-black">
@@ -94,19 +95,20 @@ export default function SingleProduct({
           </p>
           <div className="w-full flex items-center justify-between">
             <p className="text-xs font-light opacity-70">{product.brand}</p>
-            <p className="text-xs font-light opacity-70">
-              {isWishList ? "true" : "false"}
-            </p>
             <p className="text-sm text-red-600">
-              $ {Math.round(product.price * 100) / 100}
+              $ {CurrencySplitter(Math.round(product.price * 100) / 100)}
             </p>
           </div>
           <div className="w-full flex items-center justify-between text-[0.7em] mt-2">
             <div className="flex items-center gap-1">
               <Avatar src={product.owner.avatar} alt="" size={16} />
-              <p className="">{product.owner.username}</p>
+              <p className="font-medium max-w-20 text-nowrap text-ellipsis overflow-hidden">
+                {product.owner.username}
+              </p>
             </div>
-            <p className="font-light">{moment(product.updatedAt).fromNow()}</p>
+            <p className="font-light min-w-fit">
+              {moment(product.updatedAt).fromNow()}
+            </p>
           </div>
         </div>
       </div>
