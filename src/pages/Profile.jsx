@@ -3,11 +3,13 @@ import UserProfile from "../components/profile/UserProfile";
 import ProfileCharts from "../components/profile/ProfileCharts";
 import OrderHistory from "../components/profile/OrderHistory";
 import axios from "axios";
+import TimepiecesManagement from "../components/profile/TimepiecesManagement";
 
 export default function Profile() {
   const user =
     sessionStorage.signInUser && JSON.parse(sessionStorage.signInUser);
   const [orders, setOrders] = useState([]);
+  const [userProducts, setUserProducts] = useState([]);
 
   const fetchUserOrder = async () => {
     await axios
@@ -18,18 +20,56 @@ export default function Profile() {
       .catch((err) => console.log(err));
   };
 
+  const fetchProductListOfUser = async () => {
+    await axios
+      .get(`http://localhost:3000/product/user/${user.id}`)
+      .then((res) => {
+        setUserProducts(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     fetchUserOrder();
+    fetchProductListOfUser();
   }, []);
 
   return (
-    <div className="w-full min-h-[80vh] flex items-start justify-center gap-8 p-16 bg-slate-100">
-      <div className="w-1/3">
-        <UserProfile />
+    <div className="w-full min-h-[80vh] flex flex-col items-start justify-center gap-8 p-16 bg-slate-100">
+      <div className="w-full flex items-start justify-center gap-8 overflow-auto">
+        <div className="w-1/3">
+          <UserProfile />
+        </div>
+        <ProfileCharts orderList={orders} productList={userProducts} />
       </div>
-      <div className="w-2/3 flex flex-col items-center justify-start gap-8 overflow-auto">
-        <ProfileCharts list={orders} />
-        <OrderHistory list={orders} />
+      <div className="w-full flex items-start justify-center gap-4 overflow-hidden">
+        <div className="bg-white w-1/4 flex flex-col gap-1 rounded-lg px-2 py-2">
+          <button
+            onClick={() => (window.location.href = "/profile")}
+            className={`${
+              window.location.pathname === "/profile"
+                ? "bg-cyan-900 text-white"
+                : "hover:bg-slate-100 text-black"
+            }  rounded-xl text-lg duration-200 py-1`}
+          >
+            Orders
+          </button>
+          <button
+            onClick={() => (window.location.href = "/profile/manage-product")}
+            className={`${
+              window.location.pathname === "/profile/manage-product"
+                ? "bg-cyan-900 text-white"
+                : "bg-slate-100 hover:bg-slate-200 text-black"
+            }  rounded-xl text-lg duration-200 py-1`}
+          >
+            Timepieces Management
+          </button>
+        </div>
+        {window.location.pathname === "/profile" ? (
+          <OrderHistory list={orders} />
+        ) : (
+          <TimepiecesManagement list={userProducts} />
+        )}
       </div>
     </div>
   );

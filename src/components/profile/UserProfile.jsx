@@ -13,13 +13,30 @@ export default function UserProfile() {
   }, []);
 
   return (
-    <div className="w-full bg-white flex flex-col items-center justify-center gap-4 rounded-xl px-8 py-16">
+    <div className="w-full bg-white flex flex-col items-center justify-center gap-4 rounded-xl px-8 py-8 overflow-hidden">
       {contextHolder}
-      <div className="w-1/4 rounded-full overflow-hidden">
-        <img src={user.avatar} alt="" className="w-full" />
+      <div className="flex gap-2">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-1/2 rounded-full overflow-hidden">
+            <img src={user.avatar} alt="" className="w-full" />
+          </div>
+          <p className="text-lg font-bold">{user.username}</p>
+        </div>
+        <div className="flex flex-col gap-1">
+          <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-4 py-2">
+            <p className="text-xs opacity-70">Email:</p>
+            <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
+              {user.email}
+            </p>
+          </div>
+          <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-4 py-2">
+            <p className="text-xs opacity-70">Phone number:</p>
+            <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
+              {user.phone}
+            </p>
+          </div>
+        </div>
       </div>
-      <p className="text-xl font-bold">{user.username}</p>
-
       <button
         onClick={() => {
           messageApi.open({
@@ -29,7 +46,7 @@ export default function UserProfile() {
             duration: 5,
           });
         }}
-        className="flex items-center gap-2 bg-sky-300 hover:bg-sky-500 px-8 py-3 font-semibold text-black rounded-3xl mb-8 duration-300"
+        className="flex items-center gap-2 bg-sky-300 hover:bg-sky-500 px-8 py-3 font-semibold text-black rounded-3xl duration-300"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -42,19 +59,6 @@ export default function UserProfile() {
         </svg>
         EDIT PROFILE
       </button>
-
-      <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-8 py-4">
-        <p className="text-xs opacity-70">Email:</p>
-        <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
-          {user.email}
-        </p>
-      </div>
-      <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-8 py-4">
-        <p className="text-xs opacity-70">Phone number:</p>
-        <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
-          {user.phone}
-        </p>
-      </div>
     </div>
   );
 }

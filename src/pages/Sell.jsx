@@ -96,7 +96,8 @@ export default function Sell() {
               setCurrentStep(box === "yes" ? 2 : 1);
             }}
            className="mt-5"
-           >
+           layout="vertical"
+          >
             <Form.Item
               label="Watch Name"
               name="watchName"
@@ -378,7 +379,7 @@ export default function Sell() {
   ];
 
   return (
-    <div className="w-2/3 max-w-full p-10 border border-gray-300 rounded-lg shadow-lg bg-white mx-5 mt-10">
+    <div className="w-2/3 max-w-full p-10 border border-gray-300 rounded-lg shadow-lg bg-white mx-5 mt-10 mb-10">
       <h1 className="text-center text-3xl font-bold mb-4">
         Information For Sell
       </h1>
