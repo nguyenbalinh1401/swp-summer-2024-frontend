@@ -12,6 +12,7 @@ export default function FilterSidebar({
   const [selectedBrandList, setSelectedBrandList] = useState([]);
 
   const handleSearch = (e) => {
+    setSelectedBrandList([]);
     setKey(e.target.value);
     getSearchKey(e.target.value);
   };

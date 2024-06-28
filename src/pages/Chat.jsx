@@ -1,24 +1,67 @@
 import React, { useEffect, useState } from "react";
 import ChatRoom from "../components/chat/ChatRoom";
-import { generateChatRoomId } from "../assistants/generators";
 import { useParams } from "react-router-dom";
 import RoomList from "../components/chat/RoomList";
+import axios from "axios";
+import UnselectedChatRoom from "../components/chat/UnselectedChatRoom";
+import Loading from "../components/loading/Loading";
+import { message } from "antd";
 
 export default function Chat() {
   const user = sessionStorage.signInUser
     ? JSON.parse(sessionStorage.signInUser)
     : null;
-  const room = useParams().id;
+  const chatRoomId = useParams().id;
+  const [chatRoomList, setChatRoomList] = useState([]);
+  const [isRendered, setIsRendered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  return (
-    <div className="w-full min-h-[90vh] bg-slate-100 flex items-center justify-center">
-      <RoomList />
+  const fetchUserChatRoom = async () => {
+    setIsLoading(true);
+    await axios
+      .get(`http://localhost:3000/chatRoom/user/${user.id}`)
+      .then((res) => {
+        res.data.map(async (chatRoomToUser) => {
+          await axios
+            .get(
+              `http://localhost:3000/chatRoom/butUser/${user.id}/${chatRoomToUser.chatRoom.id}`
+            )
+            .then((response) => {
+              setChatRoomList((current) => [...current, response.data]);
+            })
+            .catch((err) => console.log(err));
+        });
+      })
+      .catch((err) => console.log(err));
+    setIsLoading(false);
+  };
 
-      {room ? (
-        <ChatRoom user={user} room={room} />
-      ) : (
-        <div className="">SELECT ROOM</div>
-      )}
-    </div>
-  );
+  useEffect(() => {
+    if (sessionStorage.deleteChat) {
+      message.info({
+        key: "deleteChat",
+        content: "Successfully deleted!",
+        duration: 5,
+      });
+      sessionStorage.removeItem("deleteChat");
+    }
+    if (!isRendered) {
+      setIsRendered(true);
+      return () => fetchUserChatRoom();
+    }
+  }, []);
+
+  if (isLoading && chatRoomList.length === 0) return <Loading />;
+  else
+    return (
+      <div className="w-full min-h-[90vh] bg-slate-100 flex items-center justify-center">
+        <RoomList list={chatRoomList} />
+
+        {chatRoomId ? (
+          <ChatRoom user={user} chatRoomId={chatRoomId} />
+        ) : (
+          <UnselectedChatRoom />
+        )}
+      </div>
+    );
 }

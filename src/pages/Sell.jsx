@@ -6,7 +6,6 @@ import {
   Upload,
   message,
   notification,
-  Radio,
   InputNumber,
   Steps,
 } from "antd";

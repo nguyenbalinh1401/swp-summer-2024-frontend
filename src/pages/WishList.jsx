@@ -66,11 +66,12 @@ export default function WishList() {
           <p className="text-gray-600">EMPTY WISH LIST</p>
         </div>
       ) : (
-        <div className="w-2/3 flex flex-wrap justify-start gap-4">
+        <div className="w-2/3 flex flex-wrap justify-start gap-4 px-4 pb-16">
           {currentList.map((product) => {
             return (
               <WishListItem
                 key={product.id}
+                user={user}
                 product={product}
                 getRemoveItem={getRemoveItem}
               />
