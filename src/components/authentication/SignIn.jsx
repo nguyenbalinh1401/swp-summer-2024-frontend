@@ -60,7 +60,7 @@ export default function SignIn() {
       setTimeout(() => {
         setIsAutoSigningIn(false);
         window.location.replace("/");
-      }, 2000);
+      }, 1000);
     }
   };
 

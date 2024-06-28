@@ -282,6 +282,7 @@ export default function ChatRoom({ user, chatRoomId }) {
                                 placement={
                                   mes.authorId === user.id ? "left" : "right"
                                 }
+                                mouseEnterDelay={0.5}
                               >
                                 <p
                                   className={`px-4 py-2 rounded-[30px] max-w-96 break-words ${
@@ -330,6 +331,7 @@ export default function ChatRoom({ user, chatRoomId }) {
             type="text"
             autoComplete="off"
             value={currentMessage}
+            maxLength={1500}
             placeholder="Enter message..."
             onChange={(e) => setCurrentMessage(e.target.value)}
             onKeyDown={(e) => handleEnterPressed(e)}
@@ -377,7 +379,7 @@ export default function ChatRoom({ user, chatRoomId }) {
             ?
           </p>
           <p className="text-xs italic text-gray-600">
-            Chat history will be also permanently deleted.
+            Chat history will be deleted permanently.
           </p>
           <div className="w-full flex items-center justify-end gap-8 mt-8">
             <button

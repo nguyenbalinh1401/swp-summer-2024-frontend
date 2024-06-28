@@ -163,8 +163,9 @@ export default function TimepiecesManagement({ list }) {
               type="text"
               placeholder="Search..."
               onChange={(e) => {
-                searchProductByNameAndBrand(e.target.value);
+                searchProductByNameAndBrand(e.target.value.trim());
               }}
+              className="p-2 rounded-xl"
             />
           </div>
 
