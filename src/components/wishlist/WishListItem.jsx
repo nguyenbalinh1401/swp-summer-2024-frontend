@@ -1,18 +1,14 @@
 import { Avatar } from "antd";
 import React, { useState } from "react";
-import Loading from "../loading/Loading";
 import axios from "axios";
 import { generateChatRoomId } from "../../assistants/generators";
 
 export default function WishListItem({ user, product, getRemoveItem }) {
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleRemove = () => {
     getRemoveItem(product);
   };
 
   const handleChat = async () => {
-    setIsLoading(true);
     await axios
       .get(`http://localhost:3000/chatRoom/user/${user.id}`)
       .then(async (res) => {
@@ -43,7 +39,6 @@ export default function WishListItem({ user, product, getRemoveItem }) {
             })
             .then((res) => {
               console.log("CREATE ROOM CHAT: ", res.data);
-              setIsLoading(false);
               window.location.href = `/chat/${newRoomCode}`;
             })
             .catch((err) => console.log(err));
@@ -53,11 +48,14 @@ export default function WishListItem({ user, product, getRemoveItem }) {
 
   return (
     <div className="basis-[32%] shrink bg-white drop-shadow-md flex flex-col justify-between gap-2 p-4 rounded-md">
-      <div className="flex justify-between gap-2">
+      <div
+        onClick={() => (window.location.href = `/product/${product.id}`)}
+        className="flex justify-between gap-2 cursor-pointer group"
+      >
         <img src={product.image} alt="" className="w-16 h-16 rounded-full" />
         <div className="w-full flex flex-col items-start gap-2 text-xs">
           <p className="opacity-70">{product.brand}</p>
-          <p className="font-semibold">{product.name}</p>
+          <p className="font-semibold group-hover:underline">{product.name}</p>
           <p>$ {Math.round(product.price * 100) / 100}</p>
           <div className="flex items-center gap-1">
             <p className="text-[0.7em] opacity-80">owned by</p>
@@ -66,10 +64,10 @@ export default function WishListItem({ user, product, getRemoveItem }) {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-center items-center gap-2 text-xs py-2">
+      <div className="w-full flex justify-center items-center gap-2 text-xs py-2 font-semibold">
         <button
           onClick={handleChat}
-          className="flex items-center gap-2 border border-gray-400 rounded-md px-4 py-2 hover:bg-slate-100 text-nowrap"
+          className="flex items-center gap-2 border border-green-700 text-green-700 rounded-md px-4 py-2 hover:bg-green-800 hover:text-white duration-200 text-nowrap"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +82,7 @@ export default function WishListItem({ user, product, getRemoveItem }) {
         </button>
         <button
           onClick={handleRemove}
-          className="flex items-center gap-2 bg-red-600 text-white rounded-md p-2 hover:bg-red-800"
+          className="flex items-center gap-2 bg-red-600 text-white rounded-md p-2 hover:bg-red-800 duration-200"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

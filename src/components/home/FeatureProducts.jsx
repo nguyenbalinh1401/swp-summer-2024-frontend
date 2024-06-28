@@ -37,7 +37,7 @@ export default function FeatureProducts({ list }) {
                     onClick={() =>
                       (window.location.href = `/product/${item.id}`)
                     }
-                    className="w-3/4 font-light text-xl bg-black text-white rounded-md py-2 hover:bg-gray-400 hover:text-black duration-300"
+                    className="w-3/4 font-light text-xl bg-black text-white rounded-md py-2 hover:bg-white hover:text-black hover:border border-black duration-300"
                   >
                     View details
                   </button>
