@@ -1,8 +1,17 @@
 import { Avatar, message } from "antd";
+import axios from "axios";
 import React, { useState } from "react";
+import { generateChatRoomId } from "../../assistants/generators";
+import Loading from "../loading/Loading";
+import CurrencySplitter from "../../assistants/currencySpliter";
 
-export default function ProductDetailComponent({ product, isInWishList }) {
+export default function ProductDetailComponent({
+  user,
+  product,
+  isInWishList,
+}) {
   const [wishListState, setWishListState] = useState(isInWishList);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addToFavorite = () => {
     const wishList = sessionStorage.wishList
@@ -36,8 +45,49 @@ export default function ProductDetailComponent({ product, isInWishList }) {
     }
   };
 
+  const handleChat = async () => {
+    setIsLoading(true);
+    await axios
+      .get(`http://localhost:3000/chatRoom/user/${user.id}`)
+      .then(async (res) => {
+        console.log("LIST OF USER CHAT ROOMS: ", res.data);
+        res.data.map(async (item) => {
+          await axios
+            .get(
+              `http://localhost:3000/chatRoom/butUser/${user.id}/${item.chatRoom.id}`
+            )
+            .then((res) => {
+              if (
+                res.data.participant.id === product.owner.id &&
+                res.data.chatRoom.product.id === product.id
+              ) {
+                window.location.href = `/chat/${res.data.chatRoom.code}`;
+                return;
+              }
+            });
+        });
+        setTimeout(async () => {
+          const newRoomCode = generateChatRoomId();
+          console.log("New room code: ", newRoomCode);
+          await axios
+            .post("http://localhost:3000/chatRoom", {
+              code: newRoomCode,
+              product: product.id,
+              participants: [user.id, product.owner.id],
+            })
+            .then((res) => {
+              console.log("CREATE ROOM CHAT: ", res.data);
+              setIsLoading(false);
+              window.location.href = `/chat/${newRoomCode}`;
+            })
+            .catch((err) => console.log(err));
+        }, 2000);
+      });
+  };
+
   return (
     <div className="w-full flex flex-col justify-center font-montserrat gap-4">
+      {isLoading && <Loading />}
       <div className="w-full flex items-center justify-between">
         <img src={product.image} alt="" className="w-[400px]" />
         <div className="w-1/2 flex flex-col items-start justify-between text-xl gap-8">
@@ -54,28 +104,38 @@ export default function ProductDetailComponent({ product, isInWishList }) {
               </span>
             </p>
             <p className="text-[30px] font-bold">
-              $ {Math.round(product.price * 100) / 100}
-            </p>
-            <p className="text-[30px] font-bold">
-              {isInWishList ? "true" : "false"}
+              $ {CurrencySplitter(Math.round(product.price * 100) / 100)}
             </p>
           </div>
 
           <div className="w-full flex flex-col gap-2">
             <button
-              onClick={() => {}}
-              className={`w-full flex items-center justify-center gap-2 rounded-md font-bold text-teal-700 text-sm border border-teal-700 hover:bg-slate-100 mx-auto py-3 transition-all duration-500`}
+              disabled={user.id === product.owner.id}
+              onClick={handleChat}
+              className={`w-full flex items-center justify-center gap-2 rounded-md font-bold
+               text-white text-sm bg-sky-600 hover:bg-sky-700 disabled:cursor-not-allowed disabled:bg-gray-400
+               mx-auto py-3 transition-all duration-200`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="currentColor"
-              >
-                <path d="M2 8.99374C2 5.68349 4.67654 3 8.00066 3H15.9993C19.3134 3 22 5.69478 22 8.99374V21H8.00066C4.68659 21 2 18.3052 2 15.0063V8.99374ZM20 19V8.99374C20 6.79539 18.2049 5 15.9993 5H8.00066C5.78458 5 4 6.78458 4 8.99374V15.0063C4 17.2046 5.79512 19 8.00066 19H20ZM14 11H16V13H14V11ZM8 11H10V13H8V11Z"></path>
-              </svg>
-              Chat with the owner
+              {user.id === product.owner.id ? (
+                <>Owned</>
+              ) : (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                  >
+                    <path d="M2 8.99374C2 5.68349 4.67654 3 8.00066 3H15.9993C19.3134 3 22 5.69478 22 8.99374V21H8.00066C4.68659 21 2 18.3052 2 15.0063V8.99374ZM20 19V8.99374C20 6.79539 18.2049 5 15.9993 5H8.00066C5.78458 5 4 6.78458 4 8.99374V15.0063C4 17.2046 5.79512 19 8.00066 19H20ZM14 11H16V13H14V11ZM8 11H10V13H8V11Z"></path>
+                  </svg>
+                  Chat with{" "}
+                  <span className="flex items-center gap-2">
+                    <Avatar size={16} src={product.owner.avatar} />{" "}
+                    {product.owner.username}
+                  </span>
+                </>
+              )}
             </button>
             {wishListState ? (
               <button
@@ -89,14 +149,16 @@ export default function ProductDetailComponent({ product, isInWishList }) {
                   height="16"
                   fill="currentColor"
                 >
-                  <path d="M16.5 3C19.5376 3 22 5.5 22 9C22 16 14.5 20 12 21.5C9.5 20 2 16 2 9C2 5.5 4.5 3 7.5 3C9.35997 3 11 4 12 5C13 4 14.64 3 16.5 3ZM12.9339 18.6038C13.8155 18.0485 14.61 17.4955 15.3549 16.9029C18.3337 14.533 20 11.9435 20 9C20 6.64076 18.463 5 16.5 5C15.4241 5 14.2593 5.56911 13.4142 6.41421L12 7.82843L10.5858 6.41421C9.74068 5.56911 8.5759 5 7.5 5C5.55906 5 4 6.6565 4 9C4 11.9435 5.66627 14.533 8.64514 16.9029C9.39 17.4955 10.1845 18.0485 11.0661 18.6038C11.3646 18.7919 11.6611 18.9729 12 19.1752C12.3389 18.9729 12.6354 18.7919 12.9339 18.6038Z"></path>
+                  <path d="M9.9997 15.1709L19.1921 5.97852L20.6063 7.39273L9.9997 17.9993L3.63574 11.6354L5.04996 10.2212L9.9997 15.1709Z"></path>
                 </svg>
                 Added to wishlist
               </button>
             ) : (
               <button
                 onClick={addToFavorite}
-                className="w-full flex items-center justify-center gap-2 rounded-md bg-red-500 hover:bg-red-700 font-bold text-sm text-white mx-auto py-3 duration-200"
+                className={`w-full flex items-center justify-center gap-2 rounded-md border border-red-500 font-bold text-sm text-red-500 hover:bg-stone-100 mx-auto py-3 duration-200 ${
+                  user.id === product.owner.id && "hidden"
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +167,7 @@ export default function ProductDetailComponent({ product, isInWishList }) {
                   height="16"
                   fill="currentColor"
                 >
-                  <path d="M16.5 3C19.5376 3 22 5.5 22 9C22 16 14.5 20 12 21.5C9.5 20 2 16 2 9C2 5.5 4.5 3 7.5 3C9.35997 3 11 4 12 5C13 4 14.64 3 16.5 3ZM12.9339 18.6038C13.8155 18.0485 14.61 17.4955 15.3549 16.9029C18.3337 14.533 20 11.9435 20 9C20 6.64076 18.463 5 16.5 5C15.4241 5 14.2593 5.56911 13.4142 6.41421L12 7.82843L10.5858 6.41421C9.74068 5.56911 8.5759 5 7.5 5C5.55906 5 4 6.6565 4 9C4 11.9435 5.66627 14.533 8.64514 16.9029C9.39 17.4955 10.1845 18.0485 11.0661 18.6038C11.3646 18.7919 11.6611 18.9729 12 19.1752C12.3389 18.9729 12.6354 18.7919 12.9339 18.6038Z"></path>
+                  <path d="M16.5 3C19.5376 3 22 5.5 22 9C22 16 14.5 20 12 21.5C9.5 20 2 16 2 9C2 5.5 4.5 3 7.5 3C9.35997 3 11 4 12 5C13 4 14.64 3 16.5 3Z"></path>
                 </svg>
                 Add to wishlist
               </button>

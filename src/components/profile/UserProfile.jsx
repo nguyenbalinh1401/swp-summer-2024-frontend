@@ -13,28 +13,28 @@ export default function UserProfile() {
   }, []);
 
   return (
-    <div className="w-full bg-white flex flex-col items-center justify-center gap-4 rounded-xl px-8 py-8 overflow-hidden">
+    <div className="w-full bg-white flex flex-col items-center justify-center gap-4 rounded-xl px-8 py-8">
       {contextHolder}
-      <div className="flex gap-2">
-        <div className="flex flex-col items-center gap-2">
-          <div className="w-1/2 rounded-full overflow-hidden">
-            <img src={user.avatar} alt="" className="w-full" />
-          </div>
-          <p className="text-lg font-bold">{user.username}</p>
+      <div className="w-full flex flex-col items-start justify-center gap-2">
+        <div className="w-1/2 flex items-center gap-2">
+          <img src={user.avatar} alt="" className="w-8" />
+          <p className="text-lg font-bold min-w-fit max-w-96 text-nowrap text-ellipsis overflow-hidden">
+            {user.username}
+          </p>
         </div>
-        <div className="flex flex-col gap-1">
-          <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-4 py-2">
-            <p className="text-xs opacity-70">Email:</p>
-            <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
-              {user.email}
-            </p>
-          </div>
-          <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-4 py-2">
-            <p className="text-xs opacity-70">Phone number:</p>
-            <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
-              {user.phone}
-            </p>
-          </div>
+      </div>
+      <div className="w-full min-w-fit flex flex-col gap-1">
+        <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-4 py-2">
+          <p className="text-xs opacity-70">Email:</p>
+          <p className="max-w-96 text-nowrap overflow-hidden text-ellipsis">
+            {user.email}
+          </p>
+        </div>
+        <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-4 py-2">
+          <p className="text-xs opacity-70">Phone number:</p>
+          <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
+            {user.phone || "Not yet provided"}
+          </p>
         </div>
       </div>
       <button

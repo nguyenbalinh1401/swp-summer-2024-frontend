@@ -92,6 +92,17 @@ export default function SignIn() {
     }
   };
 
+  const updateActiveStatus = async (id) => {
+    await axios
+      .patch(`http://localhost:3000/auth/active_status/${id}`)
+      .then((res) => {
+        sessionStorage.setItem("updated", "yes");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleSignIn = async () => {
     if (signInEmail.length > 0 && signInPassword.length > 0) {
       setIsLoading(true);
@@ -101,10 +112,11 @@ export default function SignIn() {
           email: signInEmail,
           password: signInPassword,
         })
-        .then((res) => {
+        .then(async (res) => {
           console.log(res.data);
+          const account = jwtDecode(res.data.metadata);
+          await updateActiveStatus(account.id);
           setTimeout(() => {
-            const account = jwtDecode(res.data.metadata);
             sessionStorage.setItem("signInUser", JSON.stringify(account));
             if (rememberSignIn) {
               setCookie("signInUser", JSON.stringify(account));
@@ -118,7 +130,12 @@ export default function SignIn() {
               duration: 5,
             });
             setIsLoading(false);
-            window.location.replace("/");
+            if (sessionStorage.signInRedirect) {
+              window.location.replace(`${sessionStorage.signInRedirect}`);
+              sessionStorage.removeItem("signInRedirect");
+            } else {
+              window.location.replace("/");
+            }
           }, 2000);
         })
         .catch((err) => {
@@ -143,19 +160,19 @@ export default function SignIn() {
 
   const onGoogleSuccess = async (credentialResponse) => {
     const googleLoginData = jwtDecode(credentialResponse.credential);
-    console.log("Google login: ", googleLoginData);
-    console.log(
-      "GET: ",
-      `http://localhost:3000/auth/email/${googleLoginData.email}`
-    );
     await axios
       .get(`http://localhost:3000/auth/email/${googleLoginData.email}`)
-      .then((res) => {
-        console.log("ACCOUNT: ", res.data);
+      .then(async (res) => {
         const found = res.data;
         if (found.email === googleLoginData.email) {
+          await updateActiveStatus(found.id);
           sessionStorage.setItem("signInUser", JSON.stringify(found));
-          window.location.replace("/");
+          if (sessionStorage.signInRedirect) {
+            window.location.replace(`${sessionStorage.signInRedirect}`);
+            sessionStorage.removeItem("signInRedirect");
+          } else {
+            window.location.replace("/");
+          }
         } else {
           messageApi.open({
             key: "signInStatus",
@@ -181,7 +198,12 @@ export default function SignIn() {
               "signInUser",
               JSON.stringify(res.data.metadata)
             );
-            window.location.replace("/");
+            if (sessionStorage.signInRedirect) {
+              window.location.replace(`${sessionStorage.signInRedirect}`);
+              sessionStorage.removeItem("signInRedirect");
+            } else {
+              window.location.replace("/");
+            }
           })
           .catch((err) => console.log(err));
       });
