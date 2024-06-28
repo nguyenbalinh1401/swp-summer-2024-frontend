@@ -39,10 +39,20 @@ const ProductEdit = ({ open, setOpen, product }) => {
     });
     setOpen(false);
   };
+  const handleFileChange = (e) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <Modal
-      title="Edit Product"
       open={open}
       onCancel={() => setOpen(false)}
       footer={[
@@ -54,16 +64,24 @@ const ProductEdit = ({ open, setOpen, product }) => {
         </Button>,
       ]}
     >
+      <h1 className="text-xl text-bold">Product Information</h1>
       <Form layout="vertical" initialValues={product}>
-        <Form.Item label="Image URL" name="image">
-          <Input value={image} onChange={(e) => setImage(e.target.value)} />
+        <Form.Item name="image">
+        <Row gutter={16} align="middle">
+            <Col span={20}>
+              <img src={image} alt="Product" className="w-full mb-2" style={{ maxHeight: "300px", objectFit: "contain" }} />
+            </Col>
+            <Col span={6}>
+              <input type="file" onChange={handleFileChange} accept="image/*" />
+            </Col>
+          </Row>
         </Form.Item>
         
         <Form.Item label="Product Name" name="name" rules={[{ required: true, message: "Please enter the product name" }]}>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Form.Item>
 
-        <Form.Item label="Description" name="description">
+        <Form.Item label="Description" name="description" className="fit">
           <Input.TextArea value={description} onChange={(e) => setDescription(e.target.value)} />
         </Form.Item>
 
