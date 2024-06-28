@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, message, Tag } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { SellRequestStatus } from './create-sell-request.dto'; // Import enum if required
+
 
 export default function StaffDashboard() {
   const [sellRequests, setSellRequests] = useState([]);
@@ -34,11 +34,7 @@ export default function StaffDashboard() {
       title: "Status", 
       dataIndex: "status", 
       key: "status",
-      render: (status) => (
-        <Tag color={status === SellRequestStatus.APPROVED ? 'green' : 'volcano'}>
-          {status.toUpperCase()}
-        </Tag>
-      ),
+      
     },
     {
       title: "Action",

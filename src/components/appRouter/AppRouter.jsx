@@ -16,10 +16,11 @@ import Products from "../../pages/ProductsList";
 import ThankYou from "../../pages/ThankYou";
 import Profile from "../../pages/Profile";
 import Sell from "../../pages/Sell";
-import OtherBrandForm from "../OtherBrandForm";
+// import OtherBrandForm from "../OtherBrandForm";
 import StaffDashboard from "../StaffDashboard";
 import SellRequestDetail from "../SellRequestDetail";
 import ReportPage from "../ReportPage";
+
 
 export default function AppRouter() {
   return (
@@ -37,9 +38,11 @@ export default function AppRouter() {
         
         
         <Route path="/staffDashboard" element={<StaffDashboard/>}/>
-        <Route path="/sellRequestDetail" element={<SellRequestDetail/>}/>
+        <Route path="/sell-request/:id" element={<SellRequestDetail />} />
+
         <Route path="/reportPage" element={<ReportPage/>}/>
-        <Route
+        <Route path="/sell" element={<Sell/>}/>
+        {/* <Route
           path="/SellPage"
           element={
             <SellProvider>
@@ -70,7 +73,7 @@ export default function AppRouter() {
               <OtherBrandForm />
             </SellProvider>
           }
-        />
+        /> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
