@@ -16,6 +16,7 @@
     "animejs": "^3.2.2",
     "antd": "^5.18.0",
     "axios": "^1.7.2",
+    "firebase": "^10.12.2",
     "flowbite": "^2.3.0",
     "formik": "^2.4.6",
     "framer-motion": "^11.2.10",
