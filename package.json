@@ -13,8 +13,10 @@
     "@emailjs/browser": "^4.3.3",
     "@hookform/resolvers": "^3.6.0",
     "@react-oauth/google": "^0.12.1",
+    "animejs": "^3.2.2",
     "antd": "^5.18.0",
     "axios": "^1.7.2",
+    "firebase": "^10.12.2",
     "flowbite": "^2.3.0",
     "formik": "^2.4.6",
     "framer-motion": "^11.2.10",
@@ -26,8 +28,10 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.52.0",
     "react-router-dom": "^6.23.1",
+    "react-scrollable-feed": "^2.0.2",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.7.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {

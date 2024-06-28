@@ -2,6 +2,13 @@ import React from "react";
 import logo from "../logoSVG/logo.svg";
 
 export default function Footer() {
+  if (
+    window.location.pathname.match("/chat") ||
+    window.location.pathname === "/signin" ||
+    window.location.pathname === "/signup"
+  )
+    return;
+
   return (
     <footer className="w-full bg-teal-950 h-24 flex items-center justify-between text-white px-8 py-4">
       <div className="flex flex-col items-start gap-1">

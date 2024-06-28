@@ -14,7 +14,7 @@ export default function ProductCard({ product }) {
       />
       <div className="absolute inset-0 transition-opacity duration-300 peer-hover:opacity-0 pointer-events-none"></div>
       <div className="w-full absolute bottom-0 left-0 text-white overflow-hidden z-10">
-        <div className="w-full px-2 py-4 text-[1em] font-semibold bg-gray-700">
+        <div className="w-full px-2 py-4 text-[1em] font-semibold bg-white text-black">
           <p className="max-w-64 text-nowrap text-ellipsis overflow-hidden group-hover:underline">
             {product.name}
           </p>

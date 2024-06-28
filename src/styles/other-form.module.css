@@ -10,14 +10,14 @@
 }
 
 .formGroup {
-    margin-bottom: 10px; /* Giảm khoảng cách giữa các nhóm trường */
+    margin-bottom: 10px;
 }
 
-label {
+/* label {
     display: block;
-    margin-bottom: 3px; /* Giảm khoảng cách giữa nhãn và trường nhập */
+    margin-bottom: 3px;
     font-weight: bold;
-    font-size: 14px; /* Giảm kích thước của chữ */
+    font-size: 14px;
 }
 
 input[type="text"],
@@ -28,7 +28,7 @@ select,
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px; /* Giảm kích thước của chữ */
+    font-size: 14px;
 }
 
 input[type="color"] {
@@ -47,8 +47,8 @@ select {
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 20px;
-    font-size: 14px; /* Giảm kích thước của chữ */
-}
+    font-size: 14px; 
+} */
 
 .checkbox-label {
     display: flex;
@@ -75,8 +75,8 @@ select {
 }
 
 h1 {
-    text-align: center; /* Căn giữa tiêu đề */
-    font-size: 24px; /* Điều chỉnh kích thước tiêu đề */
-    margin-bottom: 20px; /* Tạo khoảng cách dưới tiêu đề */
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
     font-weight: bold;
 }

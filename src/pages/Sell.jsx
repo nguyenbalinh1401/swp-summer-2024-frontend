@@ -19,7 +19,9 @@ export default function Sell() {
   const [fileList, setFileList] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [box, setBox] = useState(null);
+  const [formValues, setFormValues] = useState({});
   const navigate = useNavigate();
+
   const onFinish = async (values) => {
     try {
       if (fileList.length === 0) {
@@ -87,7 +89,14 @@ export default function Sell() {
       title: "Check",
       content: (
         <>
-          <Form form={form} onFinish={onFinish} layout="vertical">
+          <Form
+            form={form}
+            onFinish={(values) => {
+              setFormValues(values);
+              setCurrentStep(box === "yes" ? 2 : 1);
+            }}
+            layout="vertical"
+          >
             <Form.Item
               label="Watch Name"
               name="watchName"
@@ -121,88 +130,111 @@ export default function Sell() {
                 style={{ width: "98.5%" }}
               />
             </Form.Item>
-          </Form>
-          <div className="flex flex-col items-start">
-            <Form.Item
-              label="Does your watch have an appraisal certificate yet ?"
-              name="box"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select Yes or No",
-                },
-              ]}
-            >
-              <Radio.Group
-                onChange={(e) => {
-                  setBox(e.target.value);
-                }}
-                value={box}
-              >
-                <Radio value="yes">Yes</Radio>
-                <Radio value="no">No</Radio>
-              </Radio.Group>
-            </Form.Item>
-            {box === "yes" && (
-              <><Form.Item
-                label="Upload Your watch appraisal certificate"
-                name="boxImage"
-                rules={[{ required: true, message: "Please upload an image" }]}
-              >
-                <Upload
-                  name="boxImage"
-                  listType="picture"
-                  beforeUpload={() => false}
-                  onChange={onFileChange}
-                  fileList={fileList}
-                >
-                  <Button size="large" icon={<UploadOutlined />}>
-                    Click to upload
-                  </Button>
-                </Upload>
-              </Form.Item>
+            <div className="flex flex-col items-start">
               <Form.Item
-                label="Price you want to sell"
-                name="price"
-                rules={[{ required: true, message: "Please enter the price" }]}
-                layout="vertical"
-                className="flex flex-col"
+                label="Does your watch have an appraisal certificate yet ?"
+                name="box"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select Yes or No",
+                  },
+                ]}
               >
-                  <InputNumber
-                    controls={false}
-                    size="large"
-                    min={0}
-                    style={{ width: "1380px" }} />
-                </Form.Item></>
-            )}
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Form.Item>
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={() => {
-                    if (box === "yes") {
-                      setCurrentStep(2);
-                    } else {
-                      setCurrentStep(1);
-                    }
+                <Radio.Group
+                  onChange={(e) => {
+                    setBox(e.target.value);
                   }}
+                  value={box}
                 >
-                  Next
-                </Button>
+                  <Radio value="yes">Yes</Radio>
+                  <Radio value="no">No</Radio>
+                </Radio.Group>
               </Form.Item>
+              {box === "yes" && (
+                <>
+                  <Form.Item
+                    label="Upload Your watch appraisal certificate"
+                    name="documents"
+                    rules={[
+                      { required: true, message: "Please upload an image" },
+                    ]}
+                  >
+                    <Upload
+                      name="documents"
+                      listType="picture"
+                      beforeUpload={() => false}
+                      onChange={onFileChange}
+                      fileList={fileList}
+                    >
+                      <Button size="large" icon={<UploadOutlined />}>
+                        Click to upload
+                      </Button>
+                    </Upload>
+                  </Form.Item>
+                  <Form.Item
+                    label="Image"
+                    name="image"
+                    rules={[
+                      { required: true, message: "Please upload an image" },
+                    ]}
+                  >
+                    <Upload
+                      name="image"
+                      listType="picture"
+                      beforeUpload={() => false}
+                      onChange={onFileChange}
+                      fileList={fileList}
+                    >
+                      <Button size="large" icon={<UploadOutlined />}>
+                        Click to upload
+                      </Button>
+                    </Upload>
+                  </Form.Item>
+                  <Form.Item
+                    label="Price you want to sell"
+                    name="price"
+                    rules={[
+                      { required: true, message: "Please enter the price" },
+                    ]}
+                    layout="vertical"
+                    className="flex flex-col"
+                  >
+                    <InputNumber
+                      controls={false}
+                      size="large"
+                      min={0}
+                      style={{ width: "1380px" }}
+                    />
+                  </Form.Item>
+                </>
+              )}
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Form.Item>
+                  <Button type="primary" size="large" htmlType="submit">
+                    Next
+                  </Button>
+                </Form.Item>
+              </div>
             </div>
-          </div>
+          </Form>
         </>
       ),
     },
     {
       title: "Information",
       content: (
-        <Form form={form} onFinish={onFinish} layout="vertical">
+        <Form
+          form={form}
+          onFinish={(values) => {
+            setFormValues((prev) => ({ ...prev, ...values }));
+            setCurrentStep(2);
+          }}
+          layout="vertical"
+        >
           <Form.Item
             label="Do you have original box ?"
-            name="box"
+            name="originalBox"
             rules={[
               {
                 required: true,
@@ -216,8 +248,8 @@ export default function Sell() {
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            label="Does your watch have original documents ?"
-            name="documents"
+            label="Does your watch have original paper ?"
+            name="paper"
             rules={[
               {
                 required: true,
@@ -285,11 +317,7 @@ export default function Sell() {
               </Button>
             </Form.Item>
             <Form.Item>
-              <Button
-                type="primary"
-                size="large"
-                onClick={() => setCurrentStep(currentStep + 1)}
-              >
+              <Button type="primary" size="large" htmlType="submit">
                 Next
               </Button>
             </Form.Item>
@@ -301,7 +329,27 @@ export default function Sell() {
       title: "Submit",
       content: (
         <div>
-          <h2>Submit Step</h2>
+          <h2 className="text-center text-3xl font-bold mb-4">
+            Check Information
+          </h2>
+          <div>
+            <h3>Watch Name: {formValues.watchName}</h3>
+            <h3>Your Name: {formValues.name}</h3>
+            <h3>Phone Number: {formValues.phoneNumber}</h3>
+            {box === "no" && (
+              <>
+                <h3>Do you have original box? {formValues.originalBox}</h3>
+                <h3>
+                  Does your watch have original documents?{" "}
+                  {formValues.documents}
+                </h3>
+                <h3>
+                  Is your watch a limited edition? {formValues.limitedEdition}
+                </h3>
+              </>
+            )}
+            <h3>Price you want to sell: {formValues.price}</h3>
+          </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Form.Item>
               <Button
@@ -326,8 +374,9 @@ export default function Sell() {
       ),
     },
   ];
+
   return (
-    <div className="w-full max-w-full p-10 border border-gray-300 rounded-lg shadow-lg bg-white mx-5">
+    <div className="w-2/3 max-w-full p-10 border border-gray-300 rounded-lg shadow-lg bg-white mx-5">
       <h1 className="text-center text-3xl font-bold mb-4">
         Information For Sell
       </h1>
