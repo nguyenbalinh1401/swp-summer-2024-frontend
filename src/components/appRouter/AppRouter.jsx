@@ -13,7 +13,6 @@ import Chat from "../../pages/Chat";
 import ThankYou from "../../pages/ThankYou";
 import Profile from "../../pages/Profile";
 import Sell from "../../pages/Sell";
-// import OtherBrandForm from "../OtherBrandForm";
 import StaffDashboard from "../StaffDashboard";
 import SellRequestDetail from "../SellRequestDetail";
 import ReportPage from "../ReportPage";
