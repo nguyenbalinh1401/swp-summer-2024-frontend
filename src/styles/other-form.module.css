@@ -1,9 +1,9 @@
-.formContainerOther {
-    border: 1px solid #8d0606; /* Viền màu xám nhạt */
-    border-radius: 5px; /* Đường cong viền */
-    padding: 15px; /* Giảm khoảng cách giữa nội dung và viền */
-    margin: 20px; /* Tạo khoảng cách giữa form và các phần tử xung quanh */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiển thị bóng đổ */
+/*.formContainerOther {
+    border: 1px solid #8d0606; 
+    border-radius: 5px;
+    padding: 15px; 
+    margin: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 50%;
     height: 100%;
     margin-top: 100px;
@@ -12,7 +12,7 @@
 .formGroup {
     margin-bottom: 10px;
 }
-
+*/
 /* label {
     display: block;
     margin-bottom: 3px;
@@ -48,20 +48,20 @@ select {
     background-position: right 10px center;
     background-size: 20px;
     font-size: 14px; 
-} */
+} 
 
 .checkbox-label {
     display: flex;
     align-items: center;
     font-weight: normal;
-    font-size: 14px; /* Giảm kích thước của chữ */
+    font-size: 14px; 
 }
 
 .buttonOther {
-    display: block; /* Biến nút thành phần block để có thể căn giữa */
-    margin: 0 auto; /* Căn nút ra giữa theo chiều ngang */
+    display: block; 
+    margin: 0 auto; 
     padding: 10px 20px;
-    border: 1px solid #141515; /* Thêm viền xung quanh */
+    border: 1px solid #141515; 
     border-radius: 5px;
     background-color: #c5c6ca;
     color: #000000;
@@ -71,7 +71,7 @@ select {
 
 .buttonOther:hover {
     background-color: #0056b3;
-    border-color: #0056b3; /* Thay đổi màu viền khi di chuột qua */
+    border-color: #0056b3; 
 }
 
 h1 {
@@ -80,3 +80,4 @@ h1 {
     margin-bottom: 20px;
     font-weight: bold;
 }
+*/

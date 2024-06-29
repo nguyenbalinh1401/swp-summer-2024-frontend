@@ -5,14 +5,17 @@ import SignIn from "../../pages/Signin";
 import SignUp from "../../pages/SignUp";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
-import ContactPage from "../../pages/ContactPage";
 import ProductList from "../../pages/ProductsList";
+import Appraisers from "../profile/Appraisers";
+import ContactPage from "../../pages/ContactPage";
+import WishList from "../../pages/WishList";
+import Chat from "../../pages/Chat";
 import ThankYou from "../../pages/ThankYou";
 import Profile from "../../pages/Profile";
 import Sell from "../../pages/Sell";
-import Chat from "../../pages/Chat";
-import Appraisers from "../profile/Appraisers";
-import WishList from "../../pages/WishList";
+import StaffDashboard from "../StaffDashboard";
+import SellRequestDetail from "../SellRequestDetail";
+import ReportPage from "../ReportPage";
 import TestProductEdit from "../../pages/TestProductEdit";
 
 
@@ -36,6 +39,9 @@ export default function AppRouter() {
         <Route path="/sell" element={<Sell />} />
         <Route path="/appraisers" element={<Appraisers />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/staffDashboard" element={<StaffDashboard />} />
+        <Route path="/sell-request/:id" element={<SellRequestDetail />} />
+        <Route path="/reportPage" element={<ReportPage />} />
       </Routes>
     </div>
   );
