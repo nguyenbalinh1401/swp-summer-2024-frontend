@@ -175,6 +175,7 @@ export default function Sell() {
             <label className="col-span-1 self-center">Watch Name</label>
             <div className="col-span-2">
               <Input
+                
                 size="large"
                 name="watchName"
                 style={{ width: "70%" }}

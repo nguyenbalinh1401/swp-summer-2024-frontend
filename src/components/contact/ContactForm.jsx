@@ -33,8 +33,9 @@ export default function Contact() {
       });
   }, []);
   return (
-    <Content className="flex items-center justify-center mt-6 bg-gray-100">
-      <div className="w-full max-w-full p-8 space-y-6 bg-white shadow-md rounded-lg">
+    <div className="container mx-auto px-4 ">
+      <div className="w-2/3 mx-auto bg-white p-8 rounded-lg shadow-lg overflow-hidden mt-10">
+        <div className="bg-gray-100 px-6 py-4 border-b border-gray-200">
         <h1 className="text-3xl font-semibold text-center text-gray-800">Contact Us</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-600">
@@ -81,6 +82,7 @@ export default function Contact() {
           </button>
         </form>
       </div>
-    </Content>
+    </div>
+    </div>
   );
 }
