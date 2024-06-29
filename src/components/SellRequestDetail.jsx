@@ -79,6 +79,15 @@ export default function SellRequestDetail() {
             onChange={(e) => handleInputChange("image", e.target.value)}
           />
         </Descriptions.Item>
+
+        <Descriptions.Item label="ImageSet">
+          <Input
+            value={sellRequest.imageSet}
+            onChange={(e) => handleInputChange("imageSet", e.target.value)}
+          />
+        </Descriptions.Item>
+
+
         <Descriptions.Item label="Price">
           <Input
             value={sellRequest.price}
