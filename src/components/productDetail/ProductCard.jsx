@@ -1,10 +1,11 @@
 import React from "react";
 import moment from "moment";
+import CurrencySplitter from "../../assistants/currencySpliter";
 
 export default function ProductCard({ product }) {
   return (
     <div
-      onClick={() => window.location.replace(`/product/${product.id}`)}
+      onClick={() => (window.location.href = `/product/${product.id}`)}
       className="bg-gray-700 min-w-64 max-w-64 h-80 flex flex-col border border-gray-400 rounded-lg relative cursor-pointer overflow-hidden group"
     >
       <img
@@ -19,7 +20,7 @@ export default function ProductCard({ product }) {
             {product.name}
           </p>
           <p className="text-sm font-light">
-            $ {Math.round(product.price * 100) / 100}
+            $ {CurrencySplitter(Math.round(product.price * 100) / 100)}
           </p>
           <p className="text-xs font-thin mt-2 flex items-center gap-1">
             <svg

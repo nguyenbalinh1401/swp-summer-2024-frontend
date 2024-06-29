@@ -6,6 +6,9 @@ import axios from "axios";
 import Loading from "../components/loading/Loading";
 
 export default function ProductDetail() {
+  const user = sessionStorage.signInUser
+    ? JSON.parse(sessionStorage.signInUser)
+    : null;
   const { id } = useParams();
   const [product, setProduct] = useState();
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -36,7 +39,11 @@ export default function ProductDetail() {
   ) : (
     <div className="w-full min-h-[70vh] flex flex-col items-center gap-16 py-8">
       <div className="w-2/3">
-        <ProductDetailComponent product={product} isInWishList={isInWishList} />
+        <ProductDetailComponent
+          user={user}
+          product={product}
+          isInWishList={isInWishList}
+        />
       </div>
       <RelatedProductList list={relatedProducts} />
     </div>
