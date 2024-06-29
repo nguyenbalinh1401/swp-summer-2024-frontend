@@ -175,7 +175,7 @@ export default function Sell() {
               <Input
                 size="large"
                 name="watchName"
-                style={{width: "43%"}}
+                style={{width: "65%"}}
                 value={formData.watchName}
                 onChange={handleChange}
               />
@@ -187,7 +187,7 @@ export default function Sell() {
               <Input
                 size="large"
                 name="name"
-                style={{width: "43%"}}
+                style={{width: "65%"}}
                 value={formData.name}
                 onChange={handleChange}
               />
@@ -200,7 +200,7 @@ export default function Sell() {
                 controls={false}
                 size="large"
                 min={0}
-                style={{ width: "43%" }}
+                style={{ width: "65%" }}
                 value={formData.phoneNumber}
                 onChange={(value) => handleNumberChange("phoneNumber", value)}
               />
@@ -263,7 +263,7 @@ export default function Sell() {
                     controls={false}
                     size="large"
                     min={0}
-                    style={{ width: "43%" }}
+                    style={{ width: "65%" }}
                     value={formData.priceWantToSell}
                     onChange={(value) =>
                       handleNumberChange("priceWantToSell", value)
@@ -347,7 +347,7 @@ export default function Sell() {
                 controls={false}
                 size="large"
                 min={0}
-                style={{ width: "43%" }}
+                style={{ width: "65%" }}
                 value={formData.priceWantToSell}
                 onChange={(value) =>
                   handleNumberChange("priceWantToSell", value)
@@ -407,7 +407,7 @@ export default function Sell() {
   ];
   return (
     <div className="container mx-auto px-4">
-      <div className="w-full mx-auto bg-white p-8 rounded shadow">
+      <div className="w-2/3 mx-auto bg-white p-8 rounded shadow">
         <Steps current={formData.currentStep}>
           {steps.map((item, index) => (
             <Step key={index} title={item.title} />
