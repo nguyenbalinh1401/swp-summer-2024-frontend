@@ -7,21 +7,19 @@ export default function ToggleButton({ value, name, onChange })  {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-center" }}>
-      <span style={{ marginRight: "10px" }}> 
-        
-      </span>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start" }}>
+      
       <Button
         type={value === "yes" ? "primary" : "default"}
         onClick={() => handleClick("yes")}
-        style={{ margin: "0 5px", minWidth: "80px" }}  
+        style={{ minWidth: "200px" }}  
       >
         Yes
       </Button>
       <Button
         type={value === "no" ? "primary" : "default"}
         onClick={() => handleClick("no")}
-        style={{ margin: "0 5px", minWidth: "80px" }} 
+        style={{minWidth: "200px" }} 
       >
         No
       </Button>

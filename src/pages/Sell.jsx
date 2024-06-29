@@ -168,86 +168,108 @@ export default function Sell() {
     {
       title: "Check",
       content: (
-        <div className="flex flex-col ">
-          <div className="mb-4">
-            <label>Watch Name</label>
-            <Input
-              size="large"
-              name="watchName"
-              value={formData.watchName}
-              onChange={handleChange}
-            />
+        <div className="flex flex-col space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">Watch Name</label>
+            <div className="col-span-2">
+              <Input
+                size="large"
+                name="watchName"
+                style={{width: "43%"}}
+                value={formData.watchName}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label>Your Name</label>
-            <Input
-              size="large"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">Your Name</label>
+            <div className="col-span-2">
+              <Input
+                size="large"
+                name="name"
+                style={{width: "43%"}}
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label>Phone Number</label>
-            <InputNumber
-              controls={false}
-              size="large"
-              min={0}
-              style={{ width: "98.5%" }}
-              value={formData.phoneNumber}
-              onChange={(value) => handleNumberChange("phoneNumber", value)}
-            />
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">Phone Number</label>
+            <div className="col-span-2">
+              <InputNumber
+                controls={false}
+                size="large"
+                min={0}
+                style={{ width: "43%" }}
+                value={formData.phoneNumber}
+                onChange={(value) => handleNumberChange("phoneNumber", value)}
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label>Does your watch have an appraisal certificate yet?</label>
-            <ToggleButton
-              name="box"
-              onChange={handleChange}
-              value={formData.box}
-            />
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Does your watch have an appraisal certificate yet?
+            </label>
+            <div className="col-span-2">
+              <ToggleButton
+                name="box"
+                onChange={handleChange}
+                value={formData.box}
+              />
+            </div>
           </div>
           {formData.box === "yes" && (
             <>
-              <div className="mb-4">
-                <label>Upload Your watch appraisal certificate</label>
-                <Upload
-                  name="documents"
-                  listType="picture"
-                  beforeUpload={() => false}
-                  onChange={handleFileChange}
-                  fileList={formData.fileList}
-                >
-                  <Button size="large" icon={<UploadOutlined />}>
-                    Click to upload
-                  </Button>
-                </Upload>
+              <div className="grid grid-cols-3 gap-4">
+                <label className="col-span-1 self-center">
+                  Upload Your watch appraisal certificate
+                </label>
+                <div className="col-span-2">
+                  <Upload
+                    name="documents"
+                    listType="picture"
+                    beforeUpload={() => false}
+                    onChange={handleFileChange}
+                    fileList={formData.fileList}
+                  >
+                    <Button size="large" icon={<UploadOutlined />}>
+                      Click to upload
+                    </Button>
+                  </Upload>
+                </div>
               </div>
-              <div className="mb-4">
-                <label>Image</label>
-                <Upload
-                  name="image"
-                  listType="picture"
-                  beforeUpload={() => false}
-                  onChange={handleFileChange}
-                  fileList={formData.fileList}
-                >
-                  <Button size="large" icon={<UploadOutlined />}>
-                    Click to upload
-                  </Button>
-                </Upload>
+              <div className="grid grid-cols-3 gap-4">
+                <label className="col-span-1 self-center">Image</label>
+                <div className="col-span-2">
+                  <Upload
+                    name="image"
+                    listType="picture"
+                    beforeUpload={() => false}
+                    onChange={handleFileChange}
+                    fileList={formData.fileList}
+                  >
+                    <Button size="large" icon={<UploadOutlined />}>
+                      Click to upload
+                    </Button>
+                  </Upload>
+                </div>
               </div>
-              <div className="mb-4">
-                <label>Price you want to sell</label>
-                <InputNumber
-                  controls={false}
-                  size="large"
-                  min={0}
-                  style={{ width: "98.5%" }}
-                  value={formData.priceWantToSell}
-                  onChange={(value) =>
-                    handleNumberChange("priceWantToSell", value)
-                  }
-                />
+              <div className="grid grid-cols-3 gap-4">
+                <label className="col-span-1 self-center">
+                  Price you want to sell
+                </label>
+                <div className="col-span-2">
+                  <InputNumber
+                    controls={false}
+                    size="large"
+                    min={0}
+                    style={{ width: "43%" }}
+                    value={formData.priceWantToSell}
+                    onChange={(value) =>
+                      handleNumberChange("priceWantToSell", value)
+                    }
+                  />
+                </div>
               </div>
             </>
           )}
@@ -262,55 +284,76 @@ export default function Sell() {
     {
       title: "Information",
       content: (
-        <div className="flex flex-col">
-          <div className="mb-4">
-            <label>Do you have original box?</label>
-            <ToggleButton
-              name="originalBox"
-              onChange={handleChange}
-              value={formData.originalBox}
-            />
+        <div className="flex flex-col space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Do you have original box?
+            </label>
+            <div className="col-span-2">
+              <ToggleButton
+                name="originalBox"
+                onChange={handleChange}
+                value={formData.originalBox}
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <p >Does your watch have original paper?</p>
-            <ToggleButton
-            name="paper"
-            onChange={handleChange}
-            value={formData.paper}
-          />
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Does your watch have original paper?
+            </label>
+            <div className="col-span-2">
+              <ToggleButton
+                name="paper"
+                onChange={handleChange}
+                value={formData.paper}
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label>Is your watch a limited edition?</label>
-            <ToggleButton
-              name="limitedEdition"
-              onChange={handleChange}
-              value={formData.limitedEdition}
-            />
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Is your watch a limited edition?
+            </label>
+
+            <div className="col-span-2">
+              <ToggleButton
+                name="limitedEdition"
+                onChange={handleChange}
+                value={formData.limitedEdition}
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label>Image</label>
-            <Upload
-              name="image"
-              listType="picture"
-              beforeUpload={() => false}
-              onChange={handleFileChange}
-              fileList={formData.fileList}
-            >
-              <Button size="large" icon={<UploadOutlined />}>
-                Click to upload
-              </Button>
-            </Upload>
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">Image</label>
+            <div className="col-span-2">
+              <Upload
+                name="image"
+                listType="picture"
+                beforeUpload={() => false}
+                onChange={handleFileChange}
+                fileList={formData.fileList}
+              >
+                <Button size="large" icon={<UploadOutlined />}>
+                  Click to upload
+                </Button>
+              </Upload>
+            </div>
           </div>
-          <div className="mb-4">
-            <label>Price you want to sell</label>
-            <InputNumber
-              controls={false}
-              size="large"
-              min={0}
-              style={{ width: "98.5%" }}
-              value={formData.priceWantToSell}
-              onChange={(value) => handleNumberChange("priceWantToSell", value)}
-            />
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Price you want to sell
+            </label>
+            <div className="col-span-2">
+              <InputNumber
+                controls={false}
+                size="large"
+                min={0}
+                style={{ width: "43%" }}
+                value={formData.priceWantToSell}
+                onChange={(value) =>
+                  handleNumberChange("priceWantToSell", value)
+                }
+              />
+            </div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Button type="primary" size="large" onClick={handlePrevious}>
@@ -327,7 +370,8 @@ export default function Sell() {
       title: "Review",
       content: (
         <>
-          <h3>Review your details and click Submit.</h3>
+          <div className="flex flex-col space-y-4">
+          <label className="col-span-1 self-center">Review your details and click Submit.</label>
           <p>Watch Name: {formData.watchName}</p>
           <p>Your Name: {formData.name}</p>
           <p>Phone Number: {formData.phoneNumber}</p>
@@ -355,6 +399,7 @@ export default function Sell() {
             <Button type="primary" size="large" onClick={handleSubmit}>
               Submit
             </Button>
+          </div>
           </div>
         </>
       ),
