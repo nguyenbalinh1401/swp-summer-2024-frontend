@@ -32,6 +32,8 @@ export default function Sell() {
     paper: "",
     limitedEdition: "",
     currentStep: 0,
+    appraisalTypeList: [],
+    imageList: [],
   });
   // const [currentStep, setCurrentStep] = useState(0);
   // const [box, setBox] = useState(null);
@@ -63,13 +65,13 @@ export default function Sell() {
     });
   };
 
-  const handleFileChange = (info) => {
-    let files = [...info.fileList];
-    files = files.slice(-1);
-    setFormData({
-      ...formData,
-      [fileType]: files,
-    });
+  const handleFileChange = (name) => (info) => {
+    let fileList = [...info.fileList];
+    fileList = fileList.slice(-1);
+    setFormData((preState) => ({
+      ...preState,
+      [name]: fileList,
+    }));
   };
 
   const handleNext = () => {
@@ -175,7 +177,7 @@ export default function Sell() {
               <Input
                 size="large"
                 name="watchName"
-                style={{width: "65%"}}
+                style={{ width: "70%" }}
                 value={formData.watchName}
                 onChange={handleChange}
               />
@@ -187,7 +189,7 @@ export default function Sell() {
               <Input
                 size="large"
                 name="name"
-                style={{width: "65%"}}
+                style={{ width: "70%" }}
                 value={formData.name}
                 onChange={handleChange}
               />
@@ -200,7 +202,7 @@ export default function Sell() {
                 controls={false}
                 size="large"
                 min={0}
-                style={{ width: "65%" }}
+                style={{ width: "70%" }}
                 value={formData.phoneNumber}
                 onChange={(value) => handleNumberChange("phoneNumber", value)}
               />
@@ -229,8 +231,8 @@ export default function Sell() {
                     name="documents"
                     listType="picture"
                     beforeUpload={() => false}
-                    onChange={handleFileChange}
-                    fileList={formData.fileList}
+                    onChange={handleFileChange("appraisalTypeList")}
+                    fileList={formData.appraisalTypeList}
                   >
                     <Button size="large" icon={<UploadOutlined />}>
                       Click to upload
@@ -245,8 +247,8 @@ export default function Sell() {
                     name="image"
                     listType="picture"
                     beforeUpload={() => false}
-                    onChange={handleFileChange}
-                    fileList={formData.fileList}
+                    onChange={handleFileChange("imageList")}
+                    fileList={formData.imageList}
                   >
                     <Button size="large" icon={<UploadOutlined />}>
                       Click to upload
@@ -263,7 +265,7 @@ export default function Sell() {
                     controls={false}
                     size="large"
                     min={0}
-                    style={{ width: "65%" }}
+                    style={{ width: "70%" }}
                     value={formData.priceWantToSell}
                     onChange={(value) =>
                       handleNumberChange("priceWantToSell", value)
@@ -329,8 +331,8 @@ export default function Sell() {
                 name="image"
                 listType="picture"
                 beforeUpload={() => false}
-                onChange={handleFileChange}
-                fileList={formData.fileList}
+                onChange={handleFileChange("imageList")}
+                fileList={formData.imageList}
               >
                 <Button size="large" icon={<UploadOutlined />}>
                   Click to upload
@@ -347,7 +349,7 @@ export default function Sell() {
                 controls={false}
                 size="large"
                 min={0}
-                style={{ width: "65%" }}
+                style={{ width: "70%" }}
                 value={formData.priceWantToSell}
                 onChange={(value) =>
                   handleNumberChange("priceWantToSell", value)
@@ -371,50 +373,54 @@ export default function Sell() {
       content: (
         <>
           <div className="flex flex-col space-y-4">
-          <label className="col-span-1 self-center">Review your details and click Submit.</label>
-          <p>Watch Name: {formData.watchName}</p>
-          <p>Your Name: {formData.name}</p>
-          <p>Phone Number: {formData.phoneNumber}</p>
-          {formData.box === "no" && (
-            <>
-              <p>Original Box: {formData.originalBox}</p>
-              <p>Paper: {formData.paper}</p>
-              <p>Limited Edition: {formData.limitedEdition}</p>
-              <p>Price: {formData.priceWantToSell}</p>
-              <p>
-                Image: {formData.fileList.map((file) => file.name).join(", ")}
-              </p>
-            </>
-          )}
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button
-              type="primary"
-              size="large"
-              onClick={
-                formData.box === "no" ? handlePrevious : handlePreviousInfo
-              }
-            >
-              Previous
-            </Button>
-            <Button type="primary" size="large" onClick={handleSubmit}>
-              Submit
-            </Button>
-          </div>
+            <label className="col-span-1 self-center">
+              Review your details and click Submit.
+            </label>
+            <p>Watch Name: {formData.watchName}</p>
+            <p>Your Name: {formData.name}</p>
+            <p>Phone Number: {formData.phoneNumber}</p>
+            {formData.box === "no" && (
+              <>
+                <p>Original Box: {formData.originalBox}</p>
+                <p>Paper: {formData.paper}</p>
+                <p>Limited Edition: {formData.limitedEdition}</p>
+                <p>Price: {formData.priceWantToSell}</p>
+                <p>
+                  Image: {formData.fileList.map((file) => file.name).join(", ")}
+                </p>
+              </>
+            )}
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Button
+                type="primary"
+                size="large"
+                onClick={
+                  formData.box === "no" ? handlePrevious : handlePreviousInfo
+                }
+              >
+                Previous
+              </Button>
+              <Button type="primary" size="large" onClick={handleSubmit}>
+                Submit
+              </Button>
+            </div>
           </div>
         </>
       ),
     },
   ];
   return (
-    <div className="container mx-auto px-4">
-      <div className="w-2/3 mx-auto bg-white p-8 rounded shadow">
-        <Steps current={formData.currentStep}>
-          {steps.map((item, index) => (
-            <Step key={index} title={item.title} />
-          ))}
-        </Steps>
-        <div className="steps-content mt-8">
-          {steps[formData.currentStep].content}
+    <div className="container mx-auto px-4 ">
+      <div className="w-2/3 mx-auto bg-white p-8 rounded-lg shadow-lg overflow-hidden mt-10">
+        <div className="bg-gray-100 px-6 py-4 border-b border-gray-200">
+          <Steps current={formData.currentStep}>
+            {steps.map((item, index) => (
+              <Step key={index} title={item.title} />
+            ))}
+          </Steps>
+          <div className="steps-content mt-8">
+            {steps[formData.currentStep].content}
+          </div>
         </div>
       </div>
     </div>

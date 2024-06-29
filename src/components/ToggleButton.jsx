@@ -12,14 +12,14 @@ export default function ToggleButton({ value, name, onChange })  {
       <Button
         type={value === "yes" ? "primary" : "default"}
         onClick={() => handleClick("yes")}
-        style={{ minWidth: "200px" }}  
+        style={{ minWidth: "205px" }}  
       >
         Yes
       </Button>
       <Button
         type={value === "no" ? "primary" : "default"}
         onClick={() => handleClick("no")}
-        style={{minWidth: "200px" }} 
+        style={{minWidth: "205px" }} 
       >
         No
       </Button>
