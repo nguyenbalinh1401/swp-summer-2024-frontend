@@ -22,6 +22,7 @@ export default function Sell() {
   const [currentStep, setCurrentStep] = useState(0);
   const [box, setBox] = useState(null);
   const [watchName, setWatchName] = useState("");
+  const [watchBrand, setWatchBrand] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [documents, setDocuments] = useState("");
@@ -29,7 +30,11 @@ export default function Sell() {
   const [priceWantToSell, setPriceWantToSell] = useState(0);
   const [originalBox, setOriginalBox] = useState("");
   const [paper, setPaper] = useState("");
-  const [limitedEdition, setLimitedEdition] = useState("");
+
+  const user = sessionStorage.signInUser
+    ? JSON.parse(sessionStorage.signInUser)
+    : null;
+
   const navigate = useNavigate();
 
   const onFileChange = ({ fileList }) => {
@@ -45,40 +50,88 @@ export default function Sell() {
         return;
       }
   
+      // Chuẩn bị dữ liệu cho yêu cầu bán
       let newForm;
       if (box === "yes") {
         newForm = {
+          watchBrand,
           watchName,
           name,
           phoneNumber,
           documents,
           image,
           priceWantToSell,
-          originalBox: null,
-          paper: null,
-          limitedEdition: null,
           status: 'WITH_REPORT',
         };
       } else {
         newForm = {
+          watchBrand,
           watchName,
           name,
           phoneNumber,
           documents: null,
           image,
           priceWantToSell,
-          originalBox,
-          paper,
-          limitedEdition,
           status: 'WITHOUT_REPORT',
         };
       }
   
       console.log("Sending data:", newForm);
   
-      const response = await axios.post("http://localhost:3000/sell-request/create", newForm);
+      const response1 = await axios.post("http://localhost:3000/sell-request/create", newForm);
   
-      console.log("Data submitted successfully:", response.data);
+      let newProduct;
+      if (box === "yes") {
+        newProduct = {
+          owner: user.id,
+          name: watchName,
+          brand: watchBrand,
+          price: priceWantToSell,
+          description: 'not done',
+          type: 'not done',
+          image: image,
+          dialColor: 'not done',
+          box: false,
+          papers: false,
+          waterResistance: 0,
+          caseMaterial: 'not done',
+          caseSize: 0,
+          // null dc
+          pastUsageTime: null,
+          yearOfProduction: null,
+          remainingInsurance: null,
+          status: 'IN APPRAISAL',
+        };
+      } else {
+        newProduct = {
+          owner: user.id,
+          name: watchName,
+          brand: watchBrand,
+          price: priceWantToSell,
+          description: 'not done',
+          type: 'not done',
+          image: image,
+          dialColor: 'not done',
+          box: false,
+          papers: false,
+          waterResistance: 0,
+          caseMaterial: 'not done',
+          caseSize: 0,
+
+          // null dc
+          pastUsageTime: null,
+          yearOfProduction: null,
+          remainingInsurance: null,
+          status: 'IN APPRAISAL',
+        };
+      }
+  
+      console.log("New product data:", newProduct);
+  
+      const response2 = await axios.post("http://localhost:3000/product", newProduct);
+  
+      console.log("Data submitted successfully:", response1.data);
+      console.log("Data submitted successfully:", response2.data);
   
       notification.success({
         message: "Success",
@@ -96,7 +149,6 @@ export default function Sell() {
       }
     }
   };
-  
 
   const steps = [
     {
@@ -105,6 +157,7 @@ export default function Sell() {
         <Form
           form={form}
           onFinish={(values) => {
+            setWatchBrand(values.watchBrand);
             setWatchName(values.watchName);
             setName(values.name);
             setPhoneNumber(values.phoneNumber);
@@ -112,6 +165,16 @@ export default function Sell() {
           }}
           layout="vertical"
         >
+          <Form.Item
+            label="Watch Brand"
+            name="watchBrand"
+            rules={[
+              { required: true, message: "Please enter the watch brand" },
+            ]}
+            className="mb-4"
+          >
+            <Input size="large" className="full" onChange={(e) => setWatchBrand(e.target.value)} />
+          </Form.Item>
           <Form.Item
             label="Watch Name"
             name="watchName"
@@ -148,7 +211,7 @@ export default function Sell() {
           </Form.Item>
           <div className="flex flex-col items-start">
             <Form.Item
-              label="Does your watch have an appraisal certificate yet ?"
+              label="Does your watch have an appraisal certificate yet?"
               name="box"
               rules={[
                 {
@@ -249,14 +312,13 @@ export default function Sell() {
           onFinish={(values) => {
             setOriginalBox(values.originalBox);
             setPaper(values.paper);
-            setLimitedEdition(values.limitedEdition);
             setPriceWantToSell(values.priceWantToSell);
             setCurrentStep(2);
           }}
           layout="vertical"
         >
           <Form.Item
-            label="Do you have original box ?"
+            label="Do you have original box?"
             name="originalBox"
             rules={[
               {
@@ -271,7 +333,7 @@ export default function Sell() {
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            label="Does your watch have original paper ?"
+            label="Does your watch have original paper?"
             name="paper"
             rules={[
               {
@@ -286,39 +348,24 @@ export default function Sell() {
             </Radio.Group>
           </Form.Item>
           <Form.Item
-            label="Is your watch a limited edition ?"
-            name="limitedEdition"
+            label="Image"
+            name="image"
             rules={[
-              {
-                required: true,
-                message: "Please select yes or no",
-              },
+              { required: true, message: "Please upload an image" },
             ]}
           >
-            <Radio.Group onChange={(e) => setLimitedEdition(e.target.value)}>
-              <Radio value="yes">Yes</Radio>
-              <Radio value="no">No</Radio>
-            </Radio.Group>
+            <Upload
+              name="image"
+              listType="picture"
+              beforeUpload={() => false}
+              onChange={onFileChange}
+              fileList={fileList}
+            >
+              <Button size="large" icon={<UploadOutlined />}>
+                Click to upload
+              </Button>
+            </Upload>
           </Form.Item>
-          <Form.Item
-                  label="Image"
-                  name="image"
-                  rules={[
-                    { required: true, message: "Please upload an image" },
-                  ]}
-                >
-                  <Upload
-                    name="image"
-                    listType="picture"
-                    beforeUpload={() => false}
-                    onChange={onFileChange}
-                    fileList={fileList}
-                  >
-                    <Button size="large" icon={<UploadOutlined />}>
-                      Click to upload
-                    </Button>
-                  </Upload>
-                </Form.Item>
           <Form.Item
             label="Price you want to sell"
             name="priceWantToSell"
@@ -333,10 +380,10 @@ export default function Sell() {
             />
           </Form.Item>
           <Form.Item>
-              <Button type="primary" size="large" htmlType="submit">
-                Next
-              </Button>
-            </Form.Item>
+            <Button type="primary" size="large" htmlType="submit">
+              Next
+            </Button>
+          </Form.Item>
         </Form>
       ),
     },
@@ -352,7 +399,6 @@ export default function Sell() {
             <>
               <p>Original Box: {originalBox}</p>
               <p>Paper: {paper}</p>
-              <p>Limited Edition: {limitedEdition}</p>
               <p>Price: {priceWantToSell}</p>
               <p>Image: {fileList.map((file) => file.name).join(", ")}</p>
             </>
