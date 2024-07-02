@@ -39,11 +39,19 @@ export default function Chat() {
   useEffect(() => {
     if (sessionStorage.deleteChat) {
       message.info({
-        key: "deleteChat",
-        content: "Successfully deleted!",
+        key: "handleRedirect",
+        content: "A chat room has been deleted.",
         duration: 5,
       });
       sessionStorage.removeItem("deleteChat");
+    } else if (sessionStorage.notFoundChatRoom) {
+      message.error({
+        key: "handleRedirect",
+        content:
+          "This chat room has been aborted by the other participant. Please try with another!",
+        duration: 8,
+      });
+      sessionStorage.removeItem("notFoundChatRoom");
     }
     if (!isRendered) {
       setIsRendered(true);

@@ -46,7 +46,7 @@ export default function UserProfile() {
             duration: 5,
           });
         }}
-        className="flex items-center gap-2 bg-sky-300 hover:bg-sky-500 px-8 py-3 font-semibold text-black rounded-3xl duration-300"
+        className="flex items-center gap-2 bg-sky-600 hover:bg-sky-700 px-8 py-3 font-semibold text-white rounded-3xl duration-300"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

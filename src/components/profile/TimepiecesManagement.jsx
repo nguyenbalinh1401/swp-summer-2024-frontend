@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EmptyOrderImage from "../../assets/images/profile/empty-order.webp";
 import SingleTimepiece from "./SingleTimepiece";
-import { Pagination } from "antd";
+import { Pagination, Tooltip } from "antd";
 
 export default function TimepiecesManagement({ list }) {
   const [listState, setListState] = useState("all");
@@ -61,11 +61,13 @@ export default function TimepiecesManagement({ list }) {
         list.filter((item) => item.status.toUpperCase() === "AVAILABLE")
       );
       setTemp(list.filter((item) => item.status.toUpperCase() === "AVAILABLE"));
-    } else if (listState === "ordered") {
+    } else if (listState === "update_requested") {
       setCurrentList(
-        list.filter((item) => item.status.toUpperCase() === "ORDERED")
+        list.filter((item) => item.status.toUpperCase() === "UPDATE_REQUESTED")
       );
-      setTemp(list.filter((item) => item.status.toUpperCase() === "ORDERED"));
+      setTemp(
+        list.filter((item) => item.status.toUpperCase() === "UPDATE_REQUESTED")
+      );
     } else if (listState === "sold") {
       setCurrentList(
         list.filter((item) => item.status.toUpperCase() === "SOLD")
@@ -80,23 +82,24 @@ export default function TimepiecesManagement({ list }) {
 
   return (
     <div className="relative w-full min-h-full bg-white rounded-xl">
-      <button
-        onClick={() => {
-          window.location.href = "/sell";
-        }}
-        className="absolute top-9 right-8 flex items-center gap-2 bg-green-600 hover:bg-green-800 text-white rounded-xl px-6 py-2"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="currentColor"
+      <Tooltip title="Sell a new timepiece">
+        <button
+          onClick={() => {
+            window.location.href = "/sell";
+          }}
+          className="absolute top-9 right-8 flex items-center gap-2 bg-green-600 hover:bg-green-800 text-white rounded-xl px-2 py-2"
         >
-          <path d="M13.0001 10.9999L22.0002 10.9997L22.0002 12.9997L13.0001 12.9999L13.0001 21.9998L11.0001 21.9998L11.0001 12.9999L2.00004 13.0001L2 11.0001L11.0001 10.9999L11 2.00025L13 2.00024L13.0001 10.9999Z"></path>
-        </svg>
-        SELL A WATCH
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="currentColor"
+          >
+            <path d="M13.0001 10.9999L22.0002 10.9997L22.0002 12.9997L13.0001 12.9999L13.0001 21.9998L11.0001 21.9998L11.0001 12.9999L2.00004 13.0001L2 11.0001L11.0001 10.9999L11 2.00025L13 2.00024L13.0001 10.9999Z"></path>
+          </svg>
+        </button>
+      </Tooltip>
       {list.length === 0 ? (
         <div className="w-full h-[40vh] flex flex-col items-center justify-center gap-4">
           <img src={EmptyOrderImage} alt="" className="w-24" />
@@ -107,40 +110,50 @@ export default function TimepiecesManagement({ list }) {
           <div className="w-full flex items-center justify-center gap-4">
             <button
               onClick={() => setListState("all")}
-              className={`px-4 py-2 hover:bg-slate-200 hover:text-black rounded-full duration-100 ${
-                listState === "all" && "bg-gray-700 text-white"
+              className={`px-4 py-2 rounded-full duration-100 ${
+                listState === "all"
+                  ? "bg-gray-700 text-white"
+                  : "hover:bg-slate-200 text-black"
               }`}
             >
               All
             </button>
             <button
               onClick={() => setListState("in appraisal")}
-              className={`px-4 py-2 hover:bg-slate-200 hover:text-black rounded-full duration-100 ${
-                listState === "in appraisal" && "bg-gray-700 text-white"
+              className={`min-w-fit px-4 py-2 rounded-full duration-100 ${
+                listState === "in appraisal"
+                  ? "bg-gray-700 text-white"
+                  : "hover:bg-slate-200 text-black"
               }`}
             >
               In appraisal
             </button>
             <button
               onClick={() => setListState("available")}
-              className={`px-4 py-2 hover:bg-slate-200 hover:text-black rounded-full duration-100 ${
-                listState === "available" && "bg-gray-700 text-white"
+              className={`px-4 py-2 rounded-full duration-100 ${
+                listState === "available"
+                  ? "bg-gray-700 text-white"
+                  : "hover:bg-slate-200 text-black"
               }`}
             >
               Available
             </button>
             <button
-              onClick={() => setListState("ordered")}
-              className={`px-4 py-2 hover:bg-slate-200 hover:text-black rounded-full duration-100 ${
-                listState === "ordered" && "bg-gray-700 text-white"
+              onClick={() => setListState("update_requested")}
+              className={`px-4 py-2 rounded-full duration-100 ${
+                listState === "update_requested"
+                  ? "bg-gray-700 text-white"
+                  : "hover:bg-slate-200 text-black"
               }`}
             >
-              Ordered
+              Waiting to be updated
             </button>
             <button
               onClick={() => setListState("sold")}
-              className={`px-4 py-2 hover:bg-slate-200 hover:text-black rounded-full duration-100 ${
-                listState === "sold" && "bg-gray-700 text-white"
+              className={`px-4 py-2 rounded-full duration-100 ${
+                listState === "sold"
+                  ? "bg-gray-700 text-white"
+                  : "hover:bg-slate-200 text-black"
               }`}
             >
               Sold
@@ -163,9 +176,11 @@ export default function TimepiecesManagement({ list }) {
               type="text"
               placeholder="Search..."
               onChange={(e) => {
-                searchProductByNameAndBrand(e.target.value.trim());
+                searchProductByNameAndBrand(
+                  e.target.value.toLowerCase().trim()
+                );
               }}
-              className="p-2 rounded-xl"
+              className="pl-2 pr-32 py-2 border border-gray-400 rounded-xl"
             />
           </div>
 
@@ -175,7 +190,7 @@ export default function TimepiecesManagement({ list }) {
               <p>No product!</p>
             </div>
           ) : (
-            <div className="w-full min-h-[40vh] flex flex-col items-center justify-start gap-8">
+            <div className="w-full min-h-[40vh] flex flex-col items-center justify-start">
               {currentList
                 .slice(pagingState.min, pagingState.max)
                 .map((item) => {
@@ -187,6 +202,7 @@ export default function TimepiecesManagement({ list }) {
                 hideOnSinglePage
                 size="default"
                 onChange={handlePageChange}
+                className="mt-8"
               />
             </div>
           )}

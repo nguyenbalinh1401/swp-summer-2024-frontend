@@ -1,5 +1,5 @@
 import React, { useEffect, useState, createRef } from "react";
-import { Avatar, Tooltip, Modal } from "antd";
+import { Avatar, Tooltip, Modal, Checkbox } from "antd";
 import ScrollableFeed from "react-scrollable-feed";
 import { generateNumericCode } from "../../assistants/generators";
 import {
@@ -28,6 +28,7 @@ export default function ChatRoom({ user, chatRoomId }) {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [currentChatRoom, setCurrentChatRoom] = useState();
   const [isConfirmDeleteOn, setIsConfirmDeleteOn] = useState(false);
+  const [checkedConfirmDelete, setCheckedConfirmDelete] = useState(false);
 
   const scrollableRef = createRef();
 
@@ -37,6 +38,10 @@ export default function ChatRoom({ user, chatRoomId }) {
         `http://localhost:3000/chatRoom/butUser/code/${user.id}/${chatRoomId}`
       )
       .then((res) => {
+        if (!res.data) {
+          sessionStorage.setItem("notFoundChatRoom", "yes");
+          window.location.replace("/chat");
+        }
         setCurrentChatRoom(res.data);
       })
       .catch((err) => console.log(err));
@@ -221,7 +226,7 @@ export default function ChatRoom({ user, chatRoomId }) {
               height="24"
               className="fill-red-700"
             >
-              <path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"></path>
+              <path d="M2.80777 1.3934L22.6068 21.1924L21.1925 22.6066L17.5846 18.9994L6.45516 19L2.00016 22.5V4C2.00016 3.8307 2.04223 3.67123 2.11649 3.53146L1.39355 2.80762L2.80777 1.3934ZM3.99955 5.4134L4.00016 18.3853L5.76349 17L15.5846 16.9994L3.99955 5.4134ZM21.0002 3C21.5524 3 22.0002 3.44772 22.0002 4V17.785L20.0002 15.785V5L9.21316 4.999L7.21416 3H21.0002Z"></path>
             </svg>
           </button>
         </div>
@@ -371,14 +376,18 @@ export default function ChatRoom({ user, chatRoomId }) {
           centered
           className="font-montserrat"
         >
-          <p>
-            Are you sure to delete this chat with{" "}
+          <Checkbox
+            checked={checkedConfirmDelete}
+            onChange={() => setCheckedConfirmDelete(!checkedConfirmDelete)}
+          />
+          <p className="inline ml-2">
+            By deleting, you and&nbsp;
             <span className="font-bold">
               {currentChatRoom.participant.username}
             </span>
-            ?
+            &nbsp;will be disconnected from discussing about this product.
           </p>
-          <p className="text-xs italic text-gray-600">
+          <p className="text-xs italic text-gray-600 mt-2">
             Chat history will be deleted permanently.
           </p>
           <div className="w-full flex items-center justify-end gap-8 mt-8">
@@ -389,8 +398,9 @@ export default function ChatRoom({ user, chatRoomId }) {
               Cancel
             </button>
             <button
+              disabled={!checkedConfirmDelete}
               onClick={handleDeleteChatRoom}
-              className="px-6 py-2 rounded-md bg-red-700 text-white font-semibold"
+              className="px-6 py-2 rounded-md bg-red-600 hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-gray-300 text-white font-semibold"
             >
               Delete
             </button>

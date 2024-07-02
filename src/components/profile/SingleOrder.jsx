@@ -11,6 +11,7 @@ export default function SingleOrder({ order }) {
   const month = dateFormat(order.createdAt, "mmm");
 
   const fetchOrderItemList = async () => {
+    console.log("order: ", order);
     await axios
       .get(`http://localhost:3000/orderItem/order/${order.id}`)
       .then((res) => {
@@ -58,7 +59,7 @@ export default function SingleOrder({ order }) {
   };
 
   return (
-    <>
+    <div className="w-full">
       <div
         onClick={() => setShowProductList(!showProductList)}
         className="w-full flex items-center justify-between border-b border-gray-200 p-4 cursor-pointer hover:bg-slate-100 rounded-lg rounded-b-none"
@@ -160,6 +161,6 @@ export default function SingleOrder({ order }) {
           </div>
         );
       })}
-    </>
+    </div>
   );
 }
