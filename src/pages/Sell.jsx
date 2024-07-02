@@ -13,10 +13,17 @@ import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ToggleButton from "../components/ToggleButton";
+import ProductForm from "../components/profile/ProductForm";
 
 const { Step } = Steps;
 
 export default function Sell() {
+  const [isEnteringProduct, setIsEnteringProduct] = useState(false);
+  const [productData, setProductData] = useState();
+  const getProductData = (value) => {
+    console.log("Product: ", value);
+  };
+
   const [form] = Form.useForm();
 
   // const [fileList, setFileList] = useState([]);
@@ -207,6 +214,17 @@ export default function Sell() {
                 onChange={(value) => handleNumberChange("phoneNumber", value)}
               />
             </div>
+          </div>
+          <div>
+            <button onClick={() => setIsEnteringProduct(true)}>
+              Enter product data
+            </button>
+            <ProductForm
+              open={isEnteringProduct}
+              setOpen={setIsEnteringProduct}
+              editable={true}
+              getProductData={getProductData}
+            />
           </div>
           <div className="grid grid-cols-3 gap-4">
             <label className="col-span-1 self-center">

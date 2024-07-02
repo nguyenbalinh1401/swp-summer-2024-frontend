@@ -34,7 +34,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!userSession && cookies) {
+    if (!userSession && cookies.signInUser) {
       window.location.href = "/signin";
     }
     fetchFeaturedProductList();

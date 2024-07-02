@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { generateChatRoomId } from "../../assistants/generators";
 import Loading from "../loading/Loading";
 import CurrencySplitter from "../../assistants/currencySpliter";
+import ReportModal from "./ReportModal";
 
 export default function ProductDetailComponent({
   user,
@@ -11,6 +12,7 @@ export default function ProductDetailComponent({
   isInWishList,
 }) {
   const [wishListState, setWishListState] = useState(isInWishList);
+  const [isReporting, setIsReporting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const addToFavorite = () => {
@@ -137,10 +139,46 @@ export default function ProductDetailComponent({
                 </>
               )}
             </button>
-            {wishListState ? (
+            <div className="flex items-center gap-2">
+              {wishListState ? (
+                <button
+                  onClick={addToFavorite}
+                  className="w-full flex items-center justify-center gap-2 rounded-md bg-green-500 hover:bg-green-700 font-bold text-sm text-white mx-auto py-3 duration-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                  >
+                    <path d="M9.9997 15.1709L19.1921 5.97852L20.6063 7.39273L9.9997 17.9993L3.63574 11.6354L5.04996 10.2212L9.9997 15.1709Z"></path>
+                  </svg>
+                  Added to wishlist
+                </button>
+              ) : (
+                <button
+                  onClick={addToFavorite}
+                  className={`w-full flex items-center justify-center gap-2 rounded-md border border-red-500 font-bold text-sm text-red-500 hover:bg-stone-100 mx-auto py-3 duration-200 ${
+                    user.id === product.owner.id && "hidden"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                  >
+                    <path d="M16.5 3C19.5376 3 22 5.5 22 9C22 16 14.5 20 12 21.5C9.5 20 2 16 2 9C2 5.5 4.5 3 7.5 3C9.35997 3 11 4 12 5C13 4 14.64 3 16.5 3Z"></path>
+                  </svg>
+                  Add to wishlist
+                </button>
+              )}
+
               <button
-                onClick={addToFavorite}
-                className="w-full flex items-center justify-center gap-2 rounded-md bg-green-500 hover:bg-green-700 font-bold text-sm text-white mx-auto py-3 duration-200"
+                onClick={() => setIsReporting(true)}
+                className="w-1/6 flex flex-col items-center gap-1 text-amber-600 hover:text-amber-700"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -149,29 +187,17 @@ export default function ProductDetailComponent({
                   height="16"
                   fill="currentColor"
                 >
-                  <path d="M9.9997 15.1709L19.1921 5.97852L20.6063 7.39273L9.9997 17.9993L3.63574 11.6354L5.04996 10.2212L9.9997 15.1709Z"></path>
+                  <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z"></path>
                 </svg>
-                Added to wishlist
+                <p className="text-xs">Report</p>
               </button>
-            ) : (
-              <button
-                onClick={addToFavorite}
-                className={`w-full flex items-center justify-center gap-2 rounded-md border border-red-500 font-bold text-sm text-red-500 hover:bg-stone-100 mx-auto py-3 duration-200 ${
-                  user.id === product.owner.id && "hidden"
-                }`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                >
-                  <path d="M16.5 3C19.5376 3 22 5.5 22 9C22 16 14.5 20 12 21.5C9.5 20 2 16 2 9C2 5.5 4.5 3 7.5 3C9.35997 3 11 4 12 5C13 4 14.64 3 16.5 3Z"></path>
-                </svg>
-                Add to wishlist
-              </button>
-            )}
+              <ReportModal
+                on={"product"}
+                object={product}
+                open={isReporting}
+                setOpen={setIsReporting}
+              />
+            </div>
           </div>
         </div>
       </div>
