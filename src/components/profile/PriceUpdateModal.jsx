@@ -1,7 +1,16 @@
-import { Avatar, Input, Modal } from "antd";
+import { Avatar, Input, message, Modal } from "antd";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-export default function PriceUpdateModal({ product, open, setOpen }) {
+export default function PriceUpdateModal({
+  product,
+  open,
+  setOpen,
+  getRequestStatus,
+}) {
+  const user = sessionStorage.signInUser
+    ? JSON.parse(sessionStorage.signInUser)
+    : null;
   const [note, setNote] = useState("");
   const [price, setPrice] = useState("");
   const [isValidPrice, setIsValidPrice] = useState(true);
@@ -25,8 +34,42 @@ export default function PriceUpdateModal({ product, open, setOpen }) {
   }, [price]);
 
   const handleConfirmUpdatePrice = async () => {
-    console.log("Desired price: ", price);
-    console.log("Note: ", note);
+    await axios
+      .post("http://localhost:3000/sellerRequest", {
+        account: user.id,
+        product: product.id,
+        type: "update",
+        update: {
+          price: price,
+        },
+        note: note,
+        status: false,
+      })
+      .then(async (res) => {
+        await axios
+          .patch(`http://localhost:3000/product/${product.id}`, {
+            status: "UPDATE_REQUESTED",
+          })
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => console.log(err));
+        message.success({
+          key: "updatePrice",
+          content: "Your price update request has been successfully recorded.",
+          duration: 5,
+        });
+        getRequestStatus("updated");
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error({
+          key: "updatePrice",
+          content: "Failed to send request. Please try again!",
+          duration: 5,
+        });
+      });
+    setOpen(false);
   };
 
   return (

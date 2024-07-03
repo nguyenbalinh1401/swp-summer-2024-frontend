@@ -34,7 +34,7 @@ export default function ShownList({ list }) {
 
   return (
     <div className="w-full flex flex-row flex-wrap items-start justify-start gap-4 p-4">
-      {list.map((item) => {
+      {list.slice(pagingState.min, pagingState.max).map((item) => {
         const check = currentWishList.some((i) => item.id === i.id);
         return (
           <SingleProduct
@@ -48,9 +48,10 @@ export default function ShownList({ list }) {
       <Pagination
         total={list.length}
         pageSize={defaultPageSize}
-        hideOnSinglePage
+        hideOnSinglePage={true}
         size="default"
         onChange={handlePageChange}
+        className="w-full text-center mt-8"
       />
     </div>
   );

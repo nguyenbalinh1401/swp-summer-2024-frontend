@@ -6,6 +6,10 @@ import NoResult from "../assets/images/productList/no_result.jpg";
 import Loading from "../components/loading/Loading";
 
 export default function ProductList() {
+  const user = sessionStorage.signInUser
+    ? JSON.parse(sessionStorage.signInUser)
+    : null;
+
   const [productList, setProductList] = useState([]);
   const [currentList, setCurrentList] = useState([]);
   const [brandList, setBrandList] = useState([]);
@@ -13,7 +17,7 @@ export default function ProductList() {
 
   const fetchProductList = async () => {
     await axios
-      .get("http://localhost:3000/product/available")
+      .get(`http://localhost:3000/product/available/${user ? user.id : "null"}`)
       .then((res) => {
         setProductList(res.data);
         setCurrentList(res.data);
