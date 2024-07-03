@@ -34,6 +34,12 @@ export default function Profile() {
     fetchProductListOfUser();
   }, []);
 
+  const getRequestStatus = (value) => {
+    if (value === "updated") {
+      fetchProductListOfUser();
+    }
+  };
+
   return (
     <div className="w-full min-h-[80vh] flex items-start justify-center gap-8 p-16 bg-slate-100">
       <div className="w-1/3 flex flex-col items-start justify-center gap-8 overflow-auto">
@@ -44,7 +50,10 @@ export default function Profile() {
         {window.location.pathname === "/profile" ? (
           <OrderHistory list={orders} />
         ) : (
-          <TimepiecesManagement list={userProducts} />
+          <TimepiecesManagement
+            list={userProducts}
+            getRequestStatus={getRequestStatus}
+          />
         )}
       </div>
     </div>

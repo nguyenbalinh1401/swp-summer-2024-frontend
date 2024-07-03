@@ -107,7 +107,7 @@ export default function SingleProduct({
               </p>
             </div>
             <p className="font-light min-w-fit">
-              {moment(product.updatedAt).fromNow()}
+              {moment(product.createdAt).fromNow()}
             </p>
           </div>
         </div>

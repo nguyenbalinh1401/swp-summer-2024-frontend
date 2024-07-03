@@ -5,6 +5,7 @@ import { generateChatRoomId } from "../../assistants/generators";
 import Loading from "../loading/Loading";
 import CurrencySplitter from "../../assistants/currencySpliter";
 import ReportModal from "./ReportModal";
+import ColumnGroup from "antd/es/table/ColumnGroup";
 
 export default function ProductDetailComponent({
   user,
@@ -177,8 +178,28 @@ export default function ProductDetailComponent({
               )}
 
               <button
-                onClick={() => setIsReporting(true)}
-                className="w-1/6 flex flex-col items-center gap-1 text-amber-600 hover:text-amber-700"
+                onClick={async () => {
+                  await axios
+                    .get(
+                      `http://localhost:3000/report/check/${user.id}/${product.id}`
+                    )
+                    .then((res) => {
+                      if (res.data)
+                        message.warning({
+                          key: "report",
+                          content:
+                            "Your report on this product has already been recorded.",
+                          duration: 5,
+                        });
+                      else {
+                        setIsReporting(true);
+                      }
+                    })
+                    .catch((err) => console.log(err));
+                }}
+                className={`w-1/6 flex flex-col items-center gap-1 text-amber-600 hover:text-amber-700 ${
+                  user.id === product.owner.id && "hidden"
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Input, Select, Image } from "antd";
 import PlaceholderImage from "../../assets/images/profile/placeholder_image.svg";
+import { imageDb } from "../../firebase-config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 } from "uuid";
 
 export default function ProductForm({
   open,
@@ -307,14 +310,21 @@ export default function ProductForm({
 
   const handleFileUpload = async (e) => {
     const uploaded = e.target.files[0];
-    console.log("Uploaded: ", e.target.files[0]);
-    const reader = new FileReader();
-    console.log("READER: ", reader.readAsDataURL(uploaded));
+    //Upload image
+    if (uploaded) {
+      const imgRef = ref(imageDb, `files/${v4()}`);
+      uploadBytes(imgRef, uploaded).then(async (value) => {
+        console.log("Uploaded: ", value.metadata);
+        setImage(await getDownloadURL(value.ref));
+      });
+    }
   };
 
   return (
     <Modal
-      title=<h1 className="text-xl font-bold">Product Information</h1>
+      title=<h1 className="text-xl font-bold text-sky-800">
+        Product Information
+      </h1>
       open={open}
       onCancel={(e) => {
         e.stopPropagation();
@@ -677,7 +687,7 @@ export default function ProductForm({
             className={`${!editable && "hidden"} text-xs font-light italic p-2`}
           >
             Note: Please fulfill every field that are marked by{" "}
-            <span className="text-red-500">*</span>
+            <span className="text-red-500">*</span> and upload an image.
           </p>
         </div>
       </div>

@@ -1,9 +1,13 @@
 import { Input, message, Modal } from "antd";
 import React, { useState } from "react";
+import axios from "axios";
 
 export default function ReportModal({ on, object, open, setOpen }) {
+  const user = sessionStorage.signInUser
+    ? JSON.parse(sessionStorage.signInUser)
+    : null;
   const [reportList, setReportList] = useState([]);
-  const [note, setNote] = useState();
+  const [note, setNote] = useState("");
 
   const handleAddStandard = (value) => {
     let temp = [...reportList];
@@ -20,15 +24,34 @@ export default function ReportModal({ on, object, open, setOpen }) {
     return reportList.some((item) => item === value);
   };
 
-  const handleSubmitReport = () => {
-    console.log("Report: ", reportList);
-    setOpen(false);
-    message.success({
-      key: "report",
-      content:
-        "Your report has been recorded. Thank you for your dedication to improve the service.",
-      duration: 8,
-    });
+  const handleSubmitReport = async () => {
+    await axios
+      .post("http://localhost:3000/report", {
+        account: user.id,
+        on: "product",
+        reportedId: object.id,
+        criteria: reportList,
+        note: note,
+      })
+      .then((res) => {
+        console.log(res.data);
+        message.success({
+          key: "report",
+          content:
+            "Your report has been recorded. Thank you for your dedication to improve the service.",
+          duration: 8,
+        });
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        message.err({
+          key: "report",
+          content: "Failed to report. Please try again!",
+          duration: 8,
+        });
+        setOpen(false);
+      });
   };
 
   return (
