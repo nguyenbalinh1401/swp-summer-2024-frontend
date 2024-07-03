@@ -247,7 +247,7 @@ export default function ChatRoom({ user, chatRoomId }) {
                     {group.messages[0]?.time}
                     {group.date === dateFormat(new Date(), "dd/mm/yyyy")
                       ? ""
-                      : `, ${group.date}`}
+                      : ` ${group.date}`}
                   </p>
                   <div className="w-full flex flex-col gap-1">
                     {group.messages?.map((mes, i) => {
@@ -380,14 +380,11 @@ export default function ChatRoom({ user, chatRoomId }) {
             checked={checkedConfirmDelete}
             onChange={() => setCheckedConfirmDelete(!checkedConfirmDelete)}
           />
-          <p className="inline ml-2">
-            By deleting, you and&nbsp;
-            <span className="font-bold">
-              {currentChatRoom.participant.username}
-            </span>
-            &nbsp;will be disconnected from discussing about this product.
+          <p className="inline ml-2 font-bold">
+            By deleting, you and {currentChatRoom.participant.username} will be
+            disconnected from discussing about this product.
           </p>
-          <p className="text-xs italic text-gray-600 mt-2">
+          <p className="text-xs italic text-red-500 mt-2">
             Chat history will be deleted permanently.
           </p>
           <div className="w-full flex items-center justify-end gap-8 mt-8">

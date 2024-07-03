@@ -4,6 +4,7 @@ import ProfileCharts from "../components/profile/ProfileCharts";
 import OrderHistory from "../components/profile/OrderHistory";
 import axios from "axios";
 import TimepiecesManagement from "../components/profile/TimepiecesManagement";
+import { message } from "antd";
 
 export default function Profile() {
   const user =
@@ -30,6 +31,14 @@ export default function Profile() {
   };
 
   useEffect(() => {
+    if (sessionStorage.profile_updated) {
+      message.success({
+        key: "profileUpdated",
+        content: "Successfully updated your profile.",
+        duration: 5,
+      });
+      sessionStorage.removeItem("profile_updated");
+    }
     fetchUserOrder();
     fetchProductListOfUser();
   }, []);
