@@ -6,389 +6,441 @@ import {
   Upload,
   message,
   notification,
-  Radio,
   InputNumber,
   Steps,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import ToggleButton from "../components/ToggleButton";
+import ProductForm from "../components/profile/ProductForm";
+
 const { Step } = Steps;
 
 export default function Sell() {
+  const [isEnteringProduct, setIsEnteringProduct] = useState(false);
+  const [productData, setProductData] = useState();
+  const getProductData = (value) => {
+    console.log("Product: ", value);
+  };
+
   const [form] = Form.useForm();
-  const [fileList, setFileList] = useState([]);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [box, setBox] = useState(null);
-  const [formValues, setFormValues] = useState({});
+
+  // const [fileList, setFileList] = useState([]);
+  const [formData, setFormData] = useState({
+    watchName: "",
+    name: "",
+    phoneNumber: "",
+    box: "",
+    documents: null,
+    fileList: [],
+    priceWantToSell: "",
+    originalBox: "",
+    paper: "",
+    limitedEdition: "",
+    currentStep: 0,
+    appraisalTypeList: [],
+    imageList: [],
+  });
+  // const [currentStep, setCurrentStep] = useState(0);
+  // const [box, setBox] = useState(null);
+  // const [watchName, setWatchName] = useState("");
+  // const [name, setName] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  // const [documents, setDocuments] = useState("");
+  // const [priceWantToSell, setPriceWantToSell] = useState(0);
+  // const [originalBox, setOriginalBox] = useState("");
+  // const [paper, setPaper] = useState("");
+  // const [limitedEdition, setLimitedEdition] = useState("");
   const navigate = useNavigate();
 
-  // const onFinish = async (values) => {
-  //   try {
-  //     if (fileList.length === 0) {
-  //       message.error("Please upload an image.");
-  //       return;
-  //     }
-  //     const formData = new FormData();
-  //     formData.append("image", fileList[0].originFileObj);
-  //     const imageResponse = await fetch(
-  //       "http://localhost:3000/sell/uploadImage",
-  //       {
-  //         method: "POST",
-  //         body: formData,
-  //       }
-  //     );
-  //     if (!imageResponse.ok) {
-  //       throw new Error("Image upload failed");
-  //     }
-  //     const imageData = await imageResponse.json();
-  //     console.log("Image uploaded successfully:", imageData);
-  //     values.imagePath = imageData.imagePath;
-  //     const dataResponse = await fetch(
-  //       "http://localhost:3000/sell/information",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(values),
-  //       }
-  //     );
-
-  //     if (!dataResponse.ok) {
-  //       throw new Error("Data submission failed");
-  //     }
-
-  //     const data = await dataResponse.json();
-  //     console.log("Data saved successfully:", data);
-
-  //     notification.success({
-  //       message: "Success",
-  //       description: "Your information has been submitted successfully!",
-  //     });
-  //   } catch (error) {
-  //     console.error("Error submitting form:", error);
-
-  //     notification.error({
-  //       message: "Error",
-  //       description:
-  //         "There was an error submitting the form. Please try again.",
-  //     });
-
-  //     setTimeout(() => {
-  //       navigate("/sell");
-  //     }, 2000);
-  //   }
+  // const onFileChange = ({ fileList }) => {
+  //   setFileList(fileList);
   // };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-  const onFileChange = ({ fileList }) => {
-    setFileList(fileList);
+  const handleNumberChange = (name, value) => {
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleFileChange = (name) => (info) => {
+    let fileList = [...info.fileList];
+    fileList = fileList.slice(-1);
+    setFormData((preState) => ({
+      ...preState,
+      [name]: fileList,
+    }));
+  };
+
+  const handleNext = () => {
+    setFormData({
+      ...formData,
+      currentStep: formData.box === "yes" ? 2 : 1,
+    });
+  };
+
+  const handlePrevious = () => {
+    setFormData({
+      ...formData,
+      currentStep: formData.currentStep - 1,
+    });
+  };
+
+  const handleNextInfo = () => {
+    setFormData({
+      ...formData,
+      currentStep: 2,
+    });
+  };
+
+  const handlePreviousInfo = () => {
+    setFormData({
+      ...formData,
+      currentStep: 0,
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await form.validateFields();
+
+      if (fileList.length === 0) {
+        message.error("Please upload an image.");
+        return;
+      }
+
+      let newForm;
+      if (box === "yes") {
+        newForm = {
+          watchName,
+          name,
+          phoneNumber,
+          documents,
+          image,
+          priceWantToSell,
+          originalBox: null,
+          paper: null,
+          limitedEdition: null,
+          status: "WITH_REPORT",
+        };
+      } else {
+        newForm = {
+          watchName,
+          name,
+          phoneNumber,
+          documents: null,
+          image,
+          priceWantToSell,
+          originalBox,
+          paper,
+          limitedEdition,
+          status: "WITHOUT_REPORT",
+        };
+      }
+
+      console.log("Sending data:", newForm);
+
+      const response = await axios.post(
+        "http://localhost:3000/sell-request/create",
+        newForm
+      );
+
+      console.log("Data submitted successfully:", response.data);
+
+      notification.success({
+        message: "Success",
+        description: "Your information has been submitted successfully!",
+      });
+
+      navigate("/success");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+
+      if (error.response && error.response.status === 400) {
+        message.error("Bad request. Please check your inputs.");
+      } else {
+        message.error("Failed to submit the form. Please try again later.");
+      }
+    }
   };
 
   const steps = [
     {
       title: "Check",
       content: (
-        <>
-          <Form
-            form={form}
-            onFinish={(values) => {
-              setFormValues(values);
-              setCurrentStep(box === "yes" ? 2 : 1);
-            }}
-           className="mt-5"
-           layout="vertical"
-          >
-            <Form.Item
-              label="Watch Name"
-              name="watchName"
-              rules={[
-                { required: true, message: "Please enter the watch name" },
-              ]}
-              className="mb-4"
-            >
-              <Input size="large" className="full" />
-            </Form.Item>
-            <Form.Item
-              label="Your Name"
-              name="name"
-              rules={[{ required: true, message: "Please enter your name" }]}
-              className="mb-4"
-            >
-              <Input size="large" className="full" />
-            </Form.Item>
-            <Form.Item
-              label="Phone Number"
-              name="phoneNumber"
-              rules={[
-                { required: true, message: "Please enter your phone number" },
-              ]}
-              className="mb-4"
-            >
+        <div className="flex flex-col space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">Watch Name</label>
+            <div className="col-span-2">
+              <Input
+                size="large"
+                name="watchName"
+                style={{ width: "70%" }}
+                value={formData.watchName}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">Your Name</label>
+            <div className="col-span-2">
+              <Input
+                size="large"
+                name="name"
+                style={{ width: "70%" }}
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">Phone Number</label>
+            <div className="col-span-2">
               <InputNumber
                 controls={false}
                 size="large"
                 min={0}
-                style={{ width: "98.5%" }}
+                style={{ width: "70%" }}
+                value={formData.phoneNumber}
+                onChange={(value) => handleNumberChange("phoneNumber", value)}
               />
-            </Form.Item>
-            <div className="flex flex-col items-start">
-              <Form.Item
-                label="Does your watch have an appraisal certificate yet ?"
-                name="box"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Yes or No",
-                  },
-                ]}
-              >
-                <Radio.Group
-                  onChange={(e) => {
-                    setBox(e.target.value);
-                  }}
-                  value={box}
-                  
-                  buttonStyle="solid"
-                >
-                  <Radio.Button value="yes">Yes</Radio.Button>
-                  <Radio.Button value="no">No</Radio.Button>
-                </Radio.Group>
-              </Form.Item>
-              {box === "yes" && (
-                <>
-                  <Form.Item
-                    label="Upload Your watch appraisal certificate"
-                    name="documents"
-                    rules={[
-                      { required: true, message: "Please upload an image" },
-                    ]}
-                  >
-                    <Upload
-                      name="documents"
-                      listType="picture"
-                      beforeUpload={() => false}
-                      onChange={onFileChange}
-                      fileList={fileList}
-                    >
-                      <Button size="large" icon={<UploadOutlined />}>
-                        Click to upload
-                      </Button>
-                    </Upload>
-                  </Form.Item>
-                  <Form.Item
-                    label="Image"
-                    name="image"
-                    rules={[
-                      { required: true, message: "Please upload an image" },
-                    ]}
-                  >
-                    <Upload
-                      name="image"
-                      listType="picture"
-                      beforeUpload={() => false}
-                      onChange={onFileChange}
-                      fileList={fileList}
-                    >
-                      <Button size="large" icon={<UploadOutlined />}>
-                        Click to upload
-                      </Button>
-                    </Upload>
-                  </Form.Item>
-                  <Form.Item
-                    label="Price you want to sell"
-                    name="price"
-                    rules={[
-                      { required: true, message: "Please enter the price" },
-                    ]}
-                    layout="vertical"
-                    className="flex flex-col"
-                  >
-                    <InputNumber
-                      controls={false}
-                      size="large"
-                      min={0}
-                      style={{ width: "1380px" }}
-                    />
-                  </Form.Item>
-                </>
-              )}
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Form.Item>
-                  <Button type="primary" size="large" htmlType="submit">
-                    Next
-                  </Button>
-                </Form.Item>
-              </div>
             </div>
-          </Form>
-        </>
+          </div>
+          <div>
+            <button onClick={() => setIsEnteringProduct(true)}>
+              Enter product data
+            </button>
+            <ProductForm
+              open={isEnteringProduct}
+              setOpen={setIsEnteringProduct}
+              editable={true}
+              getProductData={getProductData}
+            />
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Does your watch have an appraisal certificate yet?
+            </label>
+            <div className="col-span-2">
+              <ToggleButton
+                name="box"
+                onChange={handleChange}
+                value={formData.box}
+              />
+            </div>
+          </div>
+          {formData.box === "yes" && (
+            <>
+              <div className="grid grid-cols-3 gap-4">
+                <label className="col-span-1 self-center">
+                  Upload Your watch appraisal certificate
+                </label>
+                <div className="col-span-2">
+                  <Upload
+                    name="documents"
+                    listType="picture"
+                    beforeUpload={() => false}
+                    onChange={handleFileChange("appraisalTypeList")}
+                    fileList={formData.appraisalTypeList}
+                  >
+                    <Button size="large" icon={<UploadOutlined />}>
+                      Click to upload
+                    </Button>
+                  </Upload>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <label className="col-span-1 self-center">Image</label>
+                <div className="col-span-2">
+                  <Upload
+                    name="image"
+                    listType="picture"
+                    beforeUpload={() => false}
+                    onChange={handleFileChange("imageList")}
+                    fileList={formData.imageList}
+                  >
+                    <Button size="large" icon={<UploadOutlined />}>
+                      Click to upload
+                    </Button>
+                  </Upload>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <label className="col-span-1 self-center">
+                  Price you want to sell
+                </label>
+                <div className="col-span-2">
+                  <InputNumber
+                    controls={false}
+                    size="large"
+                    min={0}
+                    style={{ width: "70%" }}
+                    value={formData.priceWantToSell}
+                    onChange={(value) =>
+                      handleNumberChange("priceWantToSell", value)
+                    }
+                  />
+                </div>
+              </div>
+            </>
+          )}
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button type="primary" size="large" onClick={handleNext}>
+              Next
+            </Button>
+          </div>
+        </div>
       ),
     },
     {
       title: "Information",
       content: (
-        <Form
-          form={form}
-          onFinish={(values) => {
-            setFormValues((prev) => ({ ...prev, ...values }));
-            setCurrentStep(2);
-          }}
-          layout="vertical"
-        >
-          <Form.Item
-            label="Do you have original box ?"
-            name="originalBox"
-            rules={[
-              {
-                required: true,
-                message: "Please select yes or no",
-              },
-            ]}
-          >
-            <Radio.Group buttonStyle="solid">
-              <Radio.Button value="yes">Yes</Radio.Button>
-              <Radio.Button value="no">No</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item
-            label="Does your watch have original paper ?"
-            name="paper"
-            rules={[
-              {
-                required: true,
-                message: "Please select yes or no",
-              },
-            ]}
-          >
-            <Radio.Group buttonStyle="solid">
-              <Radio.Button value="yes">Yes</Radio.Button>
-              <Radio.Button value="no">No</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item
-            label="Is your watch a limited edition ?"
-            name="limitedEdition"
-            rules={[
-              {
-                required: true,
-                message: "Please select yes or no",
-              },
-            ]}
-          >
-            <Radio.Group buttonStyle="solid">
-              <Radio.Button value="yes">Yes</Radio.Button>
-              <Radio.Button value="no">No</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item
-            label="Price you want to sell"
-            name="price"
-            rules={[{ required: true, message: "Please enter the price" }]}
-          >
-            <InputNumber
-              controls={false}
-              size="large"
-              min={0}
-              style={{ width: "98.5%" }}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Image"
-            name="image"
-            rules={[{ required: true, message: "Please upload an image" }]}
-          >
-            <Upload
-              name="image"
-              listType="picture"
-              beforeUpload={() => false}
-              onChange={onFileChange}
-              fileList={fileList}
-            >
-              <Button size="large" icon={<UploadOutlined />}>
-                Click to upload
-              </Button>
-            </Upload>
-          </Form.Item>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Form.Item>
-              <Button
-                type="primary"
-                size="large"
-                onClick={() => setCurrentStep(currentStep - 1)}
-              >
-                Previous
-              </Button>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" size="large" htmlType="submit">
-                Next
-              </Button>
-            </Form.Item>
+        <div className="flex flex-col space-y-4">
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Do you have original box?
+            </label>
+            <div className="col-span-2">
+              <ToggleButton
+                name="originalBox"
+                onChange={handleChange}
+                value={formData.originalBox}
+              />
+            </div>
           </div>
-        </Form>
-      ),
-    },
-    {
-      title: "Submit",
-      content: (
-        <div>
-          <h2 className="text-center text-3xl font-bold mb-4">
-            Check Information
-          </h2>
-          <div>
-            <h3>Watch Name: {formValues.watchName}</h3>
-            <h3>Your Name: {formValues.name}</h3>
-            <h3>Phone Number: {formValues.phoneNumber}</h3>
-            {box === "no" && (
-              <>
-                <h3>Do you have original box? {formValues.originalBox}</h3>
-                <h3>
-                  Does your watch have original documents?{" "}
-                  {formValues.documents}
-                </h3>
-                <h3>
-                  Is your watch a limited edition? {formValues.limitedEdition}
-                </h3>
-              </>
-            )}
-            <h3>Price you want to sell: {formValues.price}</h3>
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Does your watch have original paper?
+            </label>
+            <div className="col-span-2">
+              <ToggleButton
+                name="paper"
+                onChange={handleChange}
+                value={formData.paper}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Is your watch a limited edition?
+            </label>
+
+            <div className="col-span-2">
+              <ToggleButton
+                name="limitedEdition"
+                onChange={handleChange}
+                value={formData.limitedEdition}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">Image</label>
+            <div className="col-span-2">
+              <Upload
+                name="image"
+                listType="picture"
+                beforeUpload={() => false}
+                onChange={handleFileChange("imageList")}
+                fileList={formData.imageList}
+              >
+                <Button size="large" icon={<UploadOutlined />}>
+                  Click to upload
+                </Button>
+              </Upload>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <label className="col-span-1 self-center">
+              Price you want to sell
+            </label>
+            <div className="col-span-2">
+              <InputNumber
+                controls={false}
+                size="large"
+                min={0}
+                style={{ width: "70%" }}
+                value={formData.priceWantToSell}
+                onChange={(value) =>
+                  handleNumberChange("priceWantToSell", value)
+                }
+              />
+            </div>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Form.Item>
-              <Button
-                type="primary"
-                size="large"
-                onClick={() => {
-                  currentStep !== 1 && box !== "yes"
-                    ? setCurrentStep(1)
-                    : setCurrentStep(currentStep - 2);
-                }}
-              >
-                Previous
-              </Button>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" size="large" onClick={form.submit}>
-                Submit
-              </Button>
-            </Form.Item>
+            <Button type="primary" size="large" onClick={handlePrevious}>
+              Previous
+            </Button>
+            <Button type="primary" size="large" onClick={handleNextInfo}>
+              Next
+            </Button>
           </div>
         </div>
       ),
     },
+    {
+      title: "Review",
+      content: (
+        <>
+          <div className="flex flex-col space-y-4">
+            <label className="col-span-1 self-center">
+              Review your details and click Submit.
+            </label>
+            <p>Watch Name: {formData.watchName}</p>
+            <p>Your Name: {formData.name}</p>
+            <p>Phone Number: {formData.phoneNumber}</p>
+            {formData.box === "no" && (
+              <>
+                <p>Original Box: {formData.originalBox}</p>
+                <p>Paper: {formData.paper}</p>
+                <p>Limited Edition: {formData.limitedEdition}</p>
+                <p>Price: {formData.priceWantToSell}</p>
+                <p>
+                  Image: {formData.fileList.map((file) => file.name).join(", ")}
+                </p>
+              </>
+            )}
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Button
+                type="primary"
+                size="large"
+                onClick={
+                  formData.box === "no" ? handlePrevious : handlePreviousInfo
+                }
+              >
+                Previous
+              </Button>
+              <Button type="primary" size="large" onClick={handleSubmit}>
+                Submit
+              </Button>
+            </div>
+          </div>
+        </>
+      ),
+    },
   ];
-
   return (
-    <div className="w-2/3 max-w-full p-10 border border-gray-300 rounded-lg shadow-lg bg-white mx-5 mt-10 mb-10">
-      <h1 className="text-center text-3xl font-bold mb-4">
-        Information For Sell
-      </h1>
-      <Steps current={currentStep}>
-        {steps.map((step, index) => (
-          <Step key={index} title={step.title} />
-        ))}
-      </Steps>
-      <div className="steps-content">{steps[currentStep].content}</div>
+    <div className="container mx-auto px-4 ">
+      <div className="w-2/3 mx-auto bg-white p-8 rounded-lg shadow-lg overflow-hidden mt-10">
+        <div className="bg-gray-100 px-6 py-4 border-b border-gray-200">
+          <Steps current={formData.currentStep}>
+            {steps.map((item, index) => (
+              <Step key={index} title={item.title} />
+            ))}
+          </Steps>
+          <div className="steps-content mt-8">
+            {steps[formData.currentStep].content}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
