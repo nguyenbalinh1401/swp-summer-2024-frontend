@@ -19,7 +19,7 @@ export default function RemoveModal({
         account: user.id,
         product: product.id,
         type: "delete",
-        status: false,
+        details: "Stop selling",
       })
       .then(async (res) => {
         await axios

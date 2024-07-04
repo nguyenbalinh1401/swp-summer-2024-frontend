@@ -22,7 +22,7 @@ export default function StatusUpdateModal({
         update: {
           status: "SOLD",
         },
-        status: false,
+        details: "Update status to SOLD",
       })
       .then(async (res) => {
         await axios
