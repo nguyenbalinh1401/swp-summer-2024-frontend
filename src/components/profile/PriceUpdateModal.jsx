@@ -1,6 +1,7 @@
 import { Avatar, Input, message, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import CurrencySplitter from "../../assistants/currencySpliter";
 
 export default function PriceUpdateModal({
   product,
@@ -47,8 +48,10 @@ export default function PriceUpdateModal({
         update: {
           price: price,
         },
+        details: `Update price from $${CurrencySplitter(
+          parseFloat(product.price)
+        )} to $${CurrencySplitter(parseFloat(price))}`,
         note: note,
-        status: false,
       })
       .then(async (res) => {
         await axios
