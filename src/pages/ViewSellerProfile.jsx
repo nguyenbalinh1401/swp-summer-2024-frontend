@@ -89,7 +89,7 @@ const ViewSellerProfile = () => {
           cover={<Avatar className="mx-auto my-4" size={128} src={seller.avatar} alt={seller.username} />}
         >
           <Title level={2} className="text-center">{seller.username}</Title>
-                    {/* <div className="w-full h-full bg-blue text-center">
+          {/* <div className="w-full h-full bg-blue text-center">
             <Button
               type="text"
               icon={<PlusOutlined />}
@@ -131,7 +131,11 @@ const ViewSellerProfile = () => {
                 >
                   <Card.Meta
                     title={product.name}
-                    description={`$ ${product.price} - ${moment(product.createdAt).fromNow()}`}
+                    description={
+                      <div>
+                        <span style={{ fontWeight: 'bold', color: 'red' }}>{`$ ${product.price}`}</span> - {moment(product.createdAt).fromNow()}
+                      </div>
+                    }
                   />
                 </Card>
               </List.Item>
