@@ -1,9 +1,10 @@
 import React, { useEffect, useState, createRef } from "react";
-import { Avatar, Tooltip, Modal, Checkbox } from "antd";
+import { Avatar, Tooltip, Modal, Checkbox, message } from "antd";
 import ScrollableFeed from "react-scrollable-feed";
 import { generateNumericCode } from "../../assistants/generators";
 import {
   addDoc,
+  deleteDoc,
   collection,
   onSnapshot,
   serverTimestamp,
@@ -15,8 +16,9 @@ import { db } from "../../firebase-config";
 import axios from "axios";
 import dateFormat from "../../assistants/date.format";
 import moment from "moment";
+import MessageBubbleImage from "../../assets/images/chat/message_bubble.png";
 
-export default function ChatRoom({ user, chatRoomId }) {
+export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [groupedMessageList, setGroupedMessageList] = useState([
@@ -40,7 +42,7 @@ export default function ChatRoom({ user, chatRoomId }) {
       .then((res) => {
         if (!res.data) {
           sessionStorage.setItem("notFoundChatRoom", "yes");
-          window.location.replace("/chat");
+          window.location.reload();
         }
         setCurrentChatRoom(res.data);
       })
@@ -48,8 +50,8 @@ export default function ChatRoom({ user, chatRoomId }) {
   };
 
   useEffect(() => {
-    return () => fetchChatRoomParticipant();
-  }, []);
+    fetchChatRoomParticipant();
+  }, [chatRoomId]);
 
   const messageRef = collection(db, "messages");
 
@@ -77,11 +79,17 @@ export default function ChatRoom({ user, chatRoomId }) {
           new Date(Date.now()).getMinutes(),
         createdAt: serverTimestamp(),
       };
-      console.log("Message: ", messageData.date);
       await addDoc(messageRef, messageData);
+      setCurrentMessage("");
+
+      await axios
+        .patch(
+          `http://localhost:3000/chatRoom/last_active/${currentChatRoom.id}`
+        )
+        .catch((err) => console.log(err));
+
       setMessageList((current) => [...current, messageData]);
     }
-    setCurrentMessage("");
   };
 
   const handleScroll = (isBottom) => {
@@ -99,12 +107,13 @@ export default function ChatRoom({ user, chatRoomId }) {
   };
 
   useEffect(() => {
+    setGroupedMessageList([]);
     const queryMessages = query(
       messageRef,
       where("room", "==", chatRoomId),
       orderBy("createdAt", "asc")
     );
-    const realTimeHandler = onSnapshot(queryMessages, (snapshot) => {
+    const realTimeHandler = onSnapshot(queryMessages, async (snapshot) => {
       let tempMessages = [];
       snapshot.forEach((doc) => {
         tempMessages.push({ ...doc.data(), id: doc.id });
@@ -118,7 +127,7 @@ export default function ChatRoom({ user, chatRoomId }) {
     });
 
     return () => realTimeHandler();
-  }, []);
+  }, [chatRoomId]);
 
   const groupMessageByDate = (list) => {
     if (list.length === 0) {
@@ -166,11 +175,22 @@ export default function ChatRoom({ user, chatRoomId }) {
   };
 
   const handleDeleteChatRoom = async () => {
+    const queryMessages = query(messageRef, where("room", "==", chatRoomId));
+    onSnapshot(queryMessages, (snapshot) => {
+      snapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+    });
+
     await axios
       .delete(`http://localhost:3000/chatRoom/${currentChatRoom.chatRoom.id}`)
       .then(() => {
-        sessionStorage.setItem("deleteChat", "deleted");
-        window.location.replace("/chat");
+        message.info({
+          key: "deleteChat",
+          content: "Successfully deleted chat.",
+          duration: 5,
+        });
+        getDeleteStatus();
       })
       .catch((err) => console.log(err));
   };
@@ -230,86 +250,93 @@ export default function ChatRoom({ user, chatRoomId }) {
             </svg>
           </button>
         </div>
-        <ScrollableFeed
-          ref={scrollableRef}
-          forceScroll
-          onScroll={handleScroll}
-          className="w-full"
-        >
-          <div className="grow w-full min-h-[65vh] flex flex-col items-start justify-end gap-8 py-2 overflow-y-auto">
-            {groupedMessageList.map((group, index) => {
-              return (
-                <div
-                  key={index}
-                  className="w-full flex flex-col items-start justify-start gap-2 overflow-x-hidden"
-                >
-                  <p className="w-full text-center text-[0.65em] font-light">
-                    {group.messages[0]?.time}
-                    {group.date === dateFormat(new Date(), "dd/mm/yyyy")
-                      ? ""
-                      : ` ${group.date}`}
-                  </p>
-                  <div className="w-full flex flex-col gap-1">
-                    {group.messages?.map((mes, i) => {
-                      return (
-                        <div key={i} className="w-full flex flex-col">
-                          <p
-                            className={`w-full text-center text-[0.65em] font-light ${
-                              (i > 0 &&
-                                compareTime(
-                                  group.messages[i - 1].time,
-                                  mes.time
-                                ) < 1) ||
-                              i == 0
-                                ? "hidden"
-                                : "inline"
-                            }`}
-                          >
-                            {mes.time}
-                          </p>
-                          <div
-                            key={i}
-                            className={`px-2 w-full flex items-center ${
-                              mes.authorId === user.id
-                                ? "justify-end"
-                                : "justify-start"
-                            }`}
-                          >
-                            <div
-                              className={`flex ${
-                                mes.authorId === user.id
-                                  ? "flex-row-reverse"
-                                  : "flex-row"
-                              } items-center gap-2`}
+        {messageList.length === 0 ? (
+          <div className="grow w-full min-h-[65vh] flex flex-col items-center justify-center gap-4 opacity-50">
+            <img src={MessageBubbleImage} alt="" width={96} />
+            <p>START THE CONVERSATION NOW!</p>
+          </div>
+        ) : (
+          <ScrollableFeed
+            ref={scrollableRef}
+            forceScroll
+            onScroll={handleScroll}
+            className="w-full"
+          >
+            <div className="grow w-full min-h-[65vh] flex flex-col items-start justify-end gap-8 py-2 overflow-y-auto">
+              {groupedMessageList.map((group, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="w-full flex flex-col items-start justify-start gap-2 overflow-x-hidden"
+                  >
+                    <p className="w-full text-center text-[0.65em] font-light">
+                      {group.messages[0]?.time}
+                      {group.date === dateFormat(new Date(), "dd/mm/yyyy")
+                        ? ""
+                        : ` ${group.date}`}
+                    </p>
+                    <div className="w-full flex flex-col gap-1">
+                      {group.messages?.map((mes, i) => {
+                        return (
+                          <div key={i} className="w-full flex flex-col">
+                            <p
+                              className={`w-full text-center text-[0.65em] font-light ${
+                                (i > 0 &&
+                                  compareTime(
+                                    group.messages[i - 1].time,
+                                    mes.time
+                                  ) < 1) ||
+                                i == 0
+                                  ? "hidden"
+                                  : "inline"
+                              }`}
                             >
-                              <Tooltip
-                                title={mes.time}
-                                placement={
-                                  mes.authorId === user.id ? "left" : "right"
-                                }
-                                mouseEnterDelay={0.5}
+                              {mes.time}
+                            </p>
+                            <div
+                              key={i}
+                              className={`px-2 w-full flex items-center ${
+                                mes.authorId === user.id
+                                  ? "justify-end"
+                                  : "justify-start"
+                              }`}
+                            >
+                              <div
+                                className={`flex ${
+                                  mes.authorId === user.id
+                                    ? "flex-row-reverse"
+                                    : "flex-row"
+                                } items-center gap-2`}
                               >
-                                <p
-                                  className={`px-4 py-2 rounded-[30px] max-w-96 break-words ${
-                                    mes.authorId === user.id
-                                      ? "bg-sky-800 text-white"
-                                      : "bg-slate-200 text-black"
-                                  }`}
+                                <Tooltip
+                                  title={mes.time}
+                                  placement={
+                                    mes.authorId === user.id ? "left" : "right"
+                                  }
+                                  mouseEnterDelay={0.5}
                                 >
-                                  {mes.message}
-                                </p>
-                              </Tooltip>
+                                  <p
+                                    className={`px-4 py-2 rounded-[30px] max-w-96 break-words ${
+                                      mes.authorId === user.id
+                                        ? "bg-sky-800 text-white"
+                                        : "bg-slate-200 text-black"
+                                    }`}
+                                  >
+                                    {mes.message}
+                                  </p>
+                                </Tooltip>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </ScrollableFeed>
+                );
+              })}
+            </div>
+          </ScrollableFeed>
+        )}
 
         <button
           onClick={() => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, Divider, Input, Modal, message } from "antd";
-import { Link } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import { EmailForm, CodeForm, ResetPasswordForm } from "./ForgotForm";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
@@ -23,7 +23,7 @@ export default function SignIn() {
 
   const [messageApi, contextHolder] = message.useMessage();
   const [cookies, setCookie, removeCookie] = useCookies(["signInUser"]);
-
+  const navigate = useNavigate();
   const handleRedirect = () => {
     const passwordResetAccount = sessionStorage.passwordReset;
     if (passwordResetAccount) {
@@ -95,9 +95,6 @@ export default function SignIn() {
   const updateActiveStatus = async (id) => {
     await axios
       .patch(`http://localhost:3000/auth/active_status/${id}`)
-      .then((res) => {
-        sessionStorage.setItem("updated", "yes");
-      })
       .catch((err) => {
         console.log(err);
       });
@@ -106,37 +103,73 @@ export default function SignIn() {
   const handleSignIn = async () => {
     if (signInEmail.length > 0 && signInPassword.length > 0) {
       setIsLoading(true);
-      console.log("Sign in account: " + signInEmail + " " + signInPassword);
       await axios
         .post("http://localhost:3000/auth/login", {
           email: signInEmail,
           password: signInPassword,
         })
         .then(async (res) => {
-          console.log(res.data);
           const account = jwtDecode(res.data.metadata);
-          await updateActiveStatus(account.id);
-          setTimeout(() => {
-            sessionStorage.setItem("signInUser", JSON.stringify(account));
-            if (rememberSignIn) {
-              setCookie("signInUser", JSON.stringify(account));
-            } else {
-              removeCookie("signInUser");
-            }
-            messageApi.open({
-              key: "signInStatus",
-              type: "success",
-              content: "Successfully signed in",
-              duration: 5,
-            });
-            setIsLoading(false);
-            if (sessionStorage.signInRedirect) {
-              window.location.replace(`${sessionStorage.signInRedirect}`);
-              sessionStorage.removeItem("signInRedirect");
-            } else {
-              window.location.replace("/");
-            }
-          }, 2000);
+
+          if (account.status === false) {
+            setTimeout(() => {
+              messageApi.open({
+                key: "signInStatus",
+                type: "warning",
+                content:
+                  "Your account is currently disabled due to recent reports. Sorry for the inconvenience!",
+                duration: 5,
+              });
+              setIsLoading(false);
+            }, 2000);
+          } else {
+            await updateActiveStatus(account.id);
+            setTimeout(() => {
+              sessionStorage.setItem("signInUser", JSON.stringify(account));
+              if (rememberSignIn) {
+                setCookie("signInUser", JSON.stringify(account));
+              } else {
+                removeCookie("signInUser");
+              }
+              messageApi.open({
+                key: "signInStatus",
+                type: "success",
+                content: "Successfully signed in",
+                duration: 5,
+              });
+              setIsLoading(false);
+
+              //       if (sessionStorage.signInRedirect) {
+              //         window.location.replace(`${sessionStorage.signInRedirect}`);
+              //         sessionStorage.removeItem("signInRedirect");
+              //       } else {
+              //         window.location.replace("/");
+              //       }
+              //     }, 2000);
+              //   }
+              // })
+              // .catch((err) => {
+              //   console.log("Sign in failed: ", err);
+              //   messageApi.open({
+              //     key: "signInStatus",
+              //     type: "error",
+              //     content: "Incorrect credentials. Please try again.",
+              //     duration: 5,
+              //   });
+              //   setIsLoading(false);
+              // });
+              if (account.role === "appraiser") {
+                navigate("/appraisal");
+              } else {
+                if (sessionStorage.signInRedirect) {
+                  window.location.replace(`${sessionStorage.signInRedirect}`);
+                  sessionStorage.removeItem("signInRedirect");
+                } else {
+                  navigate("/");
+                }
+              }
+            }, 2000);
+          }
         })
         .catch((err) => {
           console.log("Sign in failed: ", err);
