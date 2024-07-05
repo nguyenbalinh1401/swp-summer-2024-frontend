@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EmptyOrderImage from "../../assets/images/profile/empty-order.webp";
 import SingleTimepiece from "./SingleTimepiece";
-import { Pagination, Tooltip, Modal, Input } from "antd";
+import { Pagination,Modal, Input } from "antd";
 
 export default function Appraisers({ list, getRequestStatus }) {
   const [currentList, setCurrentList] = useState([]);
@@ -23,9 +23,7 @@ export default function Appraisers({ list, getRequestStatus }) {
   };
 
   const approveItem = (item) => {
-    // Logic để phê duyệt sản phẩm
     console.log("Approved item:", item);
-    // Gọi hàm getRequestStatus để cập nhật trạng thái
     getRequestStatus({ id: item.id, status: "approved" });
   };
 
@@ -36,9 +34,7 @@ export default function Appraisers({ list, getRequestStatus }) {
 
   const handleOk = () => {
     if (selectedItem) {
-      // Logic để từ chối sản phẩm và gửi lý do
       console.log("Rejected item:", selectedItem, "Reason:", reason);
-      // Gọi hàm getRequestStatus để cập nhật trạng thái
       getRequestStatus({ id: selectedItem.id, status: "rejected", reason });
       setReason("");
       setSelectedItem(null);
@@ -68,7 +64,7 @@ export default function Appraisers({ list, getRequestStatus }) {
       {currentList.length === 0 ? (
         <div className="w-full h-[40vh] flex flex-col items-center justify-center gap-4">
           <img src={EmptyOrderImage} alt="" className="w-24" />
-          <p>There is yet any products!</p>
+          <p>There are no products to appraisal at this time</p>
         </div>
       ) : (
         <div className="w-full flex flex-col items-start justify-start gap-2 p-4">
