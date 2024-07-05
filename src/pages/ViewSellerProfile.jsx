@@ -131,7 +131,11 @@ const ViewSellerProfile = () => {
                 >
                   <Card.Meta
                     title={product.name}
-                    description={`$ ${product.price} - ${moment(product.createdAt).fromNow()}`}
+                    description={
+                      <div>
+                        <span style={{ fontWeight: 'bold', color: 'red' }}>{`$ ${product.price}`}</span> - {moment(product.createdAt).fromNow()}
+                      </div>
+                    }
                   />
                 </Card>
               </List.Item>
