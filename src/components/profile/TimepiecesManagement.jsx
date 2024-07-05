@@ -3,7 +3,7 @@ import EmptyOrderImage from "../../assets/images/profile/empty-order.webp";
 import SingleTimepiece from "./SingleTimepiece";
 import { Pagination, Tooltip } from "antd";
 
-export default function TimepiecesManagement({ list }) {
+export default function TimepiecesManagement({ list, getRequestStatus }) {
   const [listState, setListState] = useState("all");
   const [currentList, setCurrentList] = useState(list);
   const [temp, setTemp] = useState(list);
@@ -73,7 +73,17 @@ export default function TimepiecesManagement({ list }) {
         list.filter((item) => item.status.toUpperCase() === "SOLD")
       );
       setTemp(list.filter((item) => item.status.toUpperCase() === "SOLD"));
+    } else if (listState === "canceled") {
+      setCurrentList(
+        list.filter((item) => item.status.toUpperCase() === "CANCELED")
+      );
+      setTemp(list.filter((item) => item.status.toUpperCase() === "CANCELED"));
     }
+
+    setPagingState({
+      min: 0,
+      max: defaultPageSize,
+    });
   };
 
   useEffect(() => {
@@ -158,6 +168,16 @@ export default function TimepiecesManagement({ list }) {
             >
               Sold
             </button>
+            <button
+              onClick={() => setListState("canceled")}
+              className={`px-4 py-2 rounded-full duration-100 ${
+                listState === "canceled"
+                  ? "bg-gray-700 text-white"
+                  : "hover:bg-slate-200 text-black"
+              }`}
+            >
+              Canceled
+            </button>
           </div>
 
           <div className="w-1/2 px-16 py-2 flex items-center gap-2 mx-auto">
@@ -194,7 +214,13 @@ export default function TimepiecesManagement({ list }) {
               {currentList
                 .slice(pagingState.min, pagingState.max)
                 .map((item) => {
-                  return <SingleTimepiece key={item.id} product={item} />;
+                  return (
+                    <SingleTimepiece
+                      key={item.id}
+                      product={item}
+                      getRequestStatus={(value) => getRequestStatus(value)}
+                    />
+                  );
                 })}
               <Pagination
                 total={currentList.length}

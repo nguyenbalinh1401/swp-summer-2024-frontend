@@ -7,6 +7,9 @@ export default function FilterSidebar({
   getSortOrder,
   getSelectedBrandList,
 }) {
+  const [currentBrandList, setCurrentBrandList] = useState(
+    brandList.slice(0, 8)
+  );
   const [key, setKey] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [selectedBrandList, setSelectedBrandList] = useState([]);
@@ -142,7 +145,7 @@ export default function FilterSidebar({
       <div className="flex flex-col items-start gap-4">
         <p className="font-bold">Brands</p>
         <div className="flex flex-col text-xs items-start gap-2">
-          {brandList.map((brand) => {
+          {currentBrandList.map((brand) => {
             return (
               <div key={brand}>
                 <button className="flex items-center gap-2 px-4 py-1 rounded-full">
@@ -156,6 +159,20 @@ export default function FilterSidebar({
             );
           })}
         </div>
+        <button
+          onClick={() => {
+            if (currentBrandList.length === brandList.length)
+              setCurrentBrandList(brandList.slice(0, 8));
+            else setCurrentBrandList(brandList);
+          }}
+          className="text-[0.7em] text-gray-500 px-4 hover:underline"
+        >
+          {currentBrandList.length === brandList.length ? (
+            <>Show less</>
+          ) : (
+            <>View all {brandList.length} brands</>
+          )}
+        </button>
       </div>
     </div>
   );

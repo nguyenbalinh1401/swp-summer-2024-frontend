@@ -4,6 +4,7 @@ import ProfileCharts from "../components/profile/ProfileCharts";
 import OrderHistory from "../components/profile/OrderHistory";
 import axios from "axios";
 import TimepiecesManagement from "../components/profile/TimepiecesManagement";
+import { message } from "antd";
 
 export default function Profile() {
   const user =
@@ -30,9 +31,23 @@ export default function Profile() {
   };
 
   useEffect(() => {
+    if (sessionStorage.profile_updated) {
+      message.success({
+        key: "profileUpdated",
+        content: "Successfully updated your profile.",
+        duration: 5,
+      });
+      sessionStorage.removeItem("profile_updated");
+    }
     fetchUserOrder();
     fetchProductListOfUser();
   }, []);
+
+  const getRequestStatus = (value) => {
+    if (value === "updated") {
+      fetchProductListOfUser();
+    }
+  };
 
   return (
     <div className="w-full min-h-[80vh] flex items-start justify-center gap-8 p-16 bg-slate-100">
@@ -44,7 +59,10 @@ export default function Profile() {
         {window.location.pathname === "/profile" ? (
           <OrderHistory list={orders} />
         ) : (
-          <TimepiecesManagement list={userProducts} />
+          <TimepiecesManagement
+            list={userProducts}
+            getRequestStatus={getRequestStatus}
+          />
         )}
       </div>
     </div>
