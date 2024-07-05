@@ -341,7 +341,7 @@ export default function ProductForm({
           <Image src={image} alt="" width={300} preview={!editable} />
           {isEditing && (
             <>
-              <input type="file" onChange={handleFileUpload} />
+              <input type="file" onChange={handleFileUpload} accept="image/*" />
             </>
           )}
         </div>
