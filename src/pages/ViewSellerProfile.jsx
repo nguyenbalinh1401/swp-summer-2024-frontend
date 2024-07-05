@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { List, Avatar, Card, Typography, Button, Input, Rate, Tooltip } from 'antd';
+import { List, Avatar, Card, Typography, Button, Input, Rate, Tooltip, Pagination } from 'antd';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -20,6 +20,8 @@ const ViewSellerProfile = () => {
   const [rating, setRating] = useState(0);
   const [followHovered, setFollowHovered] = useState(false);
   const [joinedAgo, setJoinedAgo] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 9;
 
   useEffect(() => {
     const fetchSellerData = async () => {
@@ -73,6 +75,10 @@ const ViewSellerProfile = () => {
     // Handle follow seller 
   };
 
+  const onPageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   if (!seller) return <div>Loading...</div>;
 
   return (
@@ -83,7 +89,7 @@ const ViewSellerProfile = () => {
           cover={<Avatar className="mx-auto my-4" size={128} src={seller.avatar} alt={seller.username} />}
         >
           <Title level={2} className="text-center">{seller.username}</Title>
-          <div className="w-full h-full bg-blue text-center">
+                    {/* <div className="w-full h-full bg-blue text-center">
             <Button
               type="text"
               icon={<PlusOutlined />}
@@ -95,7 +101,7 @@ const ViewSellerProfile = () => {
             >
               Follow
             </Button>
-          </div>
+          </div> */}
           <Paragraph>Email: {seller.email}</Paragraph>
           <Paragraph>Phone: {seller.phone}</Paragraph>
           <Paragraph>Joined: {joinedAgo} ago</Paragraph>
@@ -115,7 +121,7 @@ const ViewSellerProfile = () => {
         <Card className="mb-4" title="Products">
           <List
             grid={{ gutter: 16, column: 3 }}
-            dataSource={products}
+            dataSource={products.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
             renderItem={product => (
               <List.Item key={product.id}>
                 <Card
@@ -131,17 +137,28 @@ const ViewSellerProfile = () => {
               </List.Item>
             )}
           />
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={products.length}
+            onChange={onPageChange}
+            style={{ marginTop: '20px', textAlign: 'center' }}
+          />
         </Card>
 
         <Card title="Give Feedback">
           <div className="space-y-4">
             <Rate value={rating} onChange={setRating} />
-            <TextArea
-              rows={4}
-              value={newFeedback}
-              onChange={e => setNewFeedback(e.target.value)}
-              placeholder="Write your feedback here..."
-            />
+            <div className="flex">
+              <Avatar size={32} src={user.avatar} />
+              <TextArea
+                rows={4}
+                value={newFeedback}
+                onChange={e => setNewFeedback(e.target.value)}
+                placeholder="Write your feedback here..."
+                style={{ marginLeft: '10px', width: 'calc(100% - 42px)' }}
+              />
+            </div>
             <Button type="primary" onClick={handleFeedbackSubmit}>Submit Feedback</Button>
           </div>
         </Card>
