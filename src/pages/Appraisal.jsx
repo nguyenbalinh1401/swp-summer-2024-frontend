@@ -13,7 +13,7 @@ export default function Appraisal() {
 
   const fetchUserOrder = async () => {
     await axios
-      .get(`http://localhost:3000/order/user/${user.id}`)
+      .get(`http://localhost:3000/product`)
       .then((res) => {
         setOrders(res.data);
       })
@@ -22,7 +22,7 @@ export default function Appraisal() {
 
   const fetchProductListOfUser = async () => {
     await axios
-      .get(`http://localhost:3000/product/user/${user.id}`)
+      .get(`http://localhost:3000/product`)
       .then((res) => {
         setUserProducts(res.data);
       })
