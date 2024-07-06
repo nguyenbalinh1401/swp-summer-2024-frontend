@@ -1,15 +1,28 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import EmptyOrderImage from "../../assets/images/profile/empty-order.webp";
 import SingleOrder from "./SingleOrder";
+import { Pagination } from "antd";
 
 export default function OrderHistory({ list }) {
   const [listState, setListState] = useState("all");
   const [currentList, setCurrentList] = useState(list);
 
+  const defaultPageSize = 8;
+  const [pagingState, setPagingState] = useState({
+    min: 0,
+    max: defaultPageSize,
+  });
+
+  const handlePageChange = (page) => {
+    setPagingState({
+      min: (page - 1) * defaultPageSize,
+      max: page * defaultPageSize,
+    });
+  };
+
   const getFilteredList = () => {
     if (listState === "all") {
       setCurrentList(list);
-      console.log("Current list: ", list.length);
     } else if (listState === "on going") {
       setCurrentList(
         list.filter(
@@ -33,9 +46,9 @@ export default function OrderHistory({ list }) {
     }
   };
 
-  useMemo(() => {
+  useEffect(() => {
     getFilteredList();
-  }, [listState]);
+  }, [listState, list]);
 
   return (
     <div className="w-full min-h-full bg-white rounded-xl">
@@ -87,9 +100,20 @@ export default function OrderHistory({ list }) {
               <p>There is yet any orders!</p>
             </div>
           ) : (
-            currentList.map((item) => {
-              return <SingleOrder key={item.id} order={item} />;
-            })
+            <div className="w-full min-h-[40vh] flex flex-col items-center justify-between gap-8">
+              {currentList
+                .slice(pagingState.min, pagingState.max)
+                .map((item) => {
+                  return <SingleOrder key={item.id} order={item} />;
+                })}
+              <Pagination
+                total={currentList.length}
+                pageSize={8}
+                hideOnSinglePage
+                size="default"
+                onChange={handlePageChange}
+              />
+            </div>
           )}
         </div>
       )}

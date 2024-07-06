@@ -194,32 +194,20 @@ export default function SignUp() {
     <div className="w-full flex flex-col items-center justify-center gap-8 pt-16">
       {contextHolder}
       <p className="text-[250%] font-bold font-title text-sky-800">SIGN UP</p>
-      <div className="w-1/2 xl:w-1/3">
+      <div className="w-2/3 xl:w-1/2">
         <form
           onSubmit={handleSubmit}
           autoComplete="off"
           ref={formRef}
           className="w-full flex flex-col justify-center gap-2"
         >
-          <div className="flex gap-4">
-            <div className="flex flex-col justify-center items-end gap-10">
-              <p>
+          <input type="hidden" name="code" value={generatedCode} />
+          <div className="w-full flex flex-col justify-center items-center gap-8">
+            <div className="w-full flex items-center justify-center gap-2">
+              <p className="w-1/4 flex items-center justify-end gap-1">
                 <span className="text-red-600">*</span> Email:
               </p>
-              <p>
-                <span className="text-red-600">*</span> Password:
-              </p>
-              <p>
-                <span className="text-red-600">*</span> Username:
-              </p>
-              <p>
-                <span className="text-red-600">*</span> Phone:
-              </p>
-            </div>
-
-            <div className="w-2/3 flex flex-col items-center gap-6">
-              <input type="hidden" name="code" value={generatedCode} />
-              <div className="relative w-full flex flex-col items-start gap-1">
+              <div className="relative w-1/2 flex items-start gap-1">
                 <Input
                   name="email"
                   required
@@ -232,38 +220,20 @@ export default function SignUp() {
                   }}
                 />
                 <div
-                  className={`absolute top-10 left-0 text-xs font-light text-red-500 ${
+                  className={`absolute top-9 left-1 text-xs font-light text-red-500 ${
                     dataError.email ? "visible" : "invisible"
                   }`}
                 >
                   Invalid email address!
                 </div>
               </div>
+            </div>
 
-              <div className="relative w-full flex flex-col items-start gap-1">
-                <Input.Password
-                  size="large"
-                  type="password"
-                  name="password"
-                  required
-                  value={accountData.password}
-                  onChange={(e) => {
-                    setAccountData({
-                      ...accountData,
-                      password: e.target.value,
-                    });
-                  }}
-                />
-                <div
-                  className={`absolute top-10 left-0 text-xs font-light text-red-500 ${
-                    dataError.password ? "visible" : "invisible"
-                  }`}
-                >
-                  Password should contain 8 to 20 characters!
-                </div>
-              </div>
-
-              <div className="relative w-full flex flex-col items-start gap-1">
+            <div className="w-full flex items-center justify-center gap-2">
+              <p className="w-1/4 min-w-fit flex items-center justify-end gap-1">
+                <span className="text-red-600">*</span> Username:
+              </p>
+              <div className="relative w-1/2 flex flex-col items-start gap-1">
                 <Input
                   type="text"
                   name="username"
@@ -277,8 +247,13 @@ export default function SignUp() {
                   }}
                 />
               </div>
+            </div>
 
-              <div className="relative w-full flex flex-col items-start gap-1">
+            <div className="w-full flex items-center justify-center gap-2">
+              <p className="w-1/4 min-w-fit flex items-center justify-end gap-1">
+                <span className="text-red-600">*</span> Phone number:
+              </p>
+              <div className="relative w-1/2 flex flex-col items-start gap-1">
                 <Input
                   type="text"
                   name="phone"
@@ -300,9 +275,37 @@ export default function SignUp() {
                 </div>
               </div>
             </div>
+
+            <div className="w-full flex items-center justify-center gap-2">
+              <p className="w-1/4 min-w-fit flex items-center justify-end gap-1">
+                <span className="text-red-600">*</span> Password:
+              </p>
+              <div className="relative w-1/2 flex flex-col items-start gap-1">
+                <Input.Password
+                  size="large"
+                  type="password"
+                  name="password"
+                  required
+                  value={accountData.password}
+                  onChange={(e) => {
+                    setAccountData({
+                      ...accountData,
+                      password: e.target.value,
+                    });
+                  }}
+                />
+                <div
+                  className={`absolute top-10 left-0 text-xs font-light text-red-500 ${
+                    dataError.password ? "visible" : "invisible"
+                  }`}
+                >
+                  Password should contain 8 to 20 characters!
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-row items-start justify-center gap-2 mt-2">
+          <div className="w-2/3 flex flex-row items-start justify-center gap-2 mt-8 mx-auto">
             <Checkbox
               className="flex flex-row mt-[2px]"
               checked={checked}
@@ -313,9 +316,13 @@ export default function SignUp() {
               onClick={() => {
                 if (
                   accountData.email === "" ||
-                  accountData.password === "" ||
                   accountData.username === "" ||
-                  accountData.phone === ""
+                  accountData.phone === "" ||
+                  accountData.password === "" ||
+                  dataError.email ||
+                  dataError.username ||
+                  dataError.phone ||
+                  dataError.password
                 ) {
                   messageApi.open({
                     key: "emptyData",
@@ -367,7 +374,18 @@ export default function SignUp() {
               />
               <p className="font-thin mt-4">
                 Couldn't find the code?&ensp;
-                <span className="font-medium text-sky-600 cursor-pointer hover:underline">
+                <span
+                  onClick={() => {
+                    sendEmail();
+                    message.success({
+                      key: "sendAgain",
+                      content:
+                        "Verification is sent once more. Please check your email!",
+                      duration: 5,
+                    });
+                  }}
+                  className="font-medium text-sky-600 cursor-pointer hover:underline"
+                >
                   Send again
                 </span>
               </p>

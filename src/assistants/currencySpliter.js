@@ -1,3 +1,3 @@
-export default function CurrencySplitter(v) {
-  return isNaN(v) ? v : parseInt(v || 0).toLocaleString();
+export default function CurrencySplitter(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

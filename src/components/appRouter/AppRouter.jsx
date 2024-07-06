@@ -5,76 +5,46 @@ import SignIn from "../../pages/Signin";
 import SignUp from "../../pages/SignUp";
 import Home from "../../pages/Home";
 import ProductDetail from "../../pages/ProductDetail";
-import Cart from "../../pages/Cart";
-import SellPage from "../../components/SellPage";
-import LastActionSell from "../../components/LastActionSell";
-import WatchForm from "../../components/WatchForm";
-import { SellProvider } from "../../context/sellContext";
+import ProductList from "../../pages/ProductsList";
+import Appraisers from "../profile/Appraisers";
 import ContactPage from "../../pages/ContactPage";
-
-import Products from "../../pages/ProductsList";
+import WishList from "../../pages/WishList";
+import Chat from "../../pages/Chat";
 import ThankYou from "../../pages/ThankYou";
 import Profile from "../../pages/Profile";
 import Sell from "../../pages/Sell";
-// import OtherBrandForm from "../OtherBrandForm";
 import StaffDashboard from "../StaffDashboard";
 import SellRequestDetail from "../SellRequestDetail";
 import ReportPage from "../ReportPage";
-
+import TestProductEdit from "../../pages/TestProductEdit";
+import Sell2 from "../../pages/Sell2";
+import Appraisal from "../../pages/Appraisal";
 
 export default function AppRouter() {
   return (
-    <div className="w-full min-h-[80vh] flex items-start justify-start">
+    <div className="w-full min-h-[80vh] flex items-start justify-center">
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/test" element={<TestProductEdit />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/products" element={<ProductList />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<WishList />} />
         <Route path="/order_completed/:id" element={<ThankYou />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/manage-product" element={<Profile />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/:id" element={<Chat />} />
         <Route path="/contact" element={<ContactPage />} />
-        
-        
-        <Route path="/staffDashboard" element={<StaffDashboard/>}/>
-        <Route path="/sell-request/:id" element={<SellRequestDetail />} />
-
-        <Route path="/reportPage" element={<ReportPage/>}/>
-        <Route path="/sell" element={<Sell/>}/>
-        {/* <Route
-          path="/SellPage"
-          element={
-            <SellProvider>
-              <SellPage />
-            </SellProvider>
-          }
-        />
-        <Route
-          path="/lastActionSell"
-          element={
-            <SellProvider>
-              <LastActionSell />
-            </SellProvider>
-          }
-        />
-        <Route
-          path="/watchForm"
-          element={
-            <SellProvider>
-              <WatchForm />
-            </SellProvider>
-          }
-        />
-        <Route
-          path="/OtherBrandForm"
-          element={
-            <SellProvider>
-              <OtherBrandForm />
-            </SellProvider>
-          }
-        /> */}
+        <Route path="/sell" element={<Sell />} />
+        <Route path="/appraisers" element={<Appraisers />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/staffDashboard" element={<StaffDashboard />} />
+        <Route path="/sell-request/:id" element={<SellRequestDetail />} />
+        <Route path="/reportPage" element={<ReportPage />} />
+        <Route path="/sell2" element={<Sell2 />} />
+        <Route path="/appraisal" element={<Appraisal />} />
       </Routes>
     </div>
   );

@@ -3,31 +3,29 @@ import ProductDetailComponent from "../components/productDetail/ProductDetailCom
 import RelatedProductList from "../components/productDetail/RelatedProductList";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import Loading from "../components/loading/Loading";
 
 export default function ProductDetail() {
+  const user = sessionStorage.signInUser
+    ? JSON.parse(sessionStorage.signInUser)
+    : null;
   const { id } = useParams();
   const [product, setProduct] = useState();
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const cart = sessionStorage.cartList
-    ? JSON.parse(sessionStorage.cartList)
+  const [isInWishList, setIsInWishList] = useState(false);
+
+  const wishList = sessionStorage.wishList
+    ? JSON.parse(sessionStorage.wishList)
     : [];
-  const [isInCart, setIsInCart] = useState(false);
 
   const fetchProduct = async () => {
     await axios
       .get(`http://localhost:3000/product/withRelated/${id}`)
       .then((res) => {
-        console.log("Product: ", res.data.product);
         setProduct(res.data.product);
+        const check = wishList.some((item) => item.id === res.data.product.id);
+        setIsInWishList(check);
         setRelatedProducts(res.data.relatedProducts);
-
-        //Check if item has already been in cart
-        if (cart.length > 0) {
-          const foundInCart = cart.find(
-            (item) => item.id === res.data.product.id
-          );
-          setIsInCart(foundInCart ? true : false);
-        }
       })
       .catch((err) => console.log(err));
   };
@@ -36,9 +34,17 @@ export default function ProductDetail() {
     fetchProduct();
   }, []);
 
-  return (
-    <div className="min-h-[70vh] flex flex-col items-center gap-16 py-8">
-      <ProductDetailComponent product={product} isInCart={isInCart} />
+  return !product ? (
+    <Loading />
+  ) : (
+    <div className="w-full min-h-[70vh] flex flex-col items-center gap-16 py-8">
+      <div className="w-2/3">
+        <ProductDetailComponent
+          user={user}
+          product={product}
+          isInWishList={isInWishList}
+        />
+      </div>
       <RelatedProductList list={relatedProducts} />
     </div>
   );

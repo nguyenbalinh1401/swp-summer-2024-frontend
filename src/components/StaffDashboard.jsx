@@ -15,7 +15,7 @@ export default function StaffDashboard() {
 
   const fetchSellRequests = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/sell-request/view`);
+      const response = await axios.get(`http://localhost:3000/sellerRequest`);
       setSellRequests(response.data.sellRequests);
       setLoading(false);
     } catch (error) {
@@ -26,10 +26,7 @@ export default function StaffDashboard() {
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Watch Name", dataIndex: "watchName", key: "watchName" },
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber" },
-    { title: "Price Want To Sell", dataIndex: "priceWantToSell", key: "priceWantToSell" },
+    
     {
       title: "Status", 
       dataIndex: "status", 

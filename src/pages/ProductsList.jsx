@@ -1,144 +1,130 @@
-//buy
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Card, Input, Select, Pagination } from 'antd';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import FilterSidebar from "../components/productList/FilterSidebar";
+import ShownList from "../components/productList/ShownList";
+import NoResult from "../assets/images/productList/no_result.jpg";
+import Loading from "../components/loading/Loading";
 
-const { Meta } = Card;
-const { Search } = Input;
-const { Option } = Select;
+export default function ProductList() {
+  const user = sessionStorage.signInUser
+    ? JSON.parse(sessionStorage.signInUser)
+    : null;
 
-const gridStyle = {
-  width: '25%',
-  textAlign: 'center',
-};
+  const [productList, setProductList] = useState([]);
+  const [currentList, setCurrentList] = useState([]);
+  const [brandList, setBrandList] = useState([]);
+  const [currentSortOrder, setCurrentSortOrder] = useState("");
 
-export default function Products() {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('');
-  const [filterDialColor, setFilterDialColor] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const productsPerPage = 8;
-
-  useEffect(() => {
-    const fetchProductsData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/product/buy');
-        const products = response.data.products;  
-        setProducts(products);
-        setFilteredProducts(products);
-      } catch (error) {
-        console.error('Failed to fetch products data', error);
-      }
-    };
-    fetchProductsData();
-  }, []);
-
-  useEffect(() => {
-    let result = products;
-    
-    // Lọc theo cụm từ tìm kiếm nếu nó ko trống
-    if (searchTerm) {
-      result = result.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Lọc theo loại nếu filterType đc chọn
-    if (filterType) {
-      result = result.filter(product => product.type === filterType);
-    }
-
-    // Lọc theo màu quay số nếu filterDialColor đc chọn
-    if (filterDialColor) {
-      result = result.filter(product => product.dialColor === filterDialColor);
-    }
-
-    setFilteredProducts(result);
-    setCurrentPage(1); // Đặt lại về trang đầu tiên bất cứ khi nào bộ lọc thay đổi
-  }, [searchTerm, filterType, filterDialColor, products]);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const fetchProductList = async () => {
+    await axios
+      .get(`http://localhost:3000/product/available/${user ? user.id : "null"}`)
+      .then((res) => {
+        setProductList(res.data);
+        setCurrentList(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
-  // Calculate current items for pagination
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const fetchBrandList = async () => {
+    await axios
+      .get("http://localhost:3000/product/brand")
+      .then((res) => {
+        let tempBrandList = [];
+        res.data.map((item) => {
+          tempBrandList.push(item.brand);
+        });
+        setBrandList(tempBrandList);
+      })
+      .catch((err) => console.log(err));
+  };
 
-  return (
-    <div className="flex flex-col items-center">
-      <div className="w-full md:w-3/4 mb-8">
-        <Search
-          placeholder="Search products"
-          enterButton
-          onSearch={value => setSearchTerm(value)}
-          className="mb-4"
-          allowClear
-          style={{ width: '100%' }}
+  useEffect(() => {
+    fetchProductList();
+    fetchBrandList();
+  }, []);
+
+  const getSearchKey = async (value) => {
+    if (value === "") {
+      setCurrentList(productList);
+      getSortOrder(currentSortOrder, productList);
+    } else {
+      await axios
+        .get(
+          `http://localhost:3000/product/search/${value.toLowerCase().trim()}`
+        )
+        .then((res) => {
+          setCurrentList(res.data);
+          getSortOrder(currentSortOrder, res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const getSortOrder = (value, current) => {
+    if (value.length > 0) {
+      if (!current) {
+        current = currentList;
+      }
+      let temp = [...current];
+      let sorted = [];
+      if (value === "price_asc") {
+        setCurrentSortOrder("price_asc");
+        sorted = temp.sort((a, b) => {
+          return parseFloat(a.price) - parseFloat(b.price);
+        });
+      } else if (value === "price_des") {
+        setCurrentSortOrder("price_des");
+        sorted = temp.sort((a, b) => {
+          return parseFloat(b.price) - parseFloat(a.price);
+        });
+      } else if (value === "date_asc") {
+        setCurrentSortOrder("date_asc");
+        sorted = temp.sort((a, b) => {
+          return new Date(a.createdAt) - new Date(b.createdAt);
+        });
+      } else if (value === "date_des") {
+        setCurrentSortOrder("date_des");
+        sorted = temp.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      }
+      setCurrentList(sorted);
+    }
+  };
+
+  const getSelectedBrandList = (value) => {
+    console.log("Selected brands: ", value);
+    let filtered = [];
+    if (value.length === 0) {
+      setCurrentList(productList);
+    } else {
+      value.map((brand) => {
+        const temp = productList.filter((i) => i.brand === brand);
+        temp.map((i) => filtered.push(i));
+      });
+      console.log("Filter brand: ", filtered);
+      setCurrentList(filtered);
+      getSortOrder(currentSortOrder, filtered);
+    }
+  };
+  if (productList.length === 0) return <Loading />;
+  else
+    return (
+      <div className="w-full flex gap-8 items-start px-4 py-8 lg:ml-32">
+        <FilterSidebar
+          brandList={brandList}
+          getSearchKey={getSearchKey}
+          getSortOrder={getSortOrder}
+          getSelectedBrandList={getSelectedBrandList}
         />
-        <div className="flex justify-between mb-4">
-          <Select
-            placeholder="Filter by Type"
-            onChange={value => setFilterType(value)}
-            allowClear
-            className="mr-2"
-            style={{ width: '48%' }}
-          >
-            <Option value="Quazt">Quazt</Option>
-            <Option value="Automatic">Automatic</Option>
-            <Option value="Solar">Solar</Option>
-          </Select>
-          <Select
-            placeholder="Filter by Dial Color"
-            onChange={value => setFilterDialColor(value)}
-            allowClear
-            className="ml-2"
-            style={{ width: '48%' }}
-          >
-            <Option value="Green">Green</Option>
-            <Option value="Blue">Blue</Option>
-            <Option value="Black">Black</Option>
-            <Option value="Gold/Silver">Gold/Silver</Option>
-            <Option value="Silver/Gold">Silver/Gold</Option>
-            <Option value="Gry">Gry</Option>
-            <Option value="Mltclr">Mltclr</Option>
-          </Select>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {currentProducts.length > 0 ? (
-          currentProducts.map(product => (
-            <Card
-              key={product.id}
-              hoverable
-              cover={<img src={product.image} alt={product.name} className="w-full h-40 object-cover" />}
-            >
-              <Meta title={product.name} description={`Price: ${product.price}`} />
-              <Link
-                to={`/product/${product.id}`}
-                className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md block text-center mt-4"
-              >
-                View Details
-              </Link>
-            </Card>
-          ))
+        {currentList.length === 0 ? (
+          <div className="w-full h-[40vh] flex flex-col items-center justify-center gap-8">
+            <img src={NoResult} alt="" className="w-32 lg:w-64" />
+            <p className="font-bold lg:text-xl">NO RESULTS FOUND</p>
+          </div>
         ) : (
-          <p>No products found</p>
+          <ShownList list={currentList} />
         )}
       </div>
-      <Pagination
-        current={currentPage}
-        pageSize={productsPerPage}
-        total={filteredProducts.length}
-        onChange={handlePageChange}
-        className="mt-4"
-      />
-    </div>
-  );
+    );
 }
-

@@ -1,35 +1,46 @@
-import { message } from "antd";
-import React, { useEffect } from "react";
+import { Avatar, message } from "antd";
+import React, { useEffect, useState } from "react";
+import EditProfileModal from "./EditProfileModal";
 
 export default function UserProfile() {
   const user = sessionStorage.signInUser
     ? JSON.parse(sessionStorage.signInUser)
     : null;
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
-  const [messageApi, contextHolder] = message.useMessage();
+  const getEditStatus = async (value) => {};
 
   useEffect(() => {
     console.log("User profile: ", user);
   }, []);
 
   return (
-    <div className="w-full bg-white flex flex-col items-center justify-center gap-4 rounded-xl px-8 py-16">
-      {contextHolder}
-      <div className="w-1/4 rounded-full overflow-hidden">
-        <img src={user.avatar} alt="" className="w-full" />
+    <div className="w-full bg-white flex flex-col items-center justify-center gap-4 rounded-xl px-8 py-8">
+      <div className="w-full flex flex-col items-start justify-center gap-2">
+        <div className="w-1/2 min-w-fit flex items-center gap-2">
+          <Avatar src={user.avatar} alt="" size={40} />
+          <p className="text-lg font-bold min-w-fit max-w-96 text-nowrap text-ellipsis overflow-hidden">
+            {user.username}
+          </p>
+        </div>
       </div>
-      <p className="text-xl font-bold">{user.username}</p>
-
+      <div className="w-full min-w-fit flex flex-col gap-1">
+        <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-4 py-2">
+          <p className="text-xs opacity-70">Email:</p>
+          <p className="max-w-96 text-nowrap overflow-hidden text-ellipsis">
+            {user.email}
+          </p>
+        </div>
+        <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-4 py-2">
+          <p className="text-xs opacity-70">Phone number:</p>
+          <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
+            {user.phone || "Not yet provided"}
+          </p>
+        </div>
+      </div>
       <button
-        onClick={() => {
-          messageApi.open({
-            key: "editProfile",
-            type: "warning",
-            content: "Profile editing is in developing process...",
-            duration: 5,
-          });
-        }}
-        className="flex items-center gap-2 bg-sky-300 hover:bg-sky-500 px-8 py-3 font-semibold text-black rounded-3xl mb-8 duration-300"
+        onClick={() => setIsEditingProfile(true)}
+        className="flex items-center gap-2 bg-sky-600 hover:bg-sky-700 px-8 py-3 font-semibold text-white rounded-3xl duration-300"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -42,19 +53,12 @@ export default function UserProfile() {
         </svg>
         EDIT PROFILE
       </button>
-
-      <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-8 py-4">
-        <p className="text-xs opacity-70">Email:</p>
-        <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
-          {user.email}
-        </p>
-      </div>
-      <div className="w-full flex flex-col items-start border border-sky-800 bg-slate-100 rounded-[30px] px-8 py-4">
-        <p className="text-xs opacity-70">Phone number:</p>
-        <p className="max-w-full text-nowrap overflow-hidden text-ellipsis">
-          {user.phone}
-        </p>
-      </div>
+      <EditProfileModal
+        user={user}
+        open={isEditingProfile}
+        setOpen={setIsEditingProfile}
+        getEditStatus={getEditStatus}
+      />
     </div>
   );
 }

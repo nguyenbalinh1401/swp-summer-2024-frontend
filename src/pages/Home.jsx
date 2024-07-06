@@ -5,10 +5,15 @@ import axios from "axios";
 import CompanyFeatures from "../components/home/CompanyFeatures";
 import LatestProducts from "../components/home/LatestProducts";
 import { useLocation } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 export default function Home() {
+  const userSession = sessionStorage.signInUser;
   const [featureProducts, setFeaturedProducts] = useState([]);
   const [latestProducts, setLatestProducts] = useState([]);
   const location = useLocation();
+
+  const [cookies, setCookie, removeCookie] = useCookies(["signInUser"]);
 
   const fetchFeaturedProductList = async () => {
     await axios
@@ -29,13 +34,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if(location.state && location.state.latestProducts){
-      setLatestProducts(location.state.latestProducts);
-    }else{
+    if (!userSession && cookies.signInUser) {
+      window.location.href = "/signin";
+    }
     fetchFeaturedProductList();
     fetchLatestProductList();
-    }
-  }, [location.state]);
+  }, []);
 
   return (
     <div className="w-full flex flex-col">

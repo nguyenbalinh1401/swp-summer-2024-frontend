@@ -1,12 +1,12 @@
 body {
     margin: 0;
     padding: 0;
-    /* Thêm hình ảnh làm nền */
+
     background-image: url('https://scr.vn/wp-content/uploads/2020/07/h%C3%ACnh-n%E1%BB%81n-tr%E1%BA%AFng-tinh.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    /* Tạo hiệu ứng chuyển động */
+
     animation: moveBackground 20s linear infinite;
 }
 
