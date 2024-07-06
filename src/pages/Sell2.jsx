@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const { Step } = Steps;
 
-const Sell = () => {
+const Sell2 = () => {
     const navigate = useNavigate();
 
     // Assuming user is fetched from sessionStorage
@@ -159,9 +159,9 @@ const Sell = () => {
                     </div>
                     {formData.box === "yes" && (
                         <div>
-                            <button onClick={() => setIsEnteringProduct(true)}>
+                            <Button type="primary" onClick={() => setIsEnteringProduct(true)}>
                                 Enter product data
-                            </button>
+                            </Button>
                             {isEnteringProduct && (
                                 <ProductForm
                                     open={isEnteringProduct}
@@ -264,4 +264,4 @@ const Sell = () => {
     );
 };
 
-export default Sell;
+export default Sell2;

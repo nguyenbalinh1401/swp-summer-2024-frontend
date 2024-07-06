@@ -17,7 +17,7 @@ import SellRequestDetail from "../SellRequestDetail";
 import ReportPage from "../ReportPage";
 import TestProductEdit from "../../pages/TestProductEdit";
 import Appraisal from "../../pages/Appraisal";
-
+import Sell2 from "../../pages/Sell2";
 export default function AppRouter() {
   return (
     <div className="w-full min-h-[80vh] flex items-start justify-center">
@@ -36,6 +36,7 @@ export default function AppRouter() {
         <Route path="/chat/:id" element={<Chat />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/sell" element={<Sell />} />
+        <Route path="/sell2" element={<Sell2 />} />
         <Route path="/appraisal" element={<Appraisal />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/staffDashboard" element={<StaffDashboard />} />
