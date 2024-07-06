@@ -11,14 +11,14 @@ export default function Appraisal() {
   const [orders, setOrders] = useState([]);
   const [userProducts, setUserProducts] = useState([]);
 
-  const fetchUserOrder = async () => {
-    await axios
-      .get(`http://localhost:3000/product`)
-      .then((res) => {
-        setOrders(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
+  // const fetchUserOrder = async () => {
+  //   await axios
+  //     .get(`http://localhost:3000/product`)
+  //     .then((res) => {
+  //       setOrders(res.data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   const fetchProductListOfUser = async () => {
     await axios
@@ -38,7 +38,7 @@ export default function Appraisal() {
       });
       sessionStorage.removeItem("profile_updated");
     }
-    fetchUserOrder();
+    // fetchUserOrder();
     fetchProductListOfUser();
   }, []);
 

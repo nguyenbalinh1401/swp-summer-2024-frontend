@@ -5,7 +5,7 @@ import { Pagination } from "antd";
 
 export default function AppraisalHistory({ list }) {
   const [listState, setListState] = useState("all");
-  const [currentList, setCurrentList] = useState(list);
+  // const [currentList, setCurrentList] = useState(list);
 
   const defaultPageSize = 8;
   const [pagingState, setPagingState] = useState({
@@ -20,31 +20,31 @@ export default function AppraisalHistory({ list }) {
     });
   };
 
-  const getFilteredList = () => {
-    if (listState === "all") {
-      setCurrentList(list);
-    } else if (listState === "on going") {
-      setCurrentList(
-        list.filter(
-          (item) =>
-            item.status.toUpperCase() === "PENDING" ||
-            item.status.toUpperCase() === "IN DELIVERY"
-        )
-      );
-    } else if (listState === "completed") {
-      setCurrentList(
-        list.filter((item) => item.status.toUpperCase() === "COMPLETED")
-      );
-    } else if (listState === "cancelled") {
-      setCurrentList(
-        list.filter(
-          (item) =>
-            item.status.toUpperCase() === "CANCELLED" ||
-            item.status.toUpperCase() === "REFUNDED"
-        )
-      );
-    }
-  };
+  // const getFilteredList = () => {
+  //   if (listState === "all") {
+  //     setCurrentList(list);
+  //   } else if (listState === "on going") {
+  //     setCurrentList(
+  //       list.filter(
+  //         (item) =>
+  //           item.status.toUpperCase() === "PENDING" ||
+  //           item.status.toUpperCase() === "IN DELIVERY"
+  //       )
+  //     );
+  //   } else if (listState === "completed") {
+  //     setCurrentList(
+  //       list.filter((item) => item.status.toUpperCase() === "COMPLETED")
+  //     );
+  //   } else if (listState === "cancelled") {
+  //     setCurrentList(
+  //       list.filter(
+  //         (item) =>
+  //           item.status.toUpperCase() === "CANCELLED" ||
+  //           item.status.toUpperCase() === "REFUNDED"
+  //       )
+  //     );
+  //   }
+  // };
 
   useEffect(() => {
     getFilteredList();
