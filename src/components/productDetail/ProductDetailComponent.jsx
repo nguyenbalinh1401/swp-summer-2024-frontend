@@ -6,6 +6,7 @@ import Loading from "../loading/Loading";
 import CurrencySplitter from "../../assistants/currencySpliter";
 import ReportModal from "./ReportModal";
 import moment from "moment";
+import ProductForm from "../profile/ProductForm";
 
 export default function ProductDetailComponent({
   user,
@@ -16,6 +17,7 @@ export default function ProductDetailComponent({
   const [isReporting, setIsReporting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingPhoneNumber, setIsShowingPhoneNumber] = useState(false);
+  const [isShowingDetails, setIsShowingDetails] = useState(false);
 
   const copyPhoneNumber = () => {
     const phone = document.getElementById("phone-number");
@@ -108,8 +110,8 @@ export default function ProductDetailComponent({
       <div className="w-full flex items-center justify-between">
         <img src={product.image} alt="" className="w-[400px]" />
         <div className="w-1/2 flex flex-col items-start justify-between text-xl gap-8">
-          <div className="w-full flex flex-col gap-3">
-            <div className="w-full flex items-start text-sm gap-4 p-2">
+          <div className="w-full flex flex-col justify-start gap-2">
+            <div className="w-full flex items-start text-sm gap-4 p-2 border-b">
               <Avatar src={product.owner.avatar} size={40} alt="" />
               <span className="flex flex-col gap-1">
                 <p>{product.owner.username}</p>
@@ -187,10 +189,10 @@ export default function ProductDetailComponent({
               </div>
             </div>
             <p className="font-light">{product.brand}</p>
-            <p className="text-[2em] font-semibold leading-[1.2em]">
+            <p className="text-[1.5em] font-semibold leading-[1.2em]">
               {product.name}
             </p>
-            <p className="text-[30px] font-bold">
+            <p className="text-red-500 font-bold">
               $ {CurrencySplitter(Math.round(product.price * 100) / 100)}
             </p>
           </div>
@@ -307,7 +309,17 @@ export default function ProductDetailComponent({
         </div>
       </div>
       <div className="flex flex-col ml-8 gap-8">
-        <p className="text-2xl font-bold">SPECIFICATIONS</p>
+        <p className="text-2xl font-bold flex items-center gap-8">
+          SPECIFICATIONS{" "}
+          <button
+            onClick={() => {
+              setIsShowingDetails(true);
+            }}
+            className="text-xs font-light p-2 rounded-lg bg-sky-800 hover:bg-sky-900 text-white"
+          >
+            View details
+          </button>
+        </p>
         <div className="flex flex-wrap justify-start gap-x-4 gap-y-2 text-sm">
           <div className="flex flex-row items-center justify-between flex-[100%] sm:flex-[45%] md:flex-[30%] lg:flex-[20%]">
             <p className="font-bold">Type:</p>
@@ -346,6 +358,12 @@ export default function ProductDetailComponent({
             <p className="font-light">{product.caseSize} mm</p>
           </div>
         </div>
+        <ProductForm
+          product={product}
+          open={isShowingDetails}
+          setOpen={setIsShowingDetails}
+          editable={false}
+        />
       </div>
     </div>
   );
