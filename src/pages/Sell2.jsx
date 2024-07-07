@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const { Step } = Steps;
 
-const Sell = () => {
+const Sell2 = () => {
     const navigate = useNavigate();
 
     // Assuming user is fetched from sessionStorage
@@ -18,12 +18,14 @@ const Sell = () => {
     const [productData, setProductData] = useState();
     const getProductData = (value) => {
         console.log("Product: ", value);
+        setProductData(value);
     };
 
     const [formData, setFormData] = useState({
-
         box: "", // Ensure formData.box has a default value
         details: "",
+        imageList: [], // Ensure formData.imageList has a default value
+        pdfList: [], // Ensure formData.pdfList has a default value
         currentStep: 0,
     });
 
@@ -48,16 +50,15 @@ const Sell = () => {
         setFormData((prevState) => ({
             ...prevState,
             [name]: fileList,
-            currentStep: formData.currentStep === 1 ? 2 : formData.currentStep,
         }));
     };
 
     const handleNext = () => {
-        let nextStep;
-        if (formData.box === "yes") {
+        const { currentStep, box } = formData;
+        let nextStep = currentStep + 1;
+
+        if (currentStep === 0 && box === "yes") {
             nextStep = 2;
-        } else {
-            nextStep = 1; 
         }
 
         setFormData({
@@ -66,7 +67,6 @@ const Sell = () => {
         });
     };
 
-
     const handlePrevious = () => {
         setFormData({
             ...formData,
@@ -74,36 +74,32 @@ const Sell = () => {
         });
     };
 
-
-
     const handleSubmit = async () => {
         try {
             // Prepare data for API call
             const newProductData = {
                 owner: user.id,
-                name: "not done",
-                brand: "not done",
-                price: 0,
-                description: "not done",
-                type: "not done",
-                image: formData.imageList[0]?.url,
-                dialColor: "not done",
-                box: false,
-                papers: false,
-                waterResistance: 0,
-                caseMaterial: "not done",
-                caseSize: 0,
-                pastUsageTime: 0,
-                yearOfProduction: 0,
-                remainingInsurance: 0,
+                name: productData?.name || "not done",
+                brand: productData?.brand || "not done",
+                price: productData?.price || 0,
+                description: productData?.description || "not done",
+                type: productData?.type || "not done",
+                image: formData.imageList[0]?.url || formData.imageList[0]?.originFileObj,
+                dialColor: productData?.dialColor || "not done",
+                box: formData.box === "yes",
+                papers: productData?.papers || false,
+                waterResistance: productData?.waterResistance || 0,
+                caseMaterial: productData?.caseMaterial || "not done",
+                caseSize: productData?.caseSize || 0,
+                pastUsageTime: productData?.pastUsageTime || 0,
+                yearOfProduction: productData?.yearOfProduction || 0,
+                remainingInsurance: productData?.remainingInsurance || 0,
                 status: "IN APPRAISAL",
             };
 
-            
             const productResponse = await axios.post("http://localhost:3000/product", newProductData);
             const productId = productResponse.data.id;
 
-            
             const requestData = {
                 account: user.id,
                 product: productId,
@@ -113,17 +109,15 @@ const Sell = () => {
                 status: "approved", 
             };
 
-            
             const requestResponse = await axios.post("http://localhost:3000/sellerRequest", requestData);
 
             // Show success notification
             notification.success({
                 message: "Success",
                 description: "Your information has been submitted successfully!",
-                
             });
 
-            //log
+            // Log responses
             console.log(productResponse);
             console.log(requestResponse);
 
@@ -140,8 +134,6 @@ const Sell = () => {
         }
     };
 
-
-
     const steps = [
         {
             title: "Check",
@@ -157,12 +149,12 @@ const Sell = () => {
                             />
                         </div>
                     </div>
-                    {formData.box === "yes" && (
+                    {formData.box === "no" && (
                         <div>
-                            <button onClick={() => setIsEnteringProduct(true)}>
-                                Enter product data
-                            </button>
-                            {isEnteringProduct && (
+                                <button onClick={() => setIsEnteringProduct(true)}>
+                                    Enter product data
+                                </button>
+                                {isEnteringProduct && (
                                 <ProductForm
                                     open={isEnteringProduct}
                                     setOpen={setIsEnteringProduct}
@@ -172,7 +164,6 @@ const Sell = () => {
                             )}
                         </div>
                     )}
-                    
                 </div>
             ),
         },
@@ -180,21 +171,19 @@ const Sell = () => {
             title: "Information",
             content: (
                 <div className="flex flex-col space-y-4">
-                    {formData.box === "no" && (
+                    {formData.box === "yes" && (
                         <>
-                            
                             <div className="grid grid-cols-3 gap-4">
                                 <label className="col-span-1 self-center">Detail</label>
                                 <div className="col-span-2">
                                     <Input
-                                        name="description"
+                                        name="details"
                                         value={formData.details}
                                         onChange={handleChange}
                                         placeholder="Enter product description"
                                     />
                                 </div>
                             </div>
-                            
                             <div className="grid grid-cols-3 gap-4">
                                 <label className="col-span-1 self-center">Image</label>
                                 <div className="col-span-2">
@@ -211,7 +200,21 @@ const Sell = () => {
                                     </Upload>
                                 </div>
                             </div>
-                            
+                            <div className="grid grid-cols-3 gap-4">
+                                <label className="col-span-1 self-center">PDF Document</label>
+                                <div className="col-span-2">
+                                    <Upload
+                                        name="pdf"
+                                        beforeUpload={() => false}
+                                        onChange={handleFileChange("pdfList")}
+                                        fileList={formData.pdfList}
+                                    >
+                                        <Button size="large" icon={<UploadOutlined />}>
+                                            Click to upload PDF
+                                        </Button>
+                                    </Upload>
+                                </div>
+                            </div>
                         </>
                     )}
                 </div>
@@ -222,9 +225,38 @@ const Sell = () => {
             content: (
                 <div className="flex flex-col space-y-4">
                     <label className="col-span-1 self-center">Review your details and click Submit.</label>
-                    {/* <p>Watch Name: {formData.watchName}</p>
-                    <p>Your Name: {formData.name}</p>
-                    <p>Phone Number: {formData.phoneNumber}</p> */}
+                    <div className="grid grid-cols-3 gap-4">
+                        <label className="col-span-1 self-center">Detail</label>
+                        <div className="col-span-2">
+                            <p>{formData.details}</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                        <label className="col-span-1 self-center">Image</label>
+                        <div className="col-span-2">
+                            {formData.imageList.length > 0 && (
+                                <img
+                                    src={URL.createObjectURL(formData.imageList[0].originFileObj)}
+                                    alt="Product"
+                                    style={{ width: '100%' }}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                        <label className="col-span-1 self-center">PDF Document</label>
+                        <div className="col-span-2">
+                            {formData.pdfList.length > 0 && (
+                                <a
+                                    href={URL.createObjectURL(formData.pdfList[0].originFileObj)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    View PDF
+                                </a>
+                            )}
+                        </div>
+                    </div>
                     
                 </div>
             ),
@@ -264,4 +296,4 @@ const Sell = () => {
     );
 };
 
-export default Sell;
+export default Sell2;
