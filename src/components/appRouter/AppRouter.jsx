@@ -33,6 +33,7 @@ export default function AppRouter() {
         <Route path="/order_completed/:id" element={<ThankYou />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/manage-product" element={<Profile />} />
+        <Route path="/profile/:id" element={<ViewSellerProfile />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:id" element={<Chat />} />
         <Route path="/contact" element={<ContactPage />} />
@@ -42,7 +43,6 @@ export default function AppRouter() {
         <Route path="/staffDashboard" element={<StaffDashboard />} />
         <Route path="/sell-request/:id" element={<SellRequestDetail />} />
         <Route path="/reportPage" element={<ReportPage />} />
-        <Route path="/viewsellerprofile/:id" element={<ViewSellerProfile />} />
       </Routes>
     </div>
   );
