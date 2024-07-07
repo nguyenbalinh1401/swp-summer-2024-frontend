@@ -57,7 +57,7 @@ const Sell2 = () => {
         const { currentStep, box } = formData;
         let nextStep = currentStep + 1;
 
-        if (currentStep === 0 && box === "yes") {
+        if (currentStep === 0 && box === "no") {
             nextStep = 2;
         }
 
@@ -100,11 +100,16 @@ const Sell2 = () => {
             const productResponse = await axios.post("http://localhost:3000/product", newProductData);
             const productId = productResponse.data.id;
 
+            const updateData = {
+                image: formData.imageList[0]?.url || formData.imageList[0]?.originFileObj,
+                pdf: formData.pdfList[0]?.url || formData.pdfList[0]?.originFileObj,
+            };
+
             const requestData = {
                 account: user.id,
                 product: productId,
                 type: "create",
-                update: null, 
+                update: updateData, 
                 details: formData.details, 
                 status: "approved", 
             };

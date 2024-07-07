@@ -40,9 +40,10 @@ export default function AppRouter() {
         <Route path="/appraisal" element={<Appraisal />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/staffDashboard" element={<StaffDashboard />} />
-        <Route path="/sell-request/:id" element={<SellRequestDetail />} />
+        <Route path="/sell-request/:productId" element={<SellRequestDetail />} />
         <Route path="/reportPage" element={<ReportPage />} />
         <Route path="/sell2" element={<Sell2 />} />
+
       </Routes>
     </div>
   );

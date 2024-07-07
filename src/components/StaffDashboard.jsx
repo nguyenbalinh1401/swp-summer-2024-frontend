@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, message, Tag } from "antd";
+import { Table, Button, message } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-
-export default function StaffDashboard() {
+const StaffDashboard = () => {
   const [sellRequests, setSellRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -16,7 +15,8 @@ export default function StaffDashboard() {
   const fetchSellRequests = async () => {
     try {
       const response = await axios.get(`http://localhost:3000/sellerRequest`);
-      setSellRequests(response.data.sellRequests);
+      setSellRequests(response.data);
+      
       setLoading(false);
     } catch (error) {
       message.error("Failed to fetch sell requests");
@@ -24,20 +24,23 @@ export default function StaffDashboard() {
     }
   };
 
+  const handleViewDetails = (productId) => {
+    console.log(productId);
+    navigate(`/sell-request/${productId}`); // Navigate to the product details page with product id
+  };
+
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
-    
     {
-      title: "Status", 
-      dataIndex: "status", 
+      title: "Status",
+      dataIndex: "status",
       key: "status",
-      
     },
     {
       title: "Action",
       key: "action",
       render: (text, record) => (
-        <Button onClick={() => navigate(`/sell-request/${record.id}`)}>View Details</Button>
+        <Button onClick={() => handleViewDetails(record.product)}>View Details</Button>
       ),
     },
   ];
@@ -53,4 +56,6 @@ export default function StaffDashboard() {
       />
     </div>
   );
-}
+};
+
+export default StaffDashboard;
