@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 const { Step } = Steps;
 
 const Sell2 = () => {
+const Sell2 = () => {
     const navigate = useNavigate();
 
     // Assuming user is fetched from sessionStorage
@@ -331,4 +332,5 @@ const Sell2 = () => {
     );
 };
 
+export default Sell2;
 export default Sell2;
