@@ -17,6 +17,7 @@ const Sell2 = () => {
 
     const [isEnteringProduct, setIsEnteringProduct] = useState(false);
     const [productData, setProductData] = useState();
+    const [image, setImage] = useState();
     const getProductData = (value) => {
         console.log("Product: ", value);
         setProductData(value);
@@ -28,7 +29,7 @@ const Sell2 = () => {
         imageList: [], // Ensure formData.imageList has a default value
         pdfList: [], // Ensure formData.pdfList has a default value
         currentStep: 0,
-        nameWatch: "",
+
     });
 
     const handleChange = (e) => {
@@ -46,21 +47,21 @@ const Sell2 = () => {
         });
     };
 
-    const handleFileChange = async (name) => async (info) => {
-        let fileList = [...info.fileList];
-        fileList = fileList.slice(-1); // Limit to only one file
-        const file = fileList[0].originFileObj;
+    const handleFileUpload = async (e) => {
+        const uploaded = e.target.files[0];
+        //Upload image
+        if (uploaded) {
+            const imgRef = ref(imageDb, `files/${v4()}`);
+            uploadBytes(imgRef, uploaded).then(async (value) => {
+                console.log("Uploaded: ", value.metadata);
+                setImage(await getDownloadURL(value.ref));
+            });
+        }
+    };
 
-        // Upload file to Firebase
-        const imgRef = ref(imageDb, `files/${v4()}`);
-        const snapshot = await uploadBytes(imgRef, file);
-        const url = await getDownloadURL(snapshot.ref);
-
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: fileList,
-            imageUrl: url, // Set the URL of the uploaded image
-        }));
+    const handleImageUrl = () => {
+        const url = prompt("Enter new image url:");
+        if (url) setImage(url);
     };
 
 
@@ -88,38 +89,19 @@ const Sell2 = () => {
 
     const handleSubmit = async () => {
         try {
-            // Prepare data for API call
-            const newProductData = {
-                owner: user.id,
-                name: productData?.name || formData.nameWatch,
-                brand: productData?.brand || "not done",
-                price: productData?.price || 0,
-                description: productData?.description || "not done",
-                type: productData?.type || "not done",
-                image: productData?.imageList?.[0]?.url || formData.imageList?.[0]?.originFileObj,
-                dialColor: productData?.dialColor || "not done",
-                box: productData.box === "yes",
-                papers: productData?.papers || false,
-                waterResistance: productData?.waterResistance || 0,
-                caseMaterial: productData?.caseMaterial || "not done",
-                caseSize: productData?.caseSize || 0,
-                pastUsageTime: productData?.pastUsageTime || 0,
-                yearOfProduction: productData?.yearOfProduction || 0,
-                remainingInsurance: productData?.remainingInsurance || 0,
-                status: "IN APPRAISAL",
-            };
+if (productData){
+            const productResponse = await axios.post("http://localhost:3000/product", productData);
+}
 
-            const productResponse = await axios.post("http://localhost:3000/product", newProductData);
-            const productId = productResponse.data.id;
 
             const updateData = {
-                image: formData.imageList[0]?.url || formData.imageList[0]?.originFileObj,
+                image: image ,
                 pdf: formData.pdfList[0]?.url || formData.pdfList[0]?.originFileObj,
             };
 
             const requestData = {
                 account: user.id,
-                product: productId,
+                product: null,
                 type: "create",
                 update: updateData,
                 details: formData.details,
@@ -136,7 +118,7 @@ const Sell2 = () => {
 
             // Log responses
             console.log(productResponse);
-            console.log(requestResponse);
+            // console.log(requestResponse);
 
             // Redirect to success page
             navigate("/success");
@@ -201,44 +183,41 @@ const Sell2 = () => {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-4">
-                                <label className="col-span-1 self-center">Name Watch: </label>
-                                <div className="col-span-2">
-                                    <Input
-                                        name="nameWatch"
-                                        value={formData.nameWatch}
-                                        onChange={handleChange}
-                                        placeholder="Enter product Name"
-                                    />
-                                </div>
-                            </div>
+
 
 
                             <div className="grid grid-cols-3 gap-4">
-                                <label className="col-span-1 self-center">Image</label>
-                                <div className="col-span-2">
-                                    {formData.imageUrl && (
-                                        <img
-                                            src={formData.imageUrl}
-                                            alt="Uploaded"
-                                            style={{ width: '100%', marginBottom: '10px' }}
+                                <Image src={image} alt="" width={300}  />
+                                
+                                
+                                        <button
+                                            onClick={() => {
+                                                document.getElementById("image-upload")?.click();
+                                            }}
+                                            className="px-4 py-2 rounded-lg bg-sky-700 hover:bg-sky-800 text-white font-semibold"
+                                        >
+                                            Upload image
+                                        </button>
+                                        <p className="text-gray-500 text-[0.8em]">
+                                            or{" "}
+                                            <span
+                                                onClick={handleImageUrl}
+                                                className="underline cursor-pointer hover:text-black"
+                                            >
+                                                use a URL instead
+                                            </span>
+                                        </p>
+                                        <input
+                                            id="image-upload"
+                                            type="file"
+                                            onChange={handleFileUpload}
+                                            accept="image/*"
+                                            hidden
                                         />
-                                    )}
-                                    <Upload
-                                        name="image"
-                                        listType="picture"
-                                        beforeUpload={() => false}
-                                        onChange={handleFileChange("imageList")}
-                                        fileList={formData.imageList}
-                                    >
-                                        <Button size="large" icon={<UploadOutlined />}>
-                                            Click to upload
-                                        </Button>
-                                    </Upload>
-                                </div>
+                                  
                             </div>
 
-                            <div className="grid grid-cols-3 gap-4">
+                            {/* <div className="grid grid-cols-3 gap-4">
                                 <label className="col-span-1 self-center">PDF Document</label>
                                 <div className="col-span-2">
                                     <Upload
@@ -252,7 +231,7 @@ const Sell2 = () => {
                                         </Button>
                                     </Upload>
                                 </div>
-                            </div>
+                            </div> */}
                         </>
                     )}
                 </div>

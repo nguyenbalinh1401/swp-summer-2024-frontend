@@ -18,6 +18,8 @@ import ReportPage from "../ReportPage";
 import TestProductEdit from "../../pages/TestProductEdit";
 import Appraisal from "../../pages/Appraisal";
 import Sell2 from "../../pages/Sell2";
+
+
 export default function AppRouter() {
   return (
     <div className="w-full min-h-[80vh] flex items-start justify-center">
@@ -32,6 +34,7 @@ export default function AppRouter() {
         <Route path="/order_completed/:id" element={<ThankYou />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/manage-product" element={<Profile />} />
+        {/* <Route path="/profile/:id" element={<ViewSellerProfile />} /> */}
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:id" element={<Chat />} />
         <Route path="/contact" element={<ContactPage />} />
