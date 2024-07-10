@@ -14,11 +14,13 @@ import {
 } from "antd";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import dateFormat from "../assistants/date.format";
 import CurrencySplitter from "../assistants/currencySpliter";
 import Loading from "../components/loading/Loading";
 import SingleFeedback from "../components/feedback/SingleFeedback";
+import ReportModal from "../components/productDetail/ReportModal";
+
 const { TextArea } = Input;
 
 const ViewSellerProfile = () => {
@@ -29,6 +31,7 @@ const ViewSellerProfile = () => {
   const [seller, setSeller] = useState();
   const [products, setProducts] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [currentFeedbackList, setCurrentFeedbackList] = useState([]);
   const [feedbackSummary, setFeedbackSummary] = useState();
   const [newFeedback, setNewFeedback] = useState("");
   const [rating, setRating] = useState(0);
@@ -36,7 +39,7 @@ const ViewSellerProfile = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isShowingPhoneNumber, setIsShowingPhoneNumber] = useState(false);
   const [isReporting, setIsReporting] = useState(false);
-  
+
   const pageSize = 9;
 
   const fetchSellerData = async () => {
@@ -59,6 +62,7 @@ const ViewSellerProfile = () => {
       );
       console.log("Feedbacks: ", feedbacksResponse.data);
       setFeedbacks(feedbacksResponse.data);
+      setCurrentFeedbackList(feedbacksResponse.data.slice(0, 4));
 
       await axios
         .get(`http://localhost:3000/feedback/average-rate/${id}`)
@@ -77,30 +81,39 @@ const ViewSellerProfile = () => {
   const handleFeedbackSubmit = async () => {
     if (rating === 0) {
       message.warning({
-        key: "emptyRating",
+        key: "rating",
         content: "Please rate with stars!",
         duration: 5,
       });
       document.getElementById("star-rating").focus();
       return;
-    } else
-      try {
-        const response = await axios.post(`http://localhost:3000/feedback`, {
+    } else {
+      await axios
+        .post(`http://localhost:3000/feedback`, {
           evaluator: user.id,
           evaluated: id,
           comment: newFeedback,
           rating,
+        })
+        .then((res) => {
+          fetchSellerData();
+          setNewFeedback("");
+          setRating(0);
+          message.success({
+            key: "rating",
+            content: "Your feedback is successfully recorded.",
+            duration: 5,
+          });
+        })
+        .catch((error) => {
+          console.log("Error submitting feedback:", error);
         });
-        setFeedbacks([...feedbacks, response.data]);
-        setNewFeedback("");
-        setRating(0);
-      } catch (error) {
-        console.log("Error submitting feedback:", error);
-      }
+    }
   };
 
   const handleReportSeller = () => {
     // Handle reporting seller
+    setIsReporting(true);
   };
 
   const handleFollowSeller = () => {
@@ -146,8 +159,10 @@ const ViewSellerProfile = () => {
                 >
                   <path d="M12.0006 18.26L4.94715 22.2082L6.52248 14.2799L0.587891 8.7918L8.61493 7.84006L12.0006 0.5L15.3862 7.84006L23.4132 8.7918L17.4787 14.2799L19.054 22.2082L12.0006 18.26Z"></path>
                 </svg>
-                {feedbackSummary && feedbackSummary.averageRate}, average of{" "}
-                {feedbackSummary && feedbackSummary.countRating} rating
+                {feedbackSummary &&
+                  Math.round(feedbackSummary.averageRate * 100) / 100}
+                , average of {feedbackSummary && feedbackSummary.countRating}{" "}
+                rating
                 <span
                   className={`${
                     feedbackSummary &&
@@ -234,7 +249,7 @@ const ViewSellerProfile = () => {
                 </div>
               </Modal>
               <p className="text-xs">
-                Joined on: {dateFormat(seller.createdAt, "dd mmmm yyyy")}
+                Joined since: {dateFormat(seller.createdAt, "dd mmmm yyyy")}
               </p>
             </div>
             <div className="text-red absolute top-4 right-4 mt-2 mr-2">
@@ -242,9 +257,33 @@ const ViewSellerProfile = () => {
                 <Button
                   type="text"
                   icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
-                  onClick={handleReportSeller}
+                  onClick={async () => {
+                    await axios
+                      .get(
+                        `http://localhost:3000/report/check/${user.id}/${seller.id}`
+                      )
+                      .then((res) => {
+                        if (res.data)
+                          message.warning({
+                            key: "report",
+                            content:
+                              "Your report on this product has already been recorded.",
+                            duration: 5,
+                          });
+                        else {
+                          setIsReporting(true);
+                        }
+                      })
+                      .catch((err) => console.log(err));
+                  }}
                 />
               </Tooltip>
+              <ReportModal
+                on="user"
+                object={seller}
+                open={isReporting}
+                setOpen={setIsReporting}
+              />
             </div>
           </div>
 
@@ -281,7 +320,7 @@ const ViewSellerProfile = () => {
                 onClick={handleFeedbackSubmit}
                 className="w-full p-2 bg-sky-600 hover:bg-sky-800 duration-150 rounded-xl text-white font-semibold mx-auto"
               >
-                Submit Feedback
+                Submit
               </button>
             </div>
           </Card>
@@ -356,13 +395,32 @@ const ViewSellerProfile = () => {
             {feedbacks.length === 0 ? (
               <div>There is no feedback yet!</div>
             ) : (
-              <List
-                itemLayout="horizontal"
-                dataSource={feedbacks}
-                renderItem={(feedback) => (
-                  <SingleFeedback key={feedback.id} feedback={feedback} />
-                )}
-              />
+              <div className="w-full relative max-h-[60vh] overflow-y-auto">
+                <List
+                  itemLayout="horizontal"
+                  dataSource={currentFeedbackList}
+                  renderItem={(feedback) => (
+                    <SingleFeedback key={feedback.id} feedback={feedback} />
+                  )}
+                />
+                <button
+                  onClick={() => {
+                    if (currentFeedbackList.length === feedbacks.length) {
+                      setCurrentFeedbackList(feedbacks.slice(0, 4));
+                    } else {
+                      setCurrentFeedbackList(feedbacks);
+                    }
+                  }}
+                  className=""
+                >
+                  {feedbackSummary &&
+                  currentFeedbackList.length < feedbacks.length
+                    ? `View ${
+                        feedbackSummary.countRating - currentFeedbackList.length
+                      } more feedbacks`
+                    : "Show less"}
+                </button>
+              </div>
             )}
           </Card>
         </div>
