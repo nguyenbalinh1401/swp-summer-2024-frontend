@@ -27,6 +27,7 @@ const Sell2 = () => {
         imageList: [], // Ensure formData.imageList has a default value
         pdfList: [], // Ensure formData.pdfList has a default value
         currentStep: 0,
+        nameWatch: "",
     });
 
     const handleChange = (e) => {
@@ -44,14 +45,24 @@ const Sell2 = () => {
         });
     };
 
-    const handleFileChange = (name) => (info) => {
+    const handleFileChange = async (name) => async (info) => {
         let fileList = [...info.fileList];
         fileList = fileList.slice(-1); // Limit to only one file
+        const file = fileList[0].originFileObj;
+
+        // Upload file to Firebase
+        const imgRef = ref(imageDb, `files/${v4()}`);
+        const snapshot = await uploadBytes(imgRef, file);
+        const url = await getDownloadURL(snapshot.ref);
+
         setFormData((prevState) => ({
             ...prevState,
             [name]: fileList,
+            imageUrl: url, // Set the URL of the uploaded image
         }));
     };
+
+
 
     const handleNext = () => {
         const { currentStep, box } = formData;
@@ -79,14 +90,14 @@ const Sell2 = () => {
             // Prepare data for API call
             const newProductData = {
                 owner: user.id,
-                name: productData?.name || "not done",
+                name: productData?.name || formData.nameWatch,
                 brand: productData?.brand || "not done",
                 price: productData?.price || 0,
                 description: productData?.description || "not done",
                 type: productData?.type || "not done",
-                image: formData.imageList[0]?.url || formData.imageList[0]?.originFileObj,
+                image: productData?.imageList?.[0]?.url || formData.imageList?.[0]?.originFileObj,
                 dialColor: productData?.dialColor || "not done",
-                box: formData.box === "yes",
+                box: productData.box === "yes",
                 papers: productData?.papers || false,
                 waterResistance: productData?.waterResistance || 0,
                 caseMaterial: productData?.caseMaterial || "not done",
@@ -109,9 +120,9 @@ const Sell2 = () => {
                 account: user.id,
                 product: productId,
                 type: "create",
-                update: updateData, 
-                details: formData.details, 
-                status: "approved", 
+                update: updateData,
+                details: formData.details,
+                status: "approved",
             };
 
             const requestResponse = await axios.post("http://localhost:3000/sellerRequest", requestData);
@@ -141,7 +152,7 @@ const Sell2 = () => {
 
     const steps = [
         {
-            title: "Check",
+
             content: (
                 <div>
                     <div className="grid grid-cols-3 gap-4">
@@ -155,11 +166,11 @@ const Sell2 = () => {
                         </div>
                     </div>
                     {formData.box === "no" && (
-                        <div>
-                                <button onClick={() => setIsEnteringProduct(true)}>
-                                    Enter product data
-                                </button>
-                                {isEnteringProduct && (
+                        <div className="mt-4">
+                            <Button type="primary" onClick={() => setIsEnteringProduct(true)}>
+                                Enter Product Data
+                            </Button>
+                            {isEnteringProduct && (
                                 <ProductForm
                                     open={isEnteringProduct}
                                     setOpen={setIsEnteringProduct}
@@ -173,7 +184,6 @@ const Sell2 = () => {
             ),
         },
         {
-            title: "Information",
             content: (
                 <div className="flex flex-col space-y-4">
                     {formData.box === "yes" && (
@@ -189,9 +199,30 @@ const Sell2 = () => {
                                     />
                                 </div>
                             </div>
+
+                            <div className="grid grid-cols-3 gap-4">
+                                <label className="col-span-1 self-center">Name Watch: </label>
+                                <div className="col-span-2">
+                                    <Input
+                                        name="nameWatch"
+                                        value={formData.nameWatch}
+                                        onChange={handleChange}
+                                        placeholder="Enter product Name"
+                                    />
+                                </div>
+                            </div>
+
+
                             <div className="grid grid-cols-3 gap-4">
                                 <label className="col-span-1 self-center">Image</label>
                                 <div className="col-span-2">
+                                    {formData.imageUrl && (
+                                        <img
+                                            src={formData.imageUrl}
+                                            alt="Uploaded"
+                                            style={{ width: '100%', marginBottom: '10px' }}
+                                        />
+                                    )}
                                     <Upload
                                         name="image"
                                         listType="picture"
@@ -205,6 +236,7 @@ const Sell2 = () => {
                                     </Upload>
                                 </div>
                             </div>
+
                             <div className="grid grid-cols-3 gap-4">
                                 <label className="col-span-1 self-center">PDF Document</label>
                                 <div className="col-span-2">
@@ -226,7 +258,7 @@ const Sell2 = () => {
             ),
         },
         {
-            title: "Review",
+
             content: (
                 <div className="flex flex-col space-y-4">
                     <label className="col-span-1 self-center">Review your details and click Submit.</label>
@@ -262,7 +294,7 @@ const Sell2 = () => {
                             )}
                         </div>
                     </div>
-                    
+
                 </div>
             ),
         },
@@ -270,16 +302,14 @@ const Sell2 = () => {
 
     return (
         <div className="container mx-auto px-4">
-            <div className="w-2/3 mx-auto bg-white p-8 rounded-lg shadow-lg overflow-hidden mt-10">
-                <div className="bg-gray-100 px-6 py-4 border-b border-gray-200">
-                    <Steps current={formData.currentStep}>
-                        {steps.map((item, index) => (
-                            <Step key={index} title={item.title} />
-                        ))}
-                    </Steps>
-                    <div className="steps-content mt-8">{steps[formData.currentStep].content}</div>
-                </div>
-                <div className="flex justify-end mt-6">
+            <div className="w-full md:w-2/3 mx-auto bg-white p-8 rounded-lg shadow-lg overflow-hidden mt-10">
+                <Steps current={formData.currentStep} className="mb-8">
+                    {steps.map((item, index) => (
+                        <Step key={index} />
+                    ))}
+                </Steps>
+                <div className="steps-content mb-8">{steps[formData.currentStep].content}</div>
+                <div className="flex justify-end">
                     {formData.currentStep > 0 && (
                         <Button style={{ marginRight: 8 }} onClick={handlePrevious}>
                             Previous
