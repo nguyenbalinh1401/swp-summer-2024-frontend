@@ -121,6 +121,7 @@ export default function Sell() {
       let newForm;
       if (box === "yes") {
         newForm = {
+          watchBrand,
           watchName,
           name,
           phoneNumber,
@@ -134,6 +135,7 @@ export default function Sell() {
         };
       } else {
         newForm = {
+          watchBrand,
           watchName,
           name,
           phoneNumber,
