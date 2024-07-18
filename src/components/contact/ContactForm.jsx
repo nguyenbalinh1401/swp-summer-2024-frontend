@@ -10,8 +10,7 @@ export default function Contact() {
   });
 
   const [errors, setErrors] = useState({});
-
-  const [products, setProducts] = useState();
+  const [products, setProducts] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +39,7 @@ export default function Contact() {
         newErrors.phone = "Phone number must be between 8 and 12 digits";
       }
     }
-    if (!formData.message) newErrors.message = "Message cannot be empty";
+    if (!formData.message) newErrors.message = "Please fill your message";
     return newErrors;
   };
 
@@ -48,7 +47,22 @@ export default function Contact() {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted:", formData);
+      fetch("http://localhost:3000/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Form submitted:", data);
+          window.location.href = "/"; 
+          alert("Your message has been sent! Thank you <3"); 
+        })
+        .catch((error) => {
+          console.error("Error submitting form:", error);
+        });
     } else {
       setErrors(validationErrors);
     }
@@ -97,7 +111,9 @@ export default function Contact() {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
               />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name}</p>
+              )}
             </div>
             <div>
               <label
@@ -115,7 +131,9 @@ export default function Contact() {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email}</p>
+              )}
             </div>
             <div>
               <label
@@ -133,7 +151,9 @@ export default function Contact() {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
               />
-              {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone}</p>
+              )}
             </div>
             <div>
               <label
@@ -150,7 +170,9 @@ export default function Contact() {
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
               />
-              {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
+              {errors.message && (
+                <p className="text-red-500 text-sm">{errors.message}</p>
+              )}
             </div>
             <button
               type="submit"
