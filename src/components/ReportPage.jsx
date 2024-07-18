@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Spin, Divider } from 'antd';
@@ -8,11 +8,12 @@ const ReportPage = () => {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const reportRef = useRef(null);
 
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/product/d9c8cff1-336d-4a47-8ef6-8e6fd99b1605`);
+        const response = await axios.get(`http://localhost:3000/product/75c54918-93b6-4067-b6b3-bef44ea828db`);
         setProductData(response.data);
         setLoading(false);
       } catch (error) {
@@ -24,12 +25,21 @@ const ReportPage = () => {
     fetchProductData();
   }, [id]);
 
-  if (loading) {
-    return <Spin size="large" />;
-  }
   const handleDownloadHTML = () => {
-    // Implement download as HTML logic here, if needed
-    console.log('Download as HTML');
+    if (reportRef.current) {
+      const htmlContent = reportRef.current.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'report.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else {
+      console.error('Report ref is not available.');
+    }
   };
 
   const styles = {
@@ -61,13 +71,17 @@ const ReportPage = () => {
     },
   };
 
+  if (loading) {
+    return <Spin size="large" />;
+  }
+
   return (
     <div style={styles.reportContainer}>
       <div style={styles.report}>
         <h2>Rolex Watch Appraisal Report</h2>
 
         {/* Khung nhỏ để hiển thị ReportHTML */}
-        <div style={styles.smallFrame}>
+        <div style={styles.smallFrame} ref={reportRef}>
           <ReportHTML productData={productData} />
         </div>
 

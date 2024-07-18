@@ -1,6 +1,12 @@
 import React from 'react';
 
+
+
 const ReportHTML = ({ productData }) => {
+
+  if (!productData) {
+    return null; // or return loading indicator or placeholder
+  }
   const {
     brand,
     description,
@@ -15,7 +21,7 @@ const ReportHTML = ({ productData }) => {
     yearOfProduction,
     remainingInsurance,
     image,
-    logo,
+    
   } = productData;
 
   const styles = {
@@ -34,6 +40,12 @@ const ReportHTML = ({ productData }) => {
       alignItems: 'left',     // Center align items horizontally
       marginBottom: '20px',
     },
+    headerLogo: {
+      display: 'flex',
+      flexDirection: 'column',  // Display items in column layout
+      alignItems: 'right',     // Center align items horizontally
+      marginBottom: '20px',
+    },
     title: {
       fontSize: '18px',
       fontWeight: 'bold',
@@ -42,6 +54,7 @@ const ReportHTML = ({ productData }) => {
     logo: {
       width: '100px',
       height: '100px',
+      
     },
     contactInfo: {
       marginBottom: '20px',
@@ -106,6 +119,8 @@ const ReportHTML = ({ productData }) => {
       <div style={styles.header}>
         <div style={styles.title}>VINTAGE TIMEPIECE</div>
         <div style={styles.title}>VT Watch Inspection Center</div>
+        </div>
+        <div style={styles.headerLogo}>
         <div style= {styles.logo}><svg
             fill="currentColor"
             height="100"
@@ -152,7 +167,8 @@ const ReportHTML = ({ productData }) => {
             </g>
           </svg>
           </div>
-      </div>
+          </div>
+      
 
       <div style={styles.contactInfo}>
         <div>ADDRESS: 123 ACB STREETS ABC</div>
