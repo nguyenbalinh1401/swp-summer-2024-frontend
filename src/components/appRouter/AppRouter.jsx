@@ -23,6 +23,7 @@ import AllAppraisal from "../../pages/AllAppraisal";
 import Appraiser from "../../pages/Appraiser";
 import Sell2 from "../../pages/Sell2";
 import AppraiseAndSell from "../../pages/AppraiseAndSell";
+import CertificateTemplate from "../certificate/CertificateTemplate";
 
 export default function AppRouter() {
   return (
@@ -57,6 +58,7 @@ export default function AppRouter() {
         />
         <Route path="/reportPage" element={<ReportPage />} />
         <Route path="/sell2" element={<Sell2 />} />
+        <Route path="/cert" element={<CertificateTemplate />} />
       </Routes>
     </div>
   );
