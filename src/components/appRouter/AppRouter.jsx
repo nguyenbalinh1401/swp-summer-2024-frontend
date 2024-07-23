@@ -11,18 +11,16 @@ import WishList from "../../pages/WishList";
 import Chat from "../../pages/Chat";
 import ThankYou from "../../pages/ThankYou";
 import Profile from "../../pages/Profile";
-import Sell from "../../pages/Sell";
 import StaffDashboard from "../StaffDashboard";
 import SellRequestDetail from "../SellRequestDetail";
 import ReportPage from "../ReportPage";
 import TestProductEdit from "../../pages/TestProductEdit";
-import Appraisal from "../../pages/Appraisal";
 
 import ViewSellerProfile from "../../pages/ViewSellerProfile";
-import AllAppraisal from "../../pages/AllAppraisal";
-import Appraiser from "../../pages/Appraiser";
+
 import Sell2 from "../../pages/Sell2";
 import AppraiseAndSell from "../../pages/AppraiseAndSell";
+import CertificateTemplate from "../certificate/CertificateTemplate";
 
 export default function AppRouter() {
   return (
@@ -42,14 +40,12 @@ export default function AppRouter() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:id" element={<Chat />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/sell" element={<AppraiseAndSell />} />
+        <Route path="/appraise" element={<AppraiseAndSell />} />
+        <Route path="*" element={<NotFound />} />
 
         <Route path="/sell2" element={<Sell2 />} />
-        <Route path="/allAppraisal/appraisal" element={<Appraisal />} />
-        <Route path="/allAppraisal" element={<AllAppraisal />} />
-        <Route path="/allAppraisal/appraisalHistory" element={<Appraiser />} />
+        
 
-        <Route path="*" element={<NotFound />} />
         <Route path="/staffDashboard" element={<StaffDashboard />} />
         <Route
           path="/sell-request/:productId"
@@ -57,6 +53,7 @@ export default function AppRouter() {
         />
         <Route path="/reportPage" element={<ReportPage />} />
         <Route path="/sell2" element={<Sell2 />} />
+        <Route path="/cert" element={<CertificateTemplate />} />
       </Routes>
     </div>
   );

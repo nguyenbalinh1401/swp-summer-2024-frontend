@@ -1,5 +1,4 @@
 import { Avatar, Rate } from "antd";
-import moment from "moment";
 import React from "react";
 import dateFormat from "../../assistants/date.format";
 
@@ -13,7 +12,7 @@ export default function SingleFeedback({ feedback }) {
           <Rate disabled value={feedback.rating} className="px-4" />
         </p>
         <p className="font-light text-xs">
-          {dateFormat(feedback.createdAt, "HH:mm dd mmm yyyy")}
+          {dateFormat(feedback.createdAt, "mmm dd, yyyy  HH:MM")}
         </p>
         <p className="py-2">{feedback.comment}</p>
       </span>
