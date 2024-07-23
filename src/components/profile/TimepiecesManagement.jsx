@@ -114,10 +114,14 @@ export default function TimepiecesManagement({ list, getRequestStatus }) {
         <div className="w-full h-[40vh] flex flex-col items-center justify-center gap-4">
           <img src={EmptyOrderImage} alt="" className="w-24" />
           <p>There is yet any products!</p>
+          <p className="text-xs font-light italic text-center max-w-96">
+            Your watches that are appraised and registered to be sold within the
+            system will appear here.
+          </p>
         </div>
       ) : (
         <div className="w-full flex flex-col items-start justify-start gap-2 p-4">
-          <div className="w-full flex items-center justify-center gap-4">
+          <div className="w-full flex items-center justify-center gap-4 drop-shadow-sm">
             <button
               onClick={() => setListState("all")}
               className={`px-4 py-2 rounded-full duration-100 ${
@@ -156,7 +160,7 @@ export default function TimepiecesManagement({ list, getRequestStatus }) {
                   : "hover:bg-slate-200 text-black"
               }`}
             >
-              Waiting to be updated
+              Updating
             </button>
             <button
               onClick={() => setListState("sold")}
@@ -205,12 +209,12 @@ export default function TimepiecesManagement({ list, getRequestStatus }) {
           </div>
 
           {currentList.length === 0 ? (
-            <div className="w-full flex flex-col items-center justify-center gap-4 my-16">
+            <div className="w-full min-h-[35vh] flex flex-col items-center justify-center gap-4 my-16">
               <img src={EmptyOrderImage} alt="" className="w-24" />
               <p>No product!</p>
             </div>
           ) : (
-            <div className="w-full min-h-[40vh] flex flex-col items-center justify-start">
+            <div className="w-full min-h-[50vh] flex flex-col items-center justify-start">
               {currentList
                 .slice(pagingState.min, pagingState.max)
                 .map((item) => {

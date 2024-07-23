@@ -84,33 +84,56 @@ const ViewSellerProfile = () => {
     } else {
       if (rating === 0) {
         message.warning({
-          key: "rating",
+          key: "feedback",
           content: "Please rate with stars!",
           duration: 5,
         });
         document.getElementById("star-rating").focus();
         return;
+      } else if (newFeedback.length === 0) {
+        message.warning({
+          key: "feedback",
+          content: "Please leave some words to feedback!",
+          duration: 5,
+        });
+        document.getElementById("new-feedback").focus();
+        return;
       } else {
         await axios
-          .post(`http://localhost:3000/feedback`, {
-            evaluator: user.id,
-            evaluated: id,
-            comment: newFeedback,
-            rating,
+          .get(`http://localhost:3000/feedback/uniqueFeedback/${id}/${user.id}`)
+          .then(async (res) => {
+            if (res.data.length === 0) {
+              await axios
+                .post(`http://localhost:3000/feedback`, {
+                  evaluator: user.id,
+                  evaluated: id,
+                  comment: newFeedback,
+                  rating,
+                })
+                .then((res) => {
+                  fetchSellerData();
+                  setNewFeedback("");
+                  setRating(0);
+                  message.success({
+                    key: "rating",
+                    content:
+                      "Your feedback is successfully recorded. Thank you for your contribution.",
+                    duration: 5,
+                  });
+                })
+                .catch((error) => {
+                  console.log("Error submitting feedback:", error);
+                });
+            } else {
+              message.info({
+                key: "feedback",
+                content:
+                  "Your feedback on this account has already been recorded!",
+                duration: 5,
+              });
+            }
           })
-          .then((res) => {
-            fetchSellerData();
-            setNewFeedback("");
-            setRating(0);
-            message.success({
-              key: "rating",
-              content: "Your feedback is successfully recorded.",
-              duration: 5,
-            });
-          })
-          .catch((error) => {
-            console.log("Error submitting feedback:", error);
-          });
+          .catch((err) => console.log(err));
       }
     }
   };
@@ -324,6 +347,7 @@ const ViewSellerProfile = () => {
               <div className="flex">
                 <Avatar size={32} src={user ? user.avatar : ""} />
                 <TextArea
+                  id="new-feedback"
                   rows={4}
                   value={newFeedback}
                   onChange={(e) => setNewFeedback(e.target.value)}
@@ -427,7 +451,7 @@ const ViewSellerProfile = () => {
                       setCurrentFeedbackList(feedbacks);
                     }
                   }}
-                  className=""
+                  className={`${currentFeedbackList.length < 5 && "hidden"}`}
                 >
                   {feedbackSummary &&
                   currentFeedbackList.length < feedbacks.length

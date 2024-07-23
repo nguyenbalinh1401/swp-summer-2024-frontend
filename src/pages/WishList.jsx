@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import WishListItem from "../components/wishlist/WishListItem";
 import EmptyList from "../assets/images/profile/empty-order.webp";
-import { message } from "antd";
+import { message, Pagination } from "antd";
 import Loading from "../components/loading/Loading";
 
 export default function WishList() {
@@ -14,6 +14,19 @@ export default function WishList() {
     : [];
 
   const [currentList, setCurrentList] = useState(wishList);
+
+  const defaultPageSize = 9;
+  const [pagingState, setPagingState] = useState({
+    min: 0,
+    max: defaultPageSize,
+  });
+
+  const handlePageChange = (page) => {
+    setPagingState({
+      min: (page - 1) * defaultPageSize,
+      max: page * defaultPageSize,
+    });
+  };
 
   const getRemoveItem = (value) => {
     const updated = currentList.filter((item) => item !== value);
@@ -51,6 +64,14 @@ export default function WishList() {
             </span>
           </p>
         </div>
+        <Pagination
+          total={currentList.length}
+          pageSize={defaultPageSize}
+          hideOnSinglePage
+          size="default"
+          onChange={handlePageChange}
+          className="ml-auto"
+        />
         <button
           onClick={() => (window.location.href = "/signin")}
           className={`absolute top-1/4 right-8 bg-gray-700 text-white p-2 lg:px-8 lg:py-2 rounded-xl ${
@@ -67,20 +88,24 @@ export default function WishList() {
           <p className="text-gray-600">EMPTY WISH LIST</p>
         </div>
       ) : (
-        <div className="w-2/3 flex flex-wrap justify-start gap-4 px-4 pb-16">
-          {currentList.map((product) => {
-            return (
-              <WishListItem
-                key={product.id}
-                user={user}
-                product={product}
-                getRemoveItem={getRemoveItem}
-                isLoading={() => {
-                  return <Loading />;
-                }}
-              />
-            );
-          })}
+        <div className="w-2/3 flex flex-col items-center pb-8">
+          <div className="w-full flex flex-wrap justify-start gap-4 px-4 pb-16">
+            {currentList
+              .slice(pagingState.min, pagingState.max)
+              .map((product) => {
+                return (
+                  <WishListItem
+                    key={product.id}
+                    user={user}
+                    product={product}
+                    getRemoveItem={getRemoveItem}
+                    isLoading={() => {
+                      return <Loading />;
+                    }}
+                  />
+                );
+              })}
+          </div>
         </div>
       )}
     </div>

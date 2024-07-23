@@ -194,10 +194,11 @@ export default function Navbar() {
           ALL WATCHES
         </button>
         <button
-          onClick={() => (window.location.href = "/sell")}
+          onClick={() => (window.location.href = "/appraise")}
           className={`min-w-fit hidden lg:flex items-center gap-2 hover:text-slate-300 hover:underline underline-offset-8
             ${
-              window.location.pathname === "/sell" && "underline text-teal-400"
+              window.location.pathname === "/appraise" &&
+              "underline text-teal-400"
             }`}
         >
           <svg

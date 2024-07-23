@@ -50,7 +50,9 @@ export default function ProductList() {
     } else {
       await axios
         .get(
-          `http://localhost:3000/product/search/${value.toLowerCase().trim()}`
+          `http://localhost:3000/product/search-available/${value
+            .toLowerCase()
+            .trim()}/${user.id}`
         )
         .then((res) => {
           setCurrentList(res.data);

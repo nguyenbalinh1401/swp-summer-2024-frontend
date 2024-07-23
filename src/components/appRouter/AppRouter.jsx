@@ -20,6 +20,7 @@ import ViewSellerProfile from "../../pages/ViewSellerProfile";
 
 import Sell2 from "../../pages/Sell2";
 import AppraiseAndSell from "../../pages/AppraiseAndSell";
+import CertificateTemplate from "../certificate/CertificateTemplate";
 
 export default function AppRouter() {
   return (
@@ -39,12 +40,12 @@ export default function AppRouter() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:id" element={<Chat />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/sell" element={<AppraiseAndSell />} />
+        <Route path="/appraise" element={<AppraiseAndSell />} />
+        <Route path="*" element={<NotFound />} />
 
         <Route path="/sell2" element={<Sell2 />} />
         
 
-        <Route path="*" element={<NotFound />} />
         <Route path="/staffDashboard" element={<StaffDashboard />} />
         <Route
           path="/sell-request/:productId"
@@ -52,6 +53,7 @@ export default function AppRouter() {
         />
         <Route path="/reportPage" element={<ReportPage />} />
         <Route path="/sell2" element={<Sell2 />} />
+        <Route path="/cert" element={<CertificateTemplate />} />
       </Routes>
     </div>
   );

@@ -74,6 +74,9 @@ export default function EditProfileModal({
       title=<p className="font-montserrat">Edit profile</p>
       open={open}
       onCancel={(e) => {
+        setUsername(user.username);
+        setPhone(user.phone);
+        setAvatar(user.avatar);
         e.stopPropagation();
         setOpen(false);
       }}

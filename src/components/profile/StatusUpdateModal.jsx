@@ -15,40 +15,20 @@ export default function StatusUpdateModal({
 
   const handleConfirmUpdatePrice = async () => {
     await axios
-      .post("http://localhost:3000/sellerRequest", {
-        account: user.id,
-        product: product.id,
-        type: "update",
-        update: {
-          status: "SOLD",
-        },
-        details: "Update status to SOLD",
+      .patch(`http://localhost:3000/product/${product.id}`, {
+        status: "SOLD",
       })
-      .then(async (res) => {
-        await axios
-          .patch(`http://localhost:3000/product/${product.id}`, {
-            status: "UPDATE_REQUESTED",
-          })
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => console.log(err));
-        message.success({
-          key: "updateStatus",
-          content:
-            "Your sale status update request has been successfully recorded.",
-          duration: 5,
-        });
-        getRequestStatus("updated");
+      .then((res) => {
+        console.log(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-        message.error({
-          key: "updateStatus",
-          content: "Failed to send request. Please try again!",
-          duration: 5,
-        });
-      });
+      .catch((err) => console.log(err));
+    message.success({
+      key: "updateStatus",
+      content:
+        "Your sale status update request has been successfully recorded.",
+      duration: 5,
+    });
+    getRequestStatus("updated");
     setOpen(false);
   };
 
@@ -59,6 +39,7 @@ export default function StatusUpdateModal({
       </p>
       open={open}
       onCancel={(e) => {
+        setCheckedConfirm(false);
         e.stopPropagation();
         setOpen(false);
       }}
@@ -89,11 +70,6 @@ export default function StatusUpdateModal({
       <p className="text-[0.9em] text-red-500 py-2 font-montserrat">
         Once you have confirmed, this action CANNOT be reverted and this product
         CANNOT be sold unless you once again own it.
-      </p>
-
-      <p className="text-[0.8em] italic pb-2 font-montserrat">
-        This product will be set to SOLD once our staffs' verification is
-        finished.
       </p>
 
       <div className="w-full flex items-center justify-end gap-8 font-montserrat pt-4">
