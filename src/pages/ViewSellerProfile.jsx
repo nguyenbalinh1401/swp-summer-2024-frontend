@@ -52,7 +52,7 @@ const ViewSellerProfile = () => {
 
       // Fetch seller's products
       const productsResponse = await axios.get(
-        `http://localhost:3000/product/user/${id}`
+        `http://localhost:3000/product/user-available/${id}`
       );
       setProducts(productsResponse.data);
 
