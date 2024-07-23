@@ -14,13 +14,6 @@ export default function RoomItem({ chatRoom, current, getSelectedRoom }) {
         current ? "bg-slate-200" : "bg-white hover:bg-slate-100"
       }`}
     >
-      <span
-        className={`${
-          chatRoom.participant.role !== "appraiser" && "hidden"
-        } absolute z-10 top-1 left-[-10px] pl-[12px] p-1 text-[0.6em] font-semibold text-white bg-red-500 rounded-lg`}
-      >
-        Appraiser
-      </span>
       <div className="flex gap-2">
         <Avatar src={chatRoom.participant.avatar} alt="" size={40} />
         <div className="min-w-fit flex flex-col self-start justify-start gap-1">

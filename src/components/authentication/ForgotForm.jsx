@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Input } from "antd";
+import { Input, message } from "antd";
 import spinner from "../spinner/spinner.svg";
 import darkSpinner from "../spinner/dark_spinner.svg";
 import emailjs from "@emailjs/browser";
 import { generateNumericAndUppercaseCode } from "../../assistants/generators";
+import axios from "axios";
 
 export function EmailForm(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [currentEmail, setCurrentEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
-  const generatedCode = generateNumericAndUppercaseCode(6, "");
+  const [generatedCode, setGeneratedCode] = useState(
+    generateNumericAndUppercaseCode(6, "")
+  );
   const formRef = useRef();
 
   const sendEmail = () => {
@@ -18,11 +21,14 @@ export function EmailForm(props) {
         publicKey: "CBPvKWvVGwvlXnu4p",
       })
       .then(
-        () => {
-          console.log("SUCCESSFULLY SENT VERIFICATION CODE TO EMAIL.");
-        },
+        () => {},
         (error) => {
           console.log("FAILED TO SEND EMAIL!", error.text);
+          message.error({
+            key: "sendEmail",
+            content: "Failed to send email. Please try again!",
+            duration: 5,
+          });
         }
       );
   };
@@ -38,15 +44,28 @@ export function EmailForm(props) {
     else setIsValidEmail(true);
   };
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    sendEmail();
-    setTimeout(() => {
-      props.email(currentEmail);
-      props.code(generatedCode);
-      setIsLoading(false);
-    }, 2000);
+    await axios
+      .get(`http://localhost:3000/auth/email/${currentEmail}`)
+      .then(() => {
+        sendEmail();
+        setTimeout(() => {
+          props.email(currentEmail);
+          props.code(generatedCode);
+          setIsLoading(false);
+        }, 2000);
+      })
+      .catch((err) => {
+        message.error({
+          key: "notFoundEmail",
+          content:
+            "This email address is yet registered within the system. Please try to sign up or try with another email address!",
+          duration: 5,
+        });
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -97,7 +116,6 @@ export function CodeForm(props) {
 
   const onChange = (code) => {
     setIsLoading(true);
-    console.log("CODE ENTERED:", code);
     if (code === props.generatedCode) {
       setTimeout(() => {
         props.codeValidated(true);
@@ -129,12 +147,6 @@ export function CodeForm(props) {
           {...sharedProps}
           onFocus={() => setIsWrongCode(false)}
         />
-        <p className="font-thin">
-          Couldn't find the code?&ensp;
-          <span className="font-medium text-sky-600 cursor-pointer hover:underline">
-            Send again
-          </span>
-        </p>
         <img
           src={darkSpinner}
           alt=""
@@ -159,7 +171,6 @@ export function ResetPasswordForm(props) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
-    console.log("New password: ", newPassword);
     if (newPassword.length > 0) {
       if (newPassword.length < 8 || newPassword.length > 20) {
         setPasswordError("Password should contain within 8 to 20 characters");
@@ -177,7 +188,6 @@ export function ResetPasswordForm(props) {
   }, [newPassword]);
 
   useEffect(() => {
-    console.log("Confirm password: ", confirmPassword);
     if (confirmPassword.length > 0) {
       if (!confirmPassword.match(newPassword)) {
         setPasswordError("Passwords do not match");
@@ -187,21 +197,30 @@ export function ResetPasswordForm(props) {
     }
   }, [confirmPassword]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("Email: ", props.email);
-    console.log("New password: ", newPassword);
-    //PATCH
-    const account = {
-      email: props.email,
-      password: newPassword,
-    };
-    sessionStorage.setItem("passwordReset", JSON.stringify(account));
-    setTimeout(() => {
-      setIsLoading(false);
-      window.location.replace("/signin");
-    }, 2000);
+    await axios
+      .get(`http://localhost:3000/auth/email/${props.email}`)
+      .then(async (res) => {
+        await axios
+          .patch(`http://localhost:3000/auth/password/${res.data.id}`, {
+            password: newPassword,
+          })
+          .then(() => {
+            const account = {
+              email: props.email,
+              password: newPassword,
+            };
+            sessionStorage.setItem("passwordReset", JSON.stringify(account));
+            setTimeout(() => {
+              setIsLoading(false);
+              window.location.replace("/signin");
+            }, 2000);
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

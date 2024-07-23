@@ -280,7 +280,12 @@ export default function ProductDetailComponent({
               <button
                 onClick={async () => {
                   if (!user) {
-                    window.location.href = "/signin";
+                    message.warning({
+                      key: "report",
+                      content:
+                        "You have to sign in before reporting this product!",
+                      duration: 5,
+                    });
                   } else {
                     await axios
                       .get(

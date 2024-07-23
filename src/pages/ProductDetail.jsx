@@ -31,7 +31,7 @@ export default function ProductDetail() {
 
         await axios
           .get(
-            `http://localhost:3000/product/user/${res.data.product.owner.id}`
+            `http://localhost:3000/product/user-available/${res.data.product.owner.id}`
           )
           .then((res) => {
             setMoreOwnerProducts(res.data.slice(0, 10));

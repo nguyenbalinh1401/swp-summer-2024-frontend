@@ -52,7 +52,7 @@ export default function ProductList() {
         .get(
           `http://localhost:3000/product/search-available/${value
             .toLowerCase()
-            .trim()}/${user.id}`
+            .trim()}/${user ? user.id : "3c8be975-243d-4026-8588-0f00f87c64dd"}`
         )
         .then((res) => {
           setCurrentList(res.data);
