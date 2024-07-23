@@ -5,6 +5,7 @@ import darkSpinner from "../spinner/dark_spinner.svg";
 import emailjs from "@emailjs/browser";
 import axios from "axios";
 import { generateNumericAndUppercaseCode } from "../../assistants/generators";
+import { Link } from "react-router-dom";
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,9 +38,7 @@ export default function SignUp() {
         publicKey: "CBPvKWvVGwvlXnu4p",
       })
       .then(
-        () => {
-          console.log("SUCCESS!");
-        },
+        () => {},
         (error) => {
           console.log("FAILED TO SEND EMAIL", error.text);
         }
@@ -127,17 +126,12 @@ export default function SignUp() {
       console.log("ERROR: ", dataError);
       return;
     }
-    console.log("VERIFY CODE: ", generatedCode);
-    console.log(accountData);
-    console.log(formRef.current);
     sendEmail();
     setModalOpen(true);
   };
 
   const onChange = (code) => {
     setIsLoading(true);
-    console.log("CODE ENTERED:", code);
-    console.log("CODE GENERATED: ", generatedCode);
     if (code === generatedCode) {
       setTimeout(() => {
         register();
@@ -164,7 +158,6 @@ export default function SignUp() {
         phone: accountData.phone,
       })
       .then((res) => {
-        console.log(res.data);
         sessionStorage.setItem("register", JSON.stringify(accountData));
         setTimeout(() => {
           setIsLoading(false);
@@ -179,6 +172,12 @@ export default function SignUp() {
             content:
               "This email has already been used. Please try logging in or using another email!",
             duration: 5,
+          });
+          setAccountData({
+            email: "",
+            username: "",
+            phone: "",
+            password: "",
           });
         } else {
           message.open({
@@ -373,6 +372,15 @@ export default function SignUp() {
               "SIGN UP"
             )}
           </button>
+          <p className="mt-4 font-light text-sm mx-auto">
+            Already had an account?{" "}
+            <Link
+              to="/signin"
+              className="font-semibold text-sky-600 hover:text-sky-800 underline cursor-pointer"
+            >
+              Sign in
+            </Link>
+          </p>
         </form>
         <Modal
           onCancel={() => {

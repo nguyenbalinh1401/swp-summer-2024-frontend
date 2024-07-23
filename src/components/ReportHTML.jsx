@@ -215,9 +215,12 @@ const ReportHTML = ({ productData }) => {
           <div>
             <span style={styles.left}>Case Size:</span> {caseSize} mm
           </div>
-          <div>
-            <span style={styles.left}>Manufactured in:</span> {yearOfProduction}
-          </div>
+          {yearOfProduction > 0 && (
+            <div>
+              <span style={styles.left}>Manufactured in:</span>{" "}
+              {yearOfProduction}
+            </div>
+          )}
         </div>
 
         {image && <img style={styles.productImage} src={image} alt="Watch" />}

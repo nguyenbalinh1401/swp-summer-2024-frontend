@@ -26,6 +26,7 @@ export default function FilterSidebar({
   };
 
   const handleSelectBrand = (brand) => {
+    setKey("");
     let temp = [...selectedBrandList];
     if (selectedBrandList.some((i) => i === brand)) {
       temp = temp.filter((i) => i !== brand);

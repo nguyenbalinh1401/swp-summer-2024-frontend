@@ -77,9 +77,9 @@ export default function Summary({ currentStep, setStep, product, dateRange }) {
     >
       <div className="flex flex-col gap-4">
         {!product ? null : (
-          <div className="flex items-start gap-4 text-sm border border-gray-400 p-4 rounded-xl">
+          <div className="w-full flex items-start gap-4 text-sm border border-gray-400 p-4 rounded-xl">
             <img src={product.image} width={100} />
-            <div className="flex flex-col gap-2">
+            <div className="w-full flex flex-col gap-2">
               <p className="font-semibold">{product.name}</p>
               <p className="font-light italic text-xs">{product.brand}</p>
               <button

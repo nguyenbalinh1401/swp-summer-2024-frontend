@@ -10,6 +10,10 @@ export default function AppraiseAndSell() {
   const [productResult, setProductResult] = useState();
   const [dateRangeResult, setDateRangeResult] = useState();
 
+  const resetDataTrigger = () => {
+    return true;
+  };
+
   useEffect(() => {
     const temp = sessionStorage.tempProduct
       ? JSON.parse(sessionStorage.tempProduct)
@@ -22,13 +26,14 @@ export default function AppraiseAndSell() {
             <p className="inline">
               Your request on <Avatar src={temp.image} alt="" size={32} />{" "}
               <span className="font-semibold">{temp.name}</span> has been
-              recorded. Updates will be shown in your timepiece management.
+              recorded. Updates will be shown in your profile.
             </p>
           ),
           duration: 8,
         });
         sessionStorage.removeItem("appraisalSucceeded");
         sessionStorage.removeItem("tempProduct");
+        resetDataTrigger();
       }
   }, []);
 
@@ -39,6 +44,7 @@ export default function AppraiseAndSell() {
         currentStep={step}
         setStep={setStep}
         setProductResult={setProductResult}
+        resetDataTrigger={resetDataTrigger}
       />
       <ScheduleForm
         currentStep={step}

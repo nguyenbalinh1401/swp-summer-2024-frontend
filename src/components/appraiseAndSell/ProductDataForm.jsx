@@ -10,6 +10,7 @@ export default function ProductDataForm({
   currentStep,
   setStep,
   setProductResult,
+  resetDataTrigger,
 }) {
   const user = sessionStorage.signInUser
     ? JSON.parse(sessionStorage.signInUser)
@@ -18,6 +19,10 @@ export default function ProductDataForm({
   if (!user) {
     window.location.href = "/signin";
   }
+
+  useEffect(() => {
+    resetData();
+  }, [resetDataTrigger]);
 
   const tempProduct = sessionStorage.tempProduct
     ? JSON.parse(sessionStorage.tempProduct)
