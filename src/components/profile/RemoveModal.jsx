@@ -15,24 +15,20 @@ export default function RemoveModal({
 
   const handleConfirmUpdatePrice = async () => {
     await axios
-      .post("http://localhost:3000/sellerRequest", {
-        account: user.id,
-        product: product.id,
-        type: "delete",
-        details: "Stop selling",
+      .patch(`http://localhost:3000/product/${product.id}`, {
+        status: "REMOVED",
       })
-      .then(async (res) => {
-        await axios
-          .patch(`http://localhost:3000/product/${product.id}`, {
-            status: "UPDATE_REQUESTED",
-          })
-          .then((res) => {
-            console.log(res.data);
-          })
-          .catch((err) => console.log(err));
+      .then((res) => {
+        console.log(res.data);
         message.success({
           key: "updateStatus",
-          content: "Your remove request has been successfully recorded.",
+          content: (
+            <p className="inline">
+              <Avatar src={product.image} alt="" size={32} />{" "}
+              <span className="font-semibold">{product.name}</span> has been
+              removed.
+            </p>
+          ),
           duration: 5,
         });
         getRequestStatus("updated");
@@ -41,7 +37,7 @@ export default function RemoveModal({
         console.log(err);
         message.error({
           key: "updateStatus",
-          content: "Failed to send request. Please try again!",
+          content: "Failed to remove this watch. Please try again!",
           duration: 5,
         });
       });

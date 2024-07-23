@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import dateFormat from "../../assistants/date.format";
-import { Avatar, Dropdown, message } from "antd";
+import { Avatar, Dropdown, message, Modal } from "antd";
 import CurrencySplitter from "../../assistants/currencySpliter";
 import ProductForm from "./ProductForm";
 import PriceUpdateModal from "./PriceUpdateModal";
@@ -12,6 +12,7 @@ export default function SingleTimepiece({ product, getRequestStatus }) {
   const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [isViewingReason, setIsViewingReason] = useState(false);
 
   const date = dateFormat(product.createdAt, "dd");
   const month = dateFormat(product.createdAt, "mmm");
@@ -117,7 +118,7 @@ export default function SingleTimepiece({ product, getRequestStatus }) {
       key: "3",
       label: (
         <button
-          disabled={product.status !== "AVAILABLE"}
+          disabled={product.status === "CANCELED" || product.status === "SOLD"}
           className="w-full flex items-center gap-2 font-montserrat font-semibold text-red-500 disabled:text-red-300 disabled:cursor-not-allowed"
         >
           <svg
@@ -135,7 +136,7 @@ export default function SingleTimepiece({ product, getRequestStatus }) {
       onClick: () => {
         setIsRemoving(true);
       },
-      disabled: product.status !== "AVAILABLE",
+      disabled: product.status === "CANCELED" || product.status === "SOLD",
     },
   ];
 
@@ -167,7 +168,9 @@ export default function SingleTimepiece({ product, getRequestStatus }) {
                 <p className="text-xs font-light">{product.brand}</p>
                 <p
                   className={`font-light text-gray-600 ${
-                    product.status === "IN APPRAISAL" && "invisible"
+                    (product.status === "IN APPRAISAL" ||
+                      product.status === "CANCELED") &&
+                    "hidden"
                   }`}
                 >
                   &#8226;
@@ -176,11 +179,43 @@ export default function SingleTimepiece({ product, getRequestStatus }) {
                   className={`text-red-600 text-md font-semibold ${
                     (product.status === "IN APPRAISAL" ||
                       product.status === "CANCELED") &&
-                    "invisible"
+                    "hidden"
                   }`}
                 >
                   $ {CurrencySplitter(Math.round(product.price * 100) / 100)}
                 </p>
+                <button
+                  onClick={() => setIsViewingReason(true)}
+                  className={`ml-8 text-xs text-white bg-cyan-900 hover:bg-cyan-800 duration-200 px-2 py-1 rounded-md ${
+                    (product.status !== "CANCELED" || !product.note) &&
+                    "invisible"
+                  }`}
+                >
+                  View reason
+                </button>
+                {product.status === "CANCELED" && product.note && (
+                  <Modal
+                    title=<p className="font-semibold font-montserrat text-sky-800">
+                      CANCEL REASON
+                    </p>
+                    open={isViewingReason}
+                    onCancel={(e) => {
+                      e.stopPropagation();
+                      setIsViewingReason(false);
+                    }}
+                    footer={null}
+                  >
+                    <div className="w-full flex flex-col font-montserrat">
+                      <p className="w-full text-sm">{product.note}</p>
+                      <button
+                        onClick={() => setIsViewingReason(false)}
+                        className="ml-auto mt-8 px-4 hover:underline duration-200"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </Modal>
+                )}
               </div>
             </span>
           </div>

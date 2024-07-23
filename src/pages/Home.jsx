@@ -5,15 +5,12 @@ import axios from "axios";
 import CompanyFeatures from "../components/home/CompanyFeatures";
 import LatestProducts from "../components/home/LatestProducts";
 import { useLocation } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 export default function Home() {
   const userSession = sessionStorage.signInUser;
   const [featureProducts, setFeaturedProducts] = useState([]);
   const [latestProducts, setLatestProducts] = useState([]);
   const location = useLocation();
-
-  const [cookies, setCookie, removeCookie] = useCookies(["signInUser"]);
 
   const fetchFeaturedProductList = async () => {
     await axios
@@ -34,9 +31,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!userSession && cookies.signInUser) {
-      window.location.href = "/signin";
-    }
     fetchFeaturedProductList();
     fetchLatestProductList();
   }, []);

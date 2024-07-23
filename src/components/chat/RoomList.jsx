@@ -16,7 +16,7 @@ export default function RoomList({
         <div className="w-full min-h-[50vh] flex flex-col items-center justify-center opacity-50">
           <img src={EmptyChatList} alt="" className="w-40 rounded-full" />
           <p className="text-[0.9em] font-semibold">
-            NO CHAT ROOM CONNECTED YET!
+            NO CHAT ROOM IS CONNECTED YET!
           </p>
         </div>
       ) : (

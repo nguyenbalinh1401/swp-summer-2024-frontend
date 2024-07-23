@@ -1,41 +1,15 @@
-import React, { useState } from "react";
-import { Avatar, Checkbox, Modal } from "antd";
+import React from "react";
+import { Avatar, Modal } from "antd";
 import moment from "moment";
-import axios from "axios";
+import CurrencySplitter from "../../assistants/currencySpliter";
 
 export default function PreviewModal({ open, setOpen, user, product }) {
-  const [confirmChecked, setConfirmChecked] = useState(false);
-
-  const handleConfirm = async () => {
-    console.log("Product: ", product);
-    await axios
-      .post("http://localhost:3000/product", product)
-      .then(async (res) => {
-        await axios
-          .post("http://localhost:3000/sellerRequest", {
-            account: user.id,
-            product: res.data.id,
-            type: "create",
-            update: product,
-            details: "Request to be appraised",
-          })
-          .then((res) => {
-            console.log("Sent request: ", res.data);
-            sessionStorage.setItem("appraisalSucceeded", "true");
-            window.location.reload();
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
-  };
-
   return (
     <Modal
       title=<p className="text-sky-700 font-bold text-lg">Preview</p>
       open={open}
       onCancel={(e) => {
         e.stopPropagation();
-        setConfirmChecked(false);
         setOpen(false);
       }}
       footer={null}
@@ -60,7 +34,7 @@ export default function PreviewModal({ open, setOpen, user, product }) {
                     {product.brand}
                   </p>
                   <p className="text-sm text-red-600">
-                    $ <span className="italic">actual price*</span>
+                    $ {CurrencySplitter(product.price)}
                   </p>
                 </div>
                 <div className="w-full flex items-center justify-between text-[0.7em] mt-2">
@@ -83,33 +57,14 @@ export default function PreviewModal({ open, setOpen, user, product }) {
           purchased.
         </p>
 
-        <div className="flex items-start gap-2 pt-8">
-          <Checkbox
-            checked={confirmChecked}
-            onChange={() => setConfirmChecked(!confirmChecked)}
-          />
-          <p>
-            By confirming, your request to appraise this watch will be sent and
-            evaluated by our appraisers. Please make sure every type of data is
-            completely correct!
-          </p>
-        </div>
-
-        <div className="w-full flex items-center gap-2 mt-8">
+        <div className="w-full flex items-center justify-end gap-2 mt-8">
           <button
             onClick={() => {
               setOpen(false);
             }}
-            className="grow py-2 border border-gray-400 hover:bg-slate-100 rounded-xl"
+            className="hover:underline"
           >
-            Cancel
-          </button>
-          <button
-            disabled={!confirmChecked}
-            onClick={handleConfirm}
-            className="grow py-2 bg-sky-700 hover:bg-sky-800 text-white font-semibold rounded-xl disabled:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            Confirm
+            Close
           </button>
         </div>
       </div>

@@ -4,6 +4,7 @@ import RelatedProductList from "../components/productDetail/RelatedProductList";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "../components/loading/Loading";
+import MoreFromOwner from "../components/productDetail/MoreFromOwner";
 
 export default function ProductDetail() {
   const user = sessionStorage.signInUser
@@ -12,6 +13,7 @@ export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState();
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [moreOwnerProducts, setMoreOwnerProducts] = useState([]);
   const [isInWishList, setIsInWishList] = useState(false);
 
   const wishList = sessionStorage.wishList
@@ -21,11 +23,20 @@ export default function ProductDetail() {
   const fetchProduct = async () => {
     await axios
       .get(`http://localhost:3000/product/withRelated/${id}`)
-      .then((res) => {
+      .then(async (res) => {
         setProduct(res.data.product);
         const check = wishList.some((item) => item.id === res.data.product.id);
         setIsInWishList(check);
         setRelatedProducts(res.data.relatedProducts);
+
+        await axios
+          .get(
+            `http://localhost:3000/product/user/${res.data.product.owner.id}`
+          )
+          .then((res) => {
+            setMoreOwnerProducts(res.data.slice(0, 10));
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   };
@@ -45,6 +56,7 @@ export default function ProductDetail() {
           isInWishList={isInWishList}
         />
       </div>
+      <MoreFromOwner list={moreOwnerProducts} owner={product.owner.username} />
       <RelatedProductList list={relatedProducts} />
     </div>
   );

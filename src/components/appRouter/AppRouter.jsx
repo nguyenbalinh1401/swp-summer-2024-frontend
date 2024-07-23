@@ -43,14 +43,14 @@ export default function AppRouter() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:id" element={<Chat />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/sell" element={<AppraiseAndSell />} />
+        <Route path="/appraise" element={<AppraiseAndSell />} />
+        <Route path="*" element={<NotFound />} />
 
         <Route path="/sell2" element={<Sell2 />} />
         <Route path="/allAppraisal/appraisal" element={<Appraisal />} />
         <Route path="/allAppraisal" element={<AllAppraisal />} />
         <Route path="/allAppraisal/appraisalHistory" element={<Appraiser />} />
 
-        <Route path="*" element={<NotFound />} />
         <Route path="/staffDashboard" element={<StaffDashboard />} />
         <Route
           path="/sell-request/:productId"

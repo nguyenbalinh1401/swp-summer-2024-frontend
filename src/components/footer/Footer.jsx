@@ -21,7 +21,7 @@ export default function Footer() {
         </button>
         <p className="text-[0.6em]">
           Please contact{" "}
-          <span className="opacity-70 underline cursor-pointer">
+          <span className="opacity-70 underline">
             vintagetimepiece00@gmail.com
           </span>{" "}
           for further information.

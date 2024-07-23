@@ -7,6 +7,7 @@ import CurrencySplitter from "../../assistants/currencySpliter";
 import ReportModal from "./ReportModal";
 import moment from "moment";
 import ProductForm from "../profile/ProductForm";
+import ProductCertificate from "./ProductCertificate";
 
 export default function ProductDetailComponent({
   user,
@@ -18,6 +19,7 @@ export default function ProductDetailComponent({
   const [isLoading, setIsLoading] = useState(false);
   const [isShowingPhoneNumber, setIsShowingPhoneNumber] = useState(false);
   const [isShowingDetails, setIsShowingDetails] = useState(false);
+  const [isShowingCertificate, setIsShowingCertificate] = useState(false);
 
   const copyPhoneNumber = () => {
     const phone = document.getElementById("phone-number");
@@ -327,14 +329,42 @@ export default function ProductDetailComponent({
       <div className="flex flex-col ml-8 gap-8">
         <p className="text-2xl font-bold flex items-center gap-8">
           SPECIFICATIONS{" "}
-          <button
-            onClick={() => {
-              setIsShowingDetails(true);
-            }}
-            className="text-xs font-light p-2 rounded-lg bg-sky-800 hover:bg-sky-900 text-white"
-          >
-            View details
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                setIsShowingDetails(true);
+              }}
+              className="flex items-center gap-1 text-xs font-light p-2 rounded-lg bg-sky-800 hover:bg-sky-900 text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="currentColor"
+              >
+                <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM12 7C14.7614 7 17 9.23858 17 12C17 14.7614 14.7614 17 12 17C9.23858 17 7 14.7614 7 12C7 11.4872 7.07719 10.9925 7.22057 10.5268C7.61175 11.3954 8.48527 12 9.5 12C10.8807 12 12 10.8807 12 9.5C12 8.48527 11.3954 7.61175 10.5269 7.21995C10.9925 7.07719 11.4872 7 12 7Z"></path>
+              </svg>
+              View details
+            </button>
+            <button
+              onClick={() => {
+                setIsShowingCertificate(true);
+              }}
+              className="flex items-center gap-1 text-xs font-light p-2 rounded-lg bg-teal-800 hover:bg-teal-900 text-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="currentColor"
+              >
+                <path d="M21 8V20.9932C21 21.5501 20.5552 22 20.0066 22H3.9934C3.44495 22 3 21.556 3 21.0082V2.9918C3 2.45531 3.4487 2 4.00221 2H14.9968L21 8ZM19 9H14V4H5V20H19V9ZM8 7H11V9H8V7ZM8 11H16V13H8V11ZM8 15H16V17H8V15Z"></path>
+              </svg>
+              View appraisal certification
+            </button>
+          </div>
         </p>
         <div className="flex flex-wrap justify-start gap-x-4 gap-y-2 text-sm">
           <div className="flex flex-row items-center justify-between flex-[100%] sm:flex-[45%] md:flex-[30%] lg:flex-[20%]">
@@ -374,11 +404,20 @@ export default function ProductDetailComponent({
             <p className="font-light">{product.caseSize} mm</p>
           </div>
         </div>
+        <div className="flex flex-col gap-2">
+          <p className="text-xl font-bold">DESCRIPTION</p>
+          <p className="font-light text-sm">{product.description}</p>
+        </div>
         <ProductForm
           product={product}
           open={isShowingDetails}
           setOpen={setIsShowingDetails}
           editable={false}
+        />
+        <ProductCertificate
+          product={product}
+          open={isShowingCertificate}
+          setOpen={setIsShowingCertificate}
         />
       </div>
     </div>
