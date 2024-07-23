@@ -309,7 +309,28 @@ export default function SignUp() {
             <Checkbox
               className="flex flex-row mt-[2px]"
               checked={checked}
-              onChange={() => setChecked(!checked)}
+              onChange={() => {
+                if (
+                  accountData.email === "" ||
+                  accountData.username === "" ||
+                  accountData.phone === "" ||
+                  accountData.password === "" ||
+                  dataError.email ||
+                  dataError.username ||
+                  dataError.phone ||
+                  dataError.password
+                ) {
+                  messageApi.open({
+                    key: "emptyData",
+                    type: "warning",
+                    content:
+                      "Please make sure all of the fields above are correctly filled!",
+                    duration: 5,
+                  });
+                } else {
+                  setChecked(!checked);
+                }
+              }}
             />
             <p
               className="font-montserrat font-light cursor-pointer"
@@ -327,7 +348,8 @@ export default function SignUp() {
                   messageApi.open({
                     key: "emptyData",
                     type: "warning",
-                    content: "Please fulfill all of the boxes above!",
+                    content:
+                      "Please make sure all of the fields above are correctly filled!",
                     duration: 5,
                   });
                 } else {
@@ -335,7 +357,7 @@ export default function SignUp() {
                 }
               }}
             >
-              By ticking, you are confirming that you have guaranteed the
+              By checking, you are confirming that you have guaranteed the
               authenticity of the information you entered.
             </p>
           </div>

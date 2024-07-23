@@ -61,23 +61,17 @@ export default function Chat() {
           currentSelectedRoomId={selectedChatRoomId}
           list={chatRoomList}
           getSelectedRoom={(value) => {
-            console.log("Room selected: ", value);
             setSelectedChatRoomId(value);
           }}
         />
-
-        {selectedChatRoomId.length > 0 ? (
-          <ChatRoom
-            user={user}
-            chatRoomId={selectedChatRoomId}
-            getDeleteStatus={() => {
-              fetchUserChatRoom();
-              setSelectedChatRoomId("");
-            }}
-          />
-        ) : (
-          <UnselectedChatRoom />
-        )}
+        <ChatRoom
+          user={user}
+          chatRoomId={selectedChatRoomId}
+          getDeleteStatus={() => {
+            fetchUserChatRoom();
+            setSelectedChatRoomId("");
+          }}
+        />
       </div>
     );
 }

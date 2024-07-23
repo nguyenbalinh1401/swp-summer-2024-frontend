@@ -16,6 +16,7 @@ import { db } from "../../firebase-config";
 import axios from "axios";
 import dateFormat from "../../assistants/date.format";
 import moment from "moment";
+import ChatGif from "../../assets/images/chat/select_room.gif";
 import MessageBubbleImage from "../../assets/images/chat/message_bubble-removebg-preview.png";
 import Loading from "../loading/Loading";
 import SendFileModal from "./SendFileModal";
@@ -30,7 +31,7 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
     },
   ]);
   const [isAtBottom, setIsAtBottom] = useState(true);
-  const [currentChatRoom, setCurrentChatRoom] = useState();
+  const [currentChatRoom, setCurrentChatRoom] = useState(null);
   const [isConfirmDeleteOn, setIsConfirmDeleteOn] = useState(false);
   const [checkedConfirmDelete, setCheckedConfirmDelete] = useState(false);
 
@@ -42,20 +43,22 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
   const scrollableRef = createRef();
 
   const fetchChatRoomParticipant = async () => {
-    setIsLoading(true);
-    await axios
-      .get(
-        `http://localhost:3000/chatRoom/butUser/code/${user.id}/${chatRoomId}`
-      )
-      .then((res) => {
-        if (!res.data) {
-          sessionStorage.setItem("notFoundChatRoom", "yes");
-          window.location.reload();
-        }
-        setCurrentChatRoom(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => console.log(err));
+    if (chatRoomId.length > 0) {
+      setIsLoading(true);
+      await axios
+        .get(
+          `http://localhost:3000/chatRoom/butUser/code/${user.id}/${chatRoomId}`
+        )
+        .then((res) => {
+          if (!res.data) {
+            sessionStorage.setItem("notFoundChatRoom", "yes");
+            window.location.reload();
+          }
+          setCurrentChatRoom(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   useEffect(() => {
@@ -253,15 +256,24 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
     setIsSendingFile(false);
   };
 
-  if (isLoading) return;
-  <div className="w-1/2 h-[85vh] rounded-r-xl bg-white drop-shadow-xl border-l border-gray-400 py-2">
-    <Loading />
-  </div>;
-  if (!currentChatRoom)
+  if (chatRoomId.length === 0) {
     return (
-      <div className="w-1/2 h-[85vh] rounded-r-xl bg-white drop-shadow-xl border-l border-gray-400 py-2"></div>
+      <div className="relative w-1/2 h-[85vh] rounded-r-xl bg-white drop-shadow-xl border-l border-gray-400 flex flex-col items-center justify-center py-2">
+        <img src={ChatGif} alt="" className="w-80 rounded-full" />
+        <div className="flex flex-col items-center gap-4">
+          <p className="font-semibold text-sm opacity-70">
+            START TO PURCHASE ANY OF YOUR CHOICES AFAR
+          </p>
+          <button
+            onClick={() => (window.location.href = "/products")}
+            className="text-xs px-4 py-2 border border-gray-500 rounded-lg hover:text-white hover:bg-gray-600 duration-100"
+          >
+            GO GET A WATCH NOW!
+          </button>
+        </div>
+      </div>
     );
-  else
+  } else if (currentChatRoom)
     return (
       <div className="relative w-1/2 h-[85vh] rounded-r-xl bg-white drop-shadow-xl border-l border-gray-400 flex flex-col items-start justify-end py-2">
         <div className="z-10 bg-white border-b border-gray-300 w-full flex items-center justify-between px-4 py-2">
@@ -279,9 +291,16 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
           </div>
 
           <div
-            onClick={() =>
-              (window.location.href = `/product/${currentChatRoom.chatRoom.product.id}`)
-            }
+            onClick={() => {
+              if (currentChatRoom.chatRoom.product.status === "AVAILABLE")
+                window.location.href = `/product/${currentChatRoom.chatRoom.product.id}`;
+              else
+                message.error({
+                  key: "unavailable",
+                  content: "This product is currently unable to be purchased.",
+                  duration: 5,
+                });
+            }}
             className="flex items-center gap-2 px-4 py-2 rounded-[30px] bg-slate-100 hover:bg-slate-200 cursor-pointer"
           >
             <img
@@ -333,7 +352,8 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
                   >
                     <p className="w-full text-center text-[0.65em] font-light">
                       {group.messages[0]?.time}
-                      {group.date === dateFormat(new Date(), "dd/mm/yyyy")
+                      {group.date ===
+                      dateFormat(new Date(Date.now()), "dd/mm/yyyy")
                         ? ""
                         : ` ${group.date}`}
                     </p>
@@ -381,7 +401,7 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
                                   mes.authorId === user.id
                                     ? "flex-row-reverse"
                                     : "flex-row"
-                                } items-center gap-2 max-w-64`}
+                                } items-center gap-2 max-w-[30rem]`}
                               >
                                 <Tooltip
                                   title={mes.time}
@@ -398,7 +418,7 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
                                     />
                                   ) : (
                                     <p
-                                      className={`px-4 py-2 rounded-[30px] max-w-96 break-words ${
+                                      className={`px-4 py-2 rounded-[30px] max-w-[30rem] break-words ${
                                         mes.authorId === user.id
                                           ? "bg-sky-800 text-white"
                                           : "bg-slate-200 text-black"
@@ -449,8 +469,9 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
 
         <div className="w-full flex items-center justify-center gap-1 px-4">
           <button
+            disabled={currentChatRoom.chatRoom.product.status !== "AVAILABLE"}
             onClick={() => document.getElementById("file-upload").click()}
-            className="p-2 rounded-full text-gray-400 hover:text-gray-600 duration-200"
+            className="p-2 rounded-full text-gray-400 hover:text-gray-600 duration-200 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -474,12 +495,19 @@ export default function ChatRoom({ user, chatRoomId, getDeleteStatus }) {
             id="message-input"
             type="text"
             autoComplete="off"
+            disabled={currentChatRoom.chatRoom.product.status !== "AVAILABLE"}
             value={currentMessage}
             maxLength={1500}
-            placeholder="Enter message..."
+            placeholder={
+              currentChatRoom.chatRoom.product.status !== "AVAILABLE"
+                ? "This product is currently unable to be purchased."
+                : "Enter message..."
+            }
             onChange={(e) => setCurrentMessage(e.target.value)}
             onKeyDown={(e) => handleEnterPressed(e)}
-            className="w-full border border-gray-400 rounded-xl px-4 py-2"
+            className={`${
+              currentMessage.length === 0 && "italic"
+            } w-full text-sm border border-gray-400 rounded-xl px-4 py-2 disabled:bg-gray-300 disabled:cursor-not-allowed`}
           />
           <button
             disabled={currentMessage.trim().length === 0}
