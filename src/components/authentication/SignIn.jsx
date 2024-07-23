@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Checkbox, Divider, Input, Modal, message } from "antd";
-import { Link,useNavigate} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { EmailForm, CodeForm, ResetPasswordForm } from "./ForgotForm";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
@@ -23,12 +23,10 @@ export default function SignIn() {
 
   const [messageApi, contextHolder] = message.useMessage();
   const [cookies, setCookie, removeCookie] = useCookies(["signInUser"]);
-  const navigate = useNavigate();
   const handleRedirect = () => {
     const passwordResetAccount = sessionStorage.passwordReset;
     if (passwordResetAccount) {
       const object = JSON.parse(passwordResetAccount);
-      console.log("DEFAULT ACCOUNT: ", object);
       setSignInEmail(object.email);
       messageApi.open({
         type: "success",
@@ -41,7 +39,6 @@ export default function SignIn() {
     const registeredAccount = sessionStorage.register;
     if (registeredAccount) {
       const object = JSON.parse(registeredAccount);
-      console.log("DEFAULT ACCOUNT: ", object);
       setSignInEmail(object.email);
       messageApi.open({
         type: "success",
@@ -55,11 +52,10 @@ export default function SignIn() {
   const checkSignInCookie = () => {
     if (cookies.signInUser) {
       setIsAutoSigningIn(true);
-      console.log("User cookie: ", cookies.signInUser);
       sessionStorage.setItem("signInUser", JSON.stringify(cookies.signInUser));
       setTimeout(() => {
         setIsAutoSigningIn(false);
-        window.location.replace("/");
+        window.location.href = "/";
       }, 1000);
     }
   };
@@ -71,7 +67,6 @@ export default function SignIn() {
 
   const getEmail = (value) => {
     if (value) {
-      console.log("GET EMAIL: ", value);
       setCurrentEmail(value);
       setEmailSent(true);
     }
@@ -79,13 +74,11 @@ export default function SignIn() {
 
   const getGeneratedCode = (value) => {
     if (value) {
-      console.log("GENERATED CODE: ", value);
       setGeneratedCode(value);
     }
   };
 
   const handleGetCodeStatus = (value) => {
-    console.log("Code status: ", value);
     if (value) {
       setForgotFormOpen(false);
       setResetPasswordFormOpen(true);
@@ -139,33 +132,14 @@ export default function SignIn() {
               });
               setIsLoading(false);
 
-              //       if (sessionStorage.signInRedirect) {
-              //         window.location.replace(`${sessionStorage.signInRedirect}`);
-              //         sessionStorage.removeItem("signInRedirect");
-              //       } else {
-              //         window.location.replace("/");
-              //       }
-              //     }, 2000);
-              //   }
-              // })
-              // .catch((err) => {
-              //   console.log("Sign in failed: ", err);
-              //   messageApi.open({
-              //     key: "signInStatus",
-              //     type: "error",
-              //     content: "Incorrect credentials. Please try again.",
-              //     duration: 5,
-              //   });
-              //   setIsLoading(false);
-              // });
               if (account.role === "user") {
-                navigate("/");
+                window.location.href = "/";
               } else {
                 if (sessionStorage.signInRedirect) {
-                  window.location.replace(`${sessionStorage.signInRedirect}`);
+                  window.location.href = `${sessionStorage.signInRedirect}`;
                   sessionStorage.removeItem("signInRedirect");
                 } else {
-                  navigate("/");
+                  window.location.href = "/";
                 }
               }
             }, 2000);
@@ -201,10 +175,10 @@ export default function SignIn() {
           await updateActiveStatus(found.id);
           sessionStorage.setItem("signInUser", JSON.stringify(found));
           if (sessionStorage.signInRedirect) {
-            window.location.replace(`${sessionStorage.signInRedirect}`);
+            window.location.href = `${sessionStorage.signInRedirect}`;
             sessionStorage.removeItem("signInRedirect");
           } else {
-            window.location.replace("/");
+            window.location.href = "/";
           }
         } else {
           messageApi.open({
@@ -216,7 +190,6 @@ export default function SignIn() {
         }
       })
       .catch((err) => {
-        console.log(err);
         const registerData = {
           email: googleLoginData.email,
           password: "12345678",
@@ -226,16 +199,15 @@ export default function SignIn() {
         axios
           .post("http://localhost:3000/auth/create-account", registerData)
           .then((res) => {
-            console.log("Register for new google account: ", res.data);
             sessionStorage.setItem(
               "signInUser",
               JSON.stringify(res.data.metadata)
             );
             if (sessionStorage.signInRedirect) {
-              window.location.replace(`${sessionStorage.signInRedirect}`);
+              window.location.href = `${sessionStorage.signInRedirect}`;
               sessionStorage.removeItem("signInRedirect");
             } else {
-              window.location.replace("/");
+              window.location.href = "/";
             }
           })
           .catch((err) => console.log(err));
@@ -296,7 +268,7 @@ export default function SignIn() {
             onChange={() => {
               setRememberSignIn(!rememberSignIn);
             }}
-            defaultChecked={rememberSignIn}
+            checked={rememberSignIn}
             className="font-montserrat"
           >
             Keep me signed in

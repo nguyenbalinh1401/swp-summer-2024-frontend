@@ -318,23 +318,6 @@ export default function Navbar() {
               SIGN OUT
             </p>
           </button>
-
-          {/* <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottomLeft"
-            trigger={["click"]}
-            autoAdjustOverflow
-            className="flex items-center border border-white md:p-2 rounded-full"
-          >
-            <button className="flex items-center gap-2 bg-white text-black hover:text-slate-600">
-              <Avatar src={user.avatar} />
-              <p className="text-[0.8em] overflow-hidden text-nowrap text-ellipsis max-w-40">
-                {user ? user.username : " user"}
-              </p>
-            </button>
-          </Dropdown> */}
         </div>
       ) : (
         <button

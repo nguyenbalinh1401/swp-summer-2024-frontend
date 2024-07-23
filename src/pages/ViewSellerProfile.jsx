@@ -52,7 +52,7 @@ const ViewSellerProfile = () => {
 
       // Fetch seller's products
       const productsResponse = await axios.get(
-        `http://localhost:3000/product/user/${id}`
+        `http://localhost:3000/product/user-available/${id}`
       );
       setProducts(productsResponse.data);
 
@@ -131,6 +131,8 @@ const ViewSellerProfile = () => {
                   "Your feedback on this account has already been recorded!",
                 duration: 5,
               });
+              setRating(0);
+              setNewFeedback("");
             }
           })
           .catch((err) => console.log(err));
@@ -287,23 +289,32 @@ const ViewSellerProfile = () => {
                   type="text"
                   icon={<ExclamationCircleOutlined style={{ color: "red" }} />}
                   onClick={async () => {
-                    await axios
-                      .get(
-                        `http://localhost:3000/report/check/${user.id}/${seller.id}`
-                      )
-                      .then((res) => {
-                        if (res.data)
-                          message.warning({
-                            key: "report",
-                            content:
-                              "Your report on this product has already been recorded.",
-                            duration: 5,
-                          });
-                        else {
-                          setIsReporting(true);
-                        }
-                      })
-                      .catch((err) => console.log(err));
+                    if (!user) {
+                      message.warning({
+                        key: "report",
+                        content:
+                          "You have to sign in before reporting this account!",
+                        duration: 5,
+                      });
+                    } else {
+                      await axios
+                        .get(
+                          `http://localhost:3000/report/check/${user.id}/${seller.id}`
+                        )
+                        .then((res) => {
+                          if (res.data)
+                            message.warning({
+                              key: "report",
+                              content:
+                                "Your report on this product has already been recorded.",
+                              duration: 5,
+                            });
+                          else {
+                            setIsReporting(true);
+                          }
+                        })
+                        .catch((err) => console.log(err));
+                    }
                   }}
                 />
               </Tooltip>
