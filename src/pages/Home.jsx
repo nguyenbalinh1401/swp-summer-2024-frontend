@@ -40,7 +40,6 @@ export default function Home() {
       <HeroSection />
       {/* <FeatureProducts list={featureProducts} /> */}
       <LatestProducts list={latestProducts} />
-      <CompanyFeatures />
     </div>
   );
 }

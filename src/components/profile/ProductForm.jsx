@@ -511,7 +511,7 @@ export default function ProductForm({
             </div>
             <div className="flex flex-col items-start justify-start gap-1">
               <p className="text-[0.7em] text-sky-800 font-semibold pl-2">
-                Water resistance <span className="font-light">(mm)</span>{" "}
+                Water resistance <span className="font-light">(m)</span>{" "}
                 <span className={`${!editable && "hidden"} text-red-600`}>
                   *
                 </span>

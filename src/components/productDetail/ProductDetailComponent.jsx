@@ -398,7 +398,7 @@ export default function ProductDetailComponent({
           </div>
           <div className="flex flex-row items-center justify-between flex-[100%] sm:flex-[45%] md:flex-[30%] lg:flex-[20%]">
             <p className="font-bold">Water resistance:</p>
-            <p className="font-light">{product.waterResistance} mm</p>
+            <p className="font-light">{product.waterResistance} m</p>
           </div>
           <div className="flex flex-row items-center justify-between flex-[100%] sm:flex-[45%] md:flex-[30%] lg:flex-[20%]">
             <p className="font-bold">Case material:</p>
