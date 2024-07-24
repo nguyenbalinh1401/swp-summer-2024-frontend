@@ -207,7 +207,7 @@ const ReportHTML = ({ productData }) => {
           </div>
           <div>
             <span style={styles.left}>Water Resistance:</span> {waterResistance}{" "}
-            mm
+            m
           </div>
           <div>
             <span style={styles.left}>Case Material:</span> {caseMaterial}
